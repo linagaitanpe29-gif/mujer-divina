@@ -131,10 +131,13 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   color: var(--gold); font-weight: 700; margin-bottom: 10px;
   display: block; font-family: var(--f-sans);
 }
-.hero-logo {
-  width: min(420px, 86vw); height: auto;
+/* Hero title image — asset-title.png es un banner 1215×140 px
+   Se muestra ancho para que el texto sea legible y prominente   */
+.hero-title-img {
+  width: min(680px, 96vw); height: auto;
   margin: 0 auto 14px;
-  filter: drop-shadow(0 4px 18px rgba(195,147,47,.30));
+  display: block;
+  /* La imagen ya tiene fondo crema/floral — mezcla naturalmente */
 }
 .hero-divider {
   display: flex; align-items: center; justify-content: center;
@@ -777,7 +780,7 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 
   /* Hero */
   .hero { padding: 36px 16px 40px; }
-  .hero-logo { width: min(260px, 74vw); }
+  .hero-title-img { width: min(340px, 94vw); }
   .hero-divider { margin: 10px 0 16px; }
 
   /* Badge — mobile: misma escala 135 %, min-height 28 % del alto escalado
