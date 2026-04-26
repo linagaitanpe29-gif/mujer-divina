@@ -115,20 +115,25 @@ const App = {
     if (!list.length) { el.innerHTML = '<p class="loading">Próximamente...</p>'; return; }
     const d = list[0];
     el.innerHTML = `
-      <div class="today-card">
-        <div class="today-card-top">
-          <span class="today-card-label">${CATEGORIAS[d.categoria] || 'Devocional'}</span>
-          <span class="today-card-date">${this.dateLong(d.date)}</span>
-        </div>
-        <div class="today-card-body">
-          <h2 class="today-card-title">${d.title}</h2>
-          <div class="today-verse">
-            <p>"${d.versiculo}"</p>
-            <cite>— ${d.referencia}</cite>
+      <div class="today-compact">
+        <div class="today-compact-inner">
+          <div class="today-compact-left">
+            <div class="today-compact-tag">
+              ${d.categoria ? `<span class="today-compact-cat">${d.categoria}</span>` : ''}
+              <span class="today-compact-date">${this.dateLong(d.date)}</span>
+            </div>
+            <h2 class="today-compact-title">${d.title}</h2>
+            <div class="today-compact-verse">
+              "${d.versiculo}"
+              <cite>— ${d.referencia}</cite>
+            </div>
           </div>
-          ${d.intro ? `<p class="today-intro">${d.intro}</p>` : ''}
-          <div class="today-foot">
-            <a href="#/devocional/${d.slug}" class="btn btn-gold">Leer devocional →</a>
+          <div class="today-compact-right">
+            <div class="today-streak">
+              <span class="today-streak-num">🔥</span>
+              <span class="today-streak-label">Racha diaria</span>
+            </div>
+            <a href="#/devocional/${d.slug}" class="btn btn-gold">Leer hoy →</a>
           </div>
         </div>
       </div>`;

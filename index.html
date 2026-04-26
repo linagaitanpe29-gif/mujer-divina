@@ -9,10 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
-
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
-
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -26,7 +24,7 @@
       <div class="nav-links" id="nav-links">
         <a href="#/" class="nav-link">Inicio</a>
         <a href="#/archivo" class="nav-link">Devocionales</a>
-        <a href="#/suscribirse" class="nav-link nav-cta">Suscríbete</a>
+        <a href="#/suscribirse" class="nav-link nav-cta">Comenzar</a>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Abrir menú">
         <span></span><span></span><span></span>
@@ -35,20 +33,17 @@
     <div class="nav-mobile" id="nav-mobile">
       <a href="#/" class="nav-link">Inicio</a>
       <a href="#/archivo" class="nav-link">Devocionales</a>
-      <a href="#/suscribirse" class="nav-link">Suscríbete</a>
+      <a href="#/suscribirse" class="nav-link">Comenzar</a>
     </div>
   </nav>
 
-  <!-- APP -->
   <main id="app">
 
-    <!-- HOME -->
+    <!-- ══ HOME ══════════════════════════════════════ -->
     <section id="page-home" class="page">
 
       <!-- HERO -->
       <div class="hero">
-        <div class="hero-corner hero-tl"></div>
-        <div class="hero-corner hero-tr"></div>
         <div class="hero-content">
           <p class="eyebrow">Devocional Diario</p>
           <img src="logo.png" alt="Mujer Divina" class="hero-logo" />
@@ -63,12 +58,10 @@
             </div>
           </div>
         </div>
-        <div class="hero-corner hero-bl"></div>
-        <div class="hero-corner hero-br"></div>
       </div>
 
-      <!-- Devocional del día -->
-      <div class="section-wrap">
+      <!-- DEVOCIONAL DE HOY — compact banner -->
+      <div class="today-banner-wrap section-wrap">
         <div class="section-head">
           <p class="eyebrow">Hoy</p>
           <h2 class="section-title">Devocional del Día</h2>
@@ -77,7 +70,50 @@
         <div id="today-card"></div>
       </div>
 
-      <!-- Recientes -->
+      <!-- CATEGORÍAS -->
+      <div class="section-full section-cream-alt">
+        <div class="section-wrap-inner">
+          <div class="section-head">
+            <p class="eyebrow">Explora</p>
+            <h2 class="section-title">Categorías</h2>
+            <div class="gold-rule"><span>✦</span></div>
+          </div>
+          <div class="categories-grid">
+            <a href="#/archivo" class="cat-card">
+              <span class="cat-icon">🌿</span>
+              <h3 class="cat-name">Fe</h3>
+              <p class="cat-desc">Confía en el proceso de Dios</p>
+            </a>
+            <a href="#/archivo" class="cat-card">
+              <span class="cat-icon">👑</span>
+              <h3 class="cat-name">Identidad</h3>
+              <p class="cat-desc">Descubre quién eres en Él</p>
+            </a>
+            <a href="#/archivo" class="cat-card">
+              <span class="cat-icon">✨</span>
+              <h3 class="cat-name">Propósito</h3>
+              <p class="cat-desc">Camina con dirección divina</p>
+            </a>
+            <a href="#/archivo" class="cat-card">
+              <span class="cat-icon">🏡</span>
+              <h3 class="cat-name">Familia</h3>
+              <p class="cat-desc">El corazón del hogar</p>
+            </a>
+            <a href="#/archivo" class="cat-card">
+              <span class="cat-icon">🤍</span>
+              <h3 class="cat-name">Relaciones</h3>
+              <p class="cat-desc">Vínculos que edifican</p>
+            </a>
+            <a href="#/archivo" class="cat-card">
+              <span class="cat-icon">🌾</span>
+              <h3 class="cat-name">Finanzas</h3>
+              <p class="cat-desc">Mayordomía y abundancia</p>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEVOCIONALES RECIENTES -->
       <div class="section-wrap section-pink">
         <div class="section-head">
           <p class="eyebrow">Archivo</p>
@@ -90,24 +126,49 @@
         </div>
       </div>
 
-      <!-- Suscripción -->
-      <div class="section-wrap" id="suscribirse-section">
-        <div class="subscribe-box">
-          <span class="subscribe-flower">❀</span>
-          <h2 class="subscribe-title">Recibe el Devocional</h2>
-          <p class="subscribe-sub">Cada mañana, directo a tu correo.<br>Sin spam, solo la Palabra.</p>
-          <form class="subscribe-form" id="sub-form">
-            <input type="email" placeholder="Tu correo electrónico" class="sub-input" required />
-            <button type="submit" class="btn btn-gold">Suscribirme</button>
-          </form>
-          <p id="sub-msg" class="sub-msg hidden"></p>
-          <p class="subscribe-note">❀ &nbsp; Puedes cancelar cuando quieras &nbsp; ❀</p>
+      <!-- CÓMO FUNCIONA -->
+      <div class="section-wrap">
+        <div class="section-head">
+          <p class="eyebrow">Acceso</p>
+          <h2 class="section-title">¿Cómo funciona?</h2>
+          <div class="gold-rule"><span>✦</span></div>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-icon">📖</div>
+            <h3 class="step-title">Adquiere el cuaderno</h3>
+            <p class="step-desc">El cuaderno devocional físico Mujer Divina incluye tu acceso digital personal e intransferible.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-icon">📱</div>
+            <h3 class="step-title">Escanea tu QR</h3>
+            <p class="step-desc">Dentro del cuaderno encontrarás un código QR único. Escanéalo y crea tu cuenta en segundos.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-icon">🌸</div>
+            <h3 class="step-title">Empieza tu momento</h3>
+            <p class="step-desc">Cada día un devocional nuevo te espera. Léelo, medítalo y luego lleva lo que Dios te habló a tu cuaderno.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FRASE INSPIRACIONAL -->
+      <div class="section-full section-pink-solid">
+        <div class="quote-section">
+          <p class="quote-flower">❀</p>
+          <blockquote class="quote-text">
+            "Dios siempre habla a un corazón dispuesto a escucharlo."
+          </blockquote>
+          <p class="quote-brand">— Mujer Divina</p>
         </div>
       </div>
 
     </section>
 
-    <!-- ARCHIVO -->
+    <!-- ══ ARCHIVO ════════════════════════════════════ -->
     <section id="page-archive" class="page hidden">
       <div class="page-hero">
         <p class="eyebrow">Todos los devocionales</p>
@@ -119,7 +180,7 @@
       </div>
     </section>
 
-    <!-- DEVOCIONAL INDIVIDUAL -->
+    <!-- ══ DEVOCIONAL INDIVIDUAL ══════════════════════ -->
     <section id="page-devocional" class="page hidden">
       <div class="devo-wrap">
         <a href="#/" class="back-link">← Volver al inicio</a>
@@ -139,7 +200,7 @@
         <span>·</span>
         <a href="#/archivo" class="footer-link">Devocionales</a>
         <span>·</span>
-        <a href="#/suscribirse" class="footer-link">Suscríbete</a>
+        <a href="#/suscribirse" class="footer-link">Comenzar</a>
       </div>
       <p class="footer-copy">© 2026 Mujer Divina · Todos los derechos reservados</p>
     </div>
