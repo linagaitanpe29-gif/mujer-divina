@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Devocional diario para mujeres que buscan a Dios cada mañana." />
+  <title>Mujer Divina — Devocional Diario</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#/" class="logo" onclick="return false;" id="logo-link">
+        <span class="logo-script">Mujer Divina</span>
+        <span class="logo-sub">Devocional Diario</span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="#/" class="nav-link">Inicio</a>
+        <a href="#/archivo" class="nav-link">Devocionales</a>
+        <a href="#/suscribirse" class="nav-link nav-cta">Suscríbete</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="nav-mobile">
+      <a href="#/" class="nav-link">Inicio</a>
+      <a href="#/archivo" class="nav-link">Devocionales</a>
+      <a href="#/suscribirse" class="nav-link">Suscríbete</a>
+    </div>
+  </nav>
+
+  <!-- APP -->
+  <main id="app">
+
+    <!-- HOME -->
+    <section id="page-home" class="page">
+
+      <div class="hero">
+        <div class="hero-corner hero-tl">❧</div>
+        <div class="hero-corner hero-tr">❧</div>
+        <div class="hero-content">
+          <p class="eyebrow">Devocional Diario</p>
+          <h1 class="hero-brand">Mujer Divina</h1>
+          <div class="hero-divider">
+            <span>✦</span>
+          </div>
+          <p class="hero-verse">"Deléitate en el Señor, y él te concederá los deseos de tu corazón."</p>
+          <p class="hero-ref">— Salmos 37:4</p>
+        </div>
+        <div class="hero-corner hero-bl">❧</div>
+        <div class="hero-corner hero-br">❧</div>
+      </div>
+
+      <!-- Devocional del día -->
+      <div class="section-wrap">
+        <div class="section-head">
+          <p class="eyebrow">Hoy</p>
+          <h2 class="section-title">Devocional del Día</h2>
+          <div class="gold-rule"></div>
+        </div>
+        <div id="today-card"></div>
+      </div>
+
+      <!-- Recientes -->
+      <div class="section-wrap section-pink">
+        <div class="section-head">
+          <p class="eyebrow">Archivo</p>
+          <h2 class="section-title">Devocionales Recientes</h2>
+          <div class="gold-rule"></div>
+        </div>
+        <div id="recent-grid" class="cards-grid"></div>
+        <div class="center mt-6">
+          <a href="#/archivo" class="btn btn-outline">Ver todos los devocionales</a>
+        </div>
+      </div>
+
+      <!-- Suscripción -->
+      <div class="section-wrap" id="suscribirse-section">
+        <div class="subscribe-box">
+          <div class="subscribe-flower">❀</div>
+          <h2 class="subscribe-title">Recibe el Devocional</h2>
+          <p class="subscribe-sub">Cada mañana, directo a tu correo. Sin spam, solo la Palabra.</p>
+
+          <!-- REEMPLAZA ESTE FORMULARIO CON TU CÓDIGO DE MAILCHIMP -->
+          <form class="subscribe-form" id="sub-form">
+            <input type="email" placeholder="Tu correo electrónico" class="sub-input" required />
+            <button type="submit" class="btn btn-gold">Suscribirme</button>
+          </form>
+          <p id="sub-msg" class="sub-msg hidden"></p>
+          <!-- FIN BLOQUE MAILCHIMP -->
+
+          <p class="subscribe-note">❀ Puedes cancelar cuando quieras ❀</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ARCHIVO -->
+    <section id="page-archive" class="page hidden">
+      <div class="page-hero">
+        <p class="eyebrow">Todos los devocionales</p>
+        <h1 class="page-hero-title">Archivo</h1>
+        <div class="gold-rule"></div>
+      </div>
+      <div class="section-wrap">
+        <div id="all-grid" class="cards-grid"></div>
+      </div>
+    </section>
+
+    <!-- DEVOCIONAL INDIVIDUAL -->
+    <section id="page-devocional" class="page hidden">
+      <div class="devo-wrap">
+        <a href="#/" class="back-link">← Volver al inicio</a>
+        <div id="devo-content"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p class="footer-brand">Mujer Divina</p>
+    <p class="footer-verse">"Yo y mi casa serviremos a Jehová." — Josué 24:15</p>
+    <div class="footer-links">
+      <a href="#/" class="footer-link">Inicio</a>
+      <span>·</span>
+      <a href="#/archivo" class="footer-link">Devocionales</a>
+      <span>·</span>
+      <a href="#/suscribirse" class="footer-link">Suscríbete</a>
+    </div>
+    <p class="footer-copy">© 2026 Mujer Divina · Todos los derechos reservados</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

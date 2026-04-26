@@ -1,0 +1,36 @@
+backend:
+  name: git-gateway
+  branch: main
+
+locale: es
+
+media_folder: "imagenes"
+public_folder: "/imagenes"
+
+collections:
+  - name: "devocionales"
+    label: "Devocionales"
+    folder: "devocionales"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    editor:
+      preview: false
+    fields:
+      - { label: "Título", name: "title", widget: "string", hint: "Ej: ¿A Quién Estás Sirviendo?" }
+      - { label: "Fecha", name: "date", widget: "date", format: "YYYY-MM-DD" }
+      - { label: "Versículo", name: "versiculo", widget: "string", hint: "Texto del versículo" }
+      - { label: "Referencia", name: "referencia", widget: "string", hint: "Ej: Josué 24:15" }
+      - label: "Categoría"
+        name: "categoria"
+        widget: "select"
+        options: ["Identidad", "Fe", "Propósito", "Amor", "Obediencia", "Gratitud", "Restauración", "Fortaleza", "Oración", "Confianza"]
+      - { label: "Introducción", name: "intro", widget: "text", hint: "2-3 frases de apertura" }
+      - { label: "Reflexión (contenido principal)", name: "body", widget: "markdown" }
+      - label: "Preguntas de Reflexión"
+        name: "preguntas"
+        widget: "list"
+        fields:
+          - { label: "Pregunta", name: "pregunta", widget: "string" }
+          - { label: "Descripción", name: "descripcion", widget: "text", required: false }
+      - { label: "Oración de cierre", name: "oracion", widget: "text" }
+      - { label: "Mensaje para llevar el día", name: "cierre", widget: "text", required: false }
