@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Devocional diario para mujeres que buscan a Dios cada mañana — Mujer Divina." />
   <title>Mujer Divina — Devocional Diario</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
@@ -39,128 +38,252 @@
 
   <main id="app">
 
-    <!-- ══ HOME ══════════════════════════════════════ -->
+    <!-- ══ HOME ══════════════════════════════════════════════ -->
     <section id="page-home" class="page">
 
-      <!-- HERO -->
-      <div class="hero">
-        <div class="hero-content">
-          <p class="eyebrow">Devocional Diario</p>
-          <img src="logo.png" alt="Mujer Divina" class="hero-logo" />
-          <div class="hero-divider"><span>✦</span></div>
-          <div class="verse-badge">
-            <div class="verse-badge-inner">
-              <p class="hero-verse">
-                <em>"Deléitate en el Señor,</em>
-                y él te concederá los deseos de tu corazón."
-              </p>
-              <p class="hero-ref">— Salmos 37:4</p>
+      <!-- ZONA FLORAL CONTINUA: hero + hoy + categorías -->
+      <div class="floral-zone">
+
+        <!-- HERO -->
+        <div class="hero">
+          <div class="hero-content">
+            <p class="eyebrow">Devocional Diario</p>
+            <img src="logo.png" alt="Mujer Divina" class="hero-logo" />
+            <div class="hero-divider"><span>✦</span></div>
+            <div class="verse-badge">
+              <div class="verse-badge-inner">
+                <p class="hero-verse">
+                  <em>"Deléitate en el Señor,</em>
+                  y él te concederá los deseos de tu corazón."
+                </p>
+                <p class="hero-ref">— Salmos 37:4</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- DEVOCIONAL DE HOY — compact banner -->
-      <div class="today-banner-wrap section-wrap">
-        <div class="section-head">
-          <p class="eyebrow">Hoy</p>
-          <h2 class="section-title">Devocional del Día</h2>
-          <div class="gold-rule"><span>✦</span></div>
+        <!-- DEVOCIONAL DE HOY -->
+        <div class="section-inner">
+          <div class="section-head">
+            <p class="eyebrow">Hoy</p>
+            <h2 class="section-title">Devocional del Día</h2>
+            <div class="gold-rule"><span>✦</span></div>
+          </div>
+          <div id="today-card"></div>
         </div>
-        <div id="today-card"></div>
-      </div>
 
-      <!-- CATEGORÍAS -->
-      <div class="section-full section-cream-alt">
-        <div class="section-wrap-inner">
+        <!-- CATEGORÍAS -->
+        <div class="section-inner section-inner-last">
           <div class="section-head">
             <p class="eyebrow">Explora</p>
             <h2 class="section-title">Categorías</h2>
             <div class="gold-rule"><span>✦</span></div>
           </div>
           <div class="categories-grid">
+
+            <!-- Fe -->
             <a href="#/archivo" class="cat-card">
-              <span class="cat-icon">🌿</span>
+              <span class="cat-icon">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+                  <line x1="16" y1="4" x2="16" y2="28"/>
+                  <line x1="7" y1="12" x2="25" y2="12"/>
+                </svg>
+              </span>
               <h3 class="cat-name">Fe</h3>
               <p class="cat-desc">Confía en el proceso de Dios</p>
             </a>
+
+            <!-- Identidad -->
             <a href="#/archivo" class="cat-card">
-              <span class="cat-icon">👑</span>
+              <span class="cat-icon">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 24 L9 13 L16 20 L23 13 L27 24 Z"/>
+                  <line x1="5" y1="24" x2="27" y2="24"/>
+                  <circle cx="16" cy="8" r="2"/>
+                </svg>
+              </span>
               <h3 class="cat-name">Identidad</h3>
               <p class="cat-desc">Descubre quién eres en Él</p>
             </a>
+
+            <!-- Propósito -->
             <a href="#/archivo" class="cat-card">
-              <span class="cat-icon">✨</span>
+              <span class="cat-icon">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="16" cy="16" r="11"/>
+                  <line x1="16" y1="5" x2="16" y2="9"/>
+                  <line x1="16" y1="23" x2="16" y2="27"/>
+                  <line x1="5" y1="16" x2="9" y2="16"/>
+                  <line x1="23" y1="16" x2="27" y2="16"/>
+                  <circle cx="16" cy="16" r="3"/>
+                </svg>
+              </span>
               <h3 class="cat-name">Propósito</h3>
               <p class="cat-desc">Camina con dirección divina</p>
             </a>
+
+            <!-- Familia -->
             <a href="#/archivo" class="cat-card">
-              <span class="cat-icon">🏡</span>
+              <span class="cat-icon">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 15 L16 5 L28 15"/>
+                  <path d="M7 13 L7 27 L25 27 L25 13"/>
+                  <rect x="12" y="19" width="8" height="8"/>
+                </svg>
+              </span>
               <h3 class="cat-name">Familia</h3>
               <p class="cat-desc">El corazón del hogar</p>
             </a>
+
+            <!-- Relaciones -->
             <a href="#/archivo" class="cat-card">
-              <span class="cat-icon">🤍</span>
+              <span class="cat-icon">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 26 C10 21 4 17 4 11 C4 7.5 7 5 10.5 5 C12.5 5 14.5 6 16 8.5 C17.5 6 19.5 5 21.5 5 C25 5 28 7.5 28 11 C28 17 22 21 16 26Z"/>
+                </svg>
+              </span>
               <h3 class="cat-name">Relaciones</h3>
               <p class="cat-desc">Vínculos que edifican</p>
             </a>
+
+            <!-- Finanzas -->
             <a href="#/archivo" class="cat-card">
-              <span class="cat-icon">🌾</span>
+              <span class="cat-icon">
+                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+                  <line x1="16" y1="28" x2="16" y2="6"/>
+                  <path d="M16 10 C14 8 10 8 9 10 C9 10 11 13 16 11"/>
+                  <path d="M16 10 C18 8 22 8 23 10 C23 10 21 13 16 11"/>
+                  <path d="M16 17 C14 15 10 15 9 17 C9 17 11 20 16 18"/>
+                  <path d="M16 17 C18 15 22 15 23 17 C23 17 21 20 16 18"/>
+                </svg>
+              </span>
               <h3 class="cat-name">Finanzas</h3>
               <p class="cat-desc">Mayordomía y abundancia</p>
             </a>
+
+          </div>
+        </div>
+
+      </div><!-- /floral-zone -->
+
+      <!-- DEVOCIONALES RECIENTES — sección rosada -->
+      <div class="section-pink-wrap">
+        <div class="section-inner">
+          <div class="section-head">
+            <p class="eyebrow">Archivo</p>
+            <h2 class="section-title">Devocionales Recientes</h2>
+            <div class="gold-rule"><span>✦</span></div>
+          </div>
+          <div id="recent-grid" class="cards-grid"></div>
+          <div class="center mt-6">
+            <a href="#/archivo" class="btn btn-outline">Ver todos los devocionales →</a>
           </div>
         </div>
       </div>
 
-      <!-- DEVOCIONALES RECIENTES -->
-      <div class="section-wrap section-pink">
+      <!-- RACHA -->
+      <div class="section-inner">
         <div class="section-head">
-          <p class="eyebrow">Archivo</p>
-          <h2 class="section-title">Devocionales Recientes</h2>
+          <p class="eyebrow">Tu progreso</p>
+          <h2 class="section-title">Tu Racha</h2>
           <div class="gold-rule"><span>✦</span></div>
         </div>
-        <div id="recent-grid" class="cards-grid"></div>
-        <div class="center mt-6">
-          <a href="#/archivo" class="btn btn-outline">Ver todos los devocionales →</a>
+        <div class="streak-panel">
+          <div class="streak-stats">
+            <div class="streak-stat-box">
+              <span class="streak-big">—</span>
+              <span class="streak-lbl">Días seguidos</span>
+            </div>
+            <div class="streak-divider"></div>
+            <div class="streak-week">
+              <p class="streak-week-title">Esta semana</p>
+              <div class="streak-days" id="streak-days">
+                <div class="sday"><span class="sday-dot"></span><span class="sday-name">L</span></div>
+                <div class="sday"><span class="sday-dot"></span><span class="sday-name">M</span></div>
+                <div class="sday"><span class="sday-dot"></span><span class="sday-name">M</span></div>
+                <div class="sday"><span class="sday-dot"></span><span class="sday-name">J</span></div>
+                <div class="sday"><span class="sday-dot"></span><span class="sday-name">V</span></div>
+                <div class="sday"><span class="sday-dot"></span><span class="sday-name">S</span></div>
+                <div class="sday"><span class="sday-dot"></span><span class="sday-name">D</span></div>
+              </div>
+            </div>
+            <div class="streak-divider"></div>
+            <div class="streak-stat-box">
+              <span class="streak-big">—</span>
+              <span class="streak-lbl">Total leídos</span>
+            </div>
+          </div>
+          <div class="streak-cta">
+            <p class="streak-cta-text">Activa tu acceso con el código QR de tu cuaderno para registrar tu racha</p>
+            <a href="#/suscribirse" class="btn btn-gold">Activar mi acceso →</a>
+          </div>
         </div>
       </div>
 
       <!-- CÓMO FUNCIONA -->
-      <div class="section-wrap">
-        <div class="section-head">
-          <p class="eyebrow">Acceso</p>
-          <h2 class="section-title">¿Cómo funciona?</h2>
-          <div class="gold-rule"><span>✦</span></div>
-        </div>
-        <div class="steps-grid">
-          <div class="step-card">
-            <div class="step-num">1</div>
-            <div class="step-icon">📖</div>
-            <h3 class="step-title">Adquiere el cuaderno</h3>
-            <p class="step-desc">El cuaderno devocional físico Mujer Divina incluye tu acceso digital personal e intransferible.</p>
+      <div class="section-pink-wrap">
+        <div class="section-inner">
+          <div class="section-head">
+            <p class="eyebrow">Acceso</p>
+            <h2 class="section-title">¿Cómo funciona?</h2>
+            <div class="gold-rule"><span>✦</span></div>
           </div>
-          <div class="step-card">
-            <div class="step-num">2</div>
-            <div class="step-icon">📱</div>
-            <h3 class="step-title">Escanea tu QR</h3>
-            <p class="step-desc">Dentro del cuaderno encontrarás un código QR único. Escanéalo y crea tu cuenta en segundos.</p>
-          </div>
-          <div class="step-card">
-            <div class="step-num">3</div>
-            <div class="step-icon">🌸</div>
-            <h3 class="step-title">Empieza tu momento</h3>
-            <p class="step-desc">Cada día un devocional nuevo te espera. Léelo, medítalo y luego lleva lo que Dios te habló a tu cuaderno.</p>
+          <div class="steps-grid">
+            <div class="step-card">
+              <div class="step-num">1</div>
+              <div class="step-icon-svg">
+                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="8" y="5" width="24" height="30" rx="2"/>
+                  <line x1="13" y1="13" x2="27" y2="13"/>
+                  <line x1="13" y1="18" x2="27" y2="18"/>
+                  <line x1="13" y1="23" x2="21" y2="23"/>
+                </svg>
+              </div>
+              <h3 class="step-title">Adquiere el cuaderno</h3>
+              <p class="step-desc">El cuaderno físico Mujer Divina incluye tu acceso digital personal e intransferible.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-num">2</div>
+              <div class="step-icon-svg">
+                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="5" y="5" width="13" height="13" rx="1"/>
+                  <rect x="22" y="5" width="13" height="13" rx="1"/>
+                  <rect x="5" y="22" width="13" height="13" rx="1"/>
+                  <rect x="8" y="8" width="7" height="7"/>
+                  <rect x="25" y="8" width="7" height="7"/>
+                  <rect x="8" y="25" width="7" height="7"/>
+                  <line x1="25" y1="25" x2="25" y2="35"/>
+                  <line x1="25" y1="25" x2="35" y2="25"/>
+                  <line x1="35" y1="30" x2="35" y2="35"/>
+                  <line x1="30" y1="35" x2="35" y2="35"/>
+                </svg>
+              </div>
+              <h3 class="step-title">Escanea tu QR</h3>
+              <p class="step-desc">Dentro del cuaderno encontrarás un código QR único. Escanéalo y crea tu cuenta en segundos.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-num">3</div>
+              <div class="step-icon-svg">
+                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 6 C20 6 10 12 10 22 C10 27 14.5 31 20 31 C25.5 31 30 27 30 22 C30 12 20 6 20 6Z"/>
+                  <line x1="20" y1="31" x2="20" y2="36"/>
+                  <line x1="15" y1="35" x2="25" y2="35"/>
+                  <path d="M15 20 L19 24 L25 17"/>
+                </svg>
+              </div>
+              <h3 class="step-title">Empieza tu momento</h3>
+              <p class="step-desc">Cada día un devocional nuevo te espera. Léelo, medítalo y lleva lo que Dios te habló a tu cuaderno.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- FRASE INSPIRACIONAL -->
-      <div class="section-full section-pink-solid">
+      <!-- FRASE -->
+      <div class="quote-zone">
         <div class="quote-section">
           <p class="quote-flower">❀</p>
           <blockquote class="quote-text">
-            "Dios siempre habla a un corazón dispuesto a escucharlo."
+            "Dios siempre habla a un corazón<br>dispuesto a escucharlo."
           </blockquote>
           <p class="quote-brand">— Mujer Divina</p>
         </div>
@@ -168,19 +291,21 @@
 
     </section>
 
-    <!-- ══ ARCHIVO ════════════════════════════════════ -->
+    <!-- ══ ARCHIVO ═══════════════════════════════════════════ -->
     <section id="page-archive" class="page hidden">
-      <div class="page-hero">
-        <p class="eyebrow">Todos los devocionales</p>
-        <h1 class="page-hero-title">Archivo</h1>
-        <div class="gold-rule"><span>✦</span></div>
+      <div class="page-hero-wrap">
+        <div class="hero-content">
+          <p class="eyebrow">Todos los devocionales</p>
+          <h1 class="page-title">Archivo</h1>
+          <div class="gold-rule"><span>✦</span></div>
+        </div>
       </div>
-      <div class="section-wrap">
+      <div class="section-inner">
         <div id="all-grid" class="cards-grid"></div>
       </div>
     </section>
 
-    <!-- ══ DEVOCIONAL INDIVIDUAL ══════════════════════ -->
+    <!-- ══ DEVOCIONAL INDIVIDUAL ════════════════════════════ -->
     <section id="page-devocional" class="page hidden">
       <div class="devo-wrap">
         <a href="#/" class="back-link">← Volver al inicio</a>
