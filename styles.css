@@ -57,14 +57,16 @@ h1,h2,h3,h4 { font-family: var(--f-head); font-weight: 500; line-height: 1.2; }
   padding: 14px var(--px);
   display: flex; align-items: center; justify-content: space-between;
 }
-.logo { display: flex; flex-direction: column; line-height: 1.1; }
-.logo-script {
-  font-family: var(--f-script); font-size: 1.9rem;
-  color: var(--gold); font-weight: 700; letter-spacing: .5px;
+.logo { display: flex; align-items: center; }
+.logo-img {
+  height: 52px; width: auto;
+  object-fit: contain;
 }
-.logo-sub {
-  font-family: var(--f-head); font-size: .58rem;
-  color: var(--text-light); letter-spacing: 3.5px; text-transform: uppercase;
+.hero-logo {
+  width: min(320px, 70vw); height: auto;
+  margin: 0 auto 4px;
+  display: block;
+  filter: drop-shadow(0 4px 16px rgba(195,147,47,.25));
 }
 .nav-links { display: flex; align-items: center; gap: 28px; }
 .nav-link {
