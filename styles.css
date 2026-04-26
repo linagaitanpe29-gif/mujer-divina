@@ -67,7 +67,7 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 }
 .logo { display: flex; align-items: center; }
 .logo-img {
-  height: 62px; width: auto; object-fit: contain;
+  height: 88px; width: auto; object-fit: contain;
   filter: drop-shadow(0 2px 8px rgba(195,147,47,.2));
 }
 .nav-links { display: flex; align-items: center; gap: 28px; }
@@ -132,8 +132,8 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   display: block; font-family: var(--f-sans);
 }
 .hero-logo {
-  width: min(340px, 74vw); height: auto;
-  margin: 0 auto 12px;
+  width: min(420px, 86vw); height: auto;
+  margin: 0 auto 14px;
   filter: drop-shadow(0 4px 18px rgba(195,147,47,.30));
 }
 .hero-divider {
@@ -146,19 +146,23 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 }
 .hero-divider::after { transform: scaleX(-1); }
 
-/* ─── Recuadro del versículo — usa el PNG de Canva ─── */
+/* ─── Recuadro del versículo — usa el PNG de Canva ─── *
+ * Matemática exacta (asset-badge.png = 1414 × 2000 px) :
+ *  · El marco cartouche ocupa x 13-87 % = 74 % del ancho
+ *  · background-size 135 % → escala imagen para que el
+ *    74 % de ancho = 100 % del contenedor                *
+ *  · El centro vertical del marco = 50 % de la imagen   *
+ *    → background-position 50 % 50 % lo centra exacto   *
+ *  · min-height 296 px = 28 % de alto del marco a escala *
+ *    (1035 px alto escalado × 28 % = 290 px) + margen   */
 .verse-badge {
   position: relative;
-  /* El PNG tiene el marco cartouche centrado.
-     badge = 74 % del ancho → background-size: 135 % auto
-     badge centrado vertical al 50 %             → position: 50 % 50 % */
   background-image: url('asset-badge.png');
   background-repeat: no-repeat;
   background-size: 135% auto;
   background-position: 50% 50%;
-  /* padding generoso para quedar dentro del área rosada */
-  padding: 44px 72px 40px;
-  min-height: 220px;
+  padding: 52px 76px 48px;
+  min-height: 296px;
   max-width: 540px;
   margin: 0 auto;
   display: flex;
@@ -166,7 +170,6 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   align-items: center;
   justify-content: center;
   text-align: center;
-  /* sin borde CSS — el borde lo da el PNG */
   border: none;
   background-color: transparent;
 }
@@ -754,10 +757,12 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
    ═══════════════════════════════════════════════════ */
 @media (max-width: 720px) {
   .steps-grid { grid-template-columns: 1fr; gap: 14px; }
+  /* Tablet: contenedor más estrecho → la misma matemática funciona
+     min-height ≈ 28 % del alto escalado a ese ancho               */
   .verse-badge {
-    background-size: 142% auto;
-    padding: 38px 52px 34px;
-    min-height: 200px;
+    background-size: 135% auto;
+    padding: 44px 60px 40px;
+    min-height: 260px;
   }
 }
 
@@ -768,18 +773,19 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   /* Nav */
   .nav-links { display: none; }
   .hamburger { display: flex; }
-  .logo-img  { height: 56px; }
+  .logo-img  { height: 72px; }
 
   /* Hero */
   .hero { padding: 36px 16px 40px; }
   .hero-logo { width: min(260px, 74vw); }
   .hero-divider { margin: 10px 0 16px; }
 
-  /* Badge — mobile: zoom more so cream edges don't show */
+  /* Badge — mobile: misma escala 135 %, min-height 28 % del alto escalado
+     Ej. 340 px contenedor → imagen escalada 459 × 649 px → marco = 182 px */
   .verse-badge {
-    background-size: 148% auto;
-    padding: 32px 36px 28px;
-    min-height: 180px;
+    background-size: 135% auto;
+    padding: 38px 44px 34px;
+    min-height: 200px;
     max-width: 100%;
   }
 
