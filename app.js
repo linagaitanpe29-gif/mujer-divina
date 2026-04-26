@@ -114,6 +114,9 @@ const App = {
     const list = this.sorted();
     if (!list.length) { el.innerHTML = '<p class="loading">Próximamente...</p>'; return; }
     const d = list[0];
+    // Actualiza el botón CTA del hero con el devocional de hoy
+    const heroCta = document.getElementById('hero-cta');
+    if (heroCta) heroCta.setAttribute('href', `#/devocional/${d.slug}`);
     el.innerHTML = `
       <div class="today-compact">
         <div class="today-compact-inner">

@@ -17,6 +17,7 @@ a   { text-decoration: none; color: inherit; }
   --pink:       #FADADD;
   --pink-mid:   #E8A0AD;
   --pink-solid: #F9D0D4;
+  --pink-border: #D7AAB5;   /* rosado intenso para bordes de tarjetas */
   --cream:      #FDFAF4;
   --cream-alt:  #F8F2E8;
 
@@ -189,6 +190,18 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   font-size: .68rem; color: var(--gold); font-weight: 700;
   letter-spacing: 3px; text-transform: uppercase;
 }
+.hero-subtitle {
+  font-family: var(--f-serif); font-style: italic;
+  font-size: clamp(1rem, 2.6vw, 1.2rem);
+  color: var(--text-mid); letter-spacing: .5px;
+  margin: 0 0 4px;
+}
+.hero-cta {
+  margin-top: 28px;
+  padding: 14px 40px;
+  font-size: .76rem; letter-spacing: 3px;
+  box-shadow: 0 6px 22px rgba(195,147,47,.38);
+}
 
 /* ═══════════════════════════════════════════════════
    SECCIONES
@@ -257,7 +270,7 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 .today-compact {
   position: relative;
   background: rgba(255,255,255,.88);
-  border: 1.5px solid var(--gold-pale);
+  border: 2px solid var(--pink-border);
   box-shadow: var(--shadow);
   overflow: hidden;
   backdrop-filter: blur(4px);
@@ -323,7 +336,7 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   display: flex; flex-direction: column; align-items: center;
   text-align: center;
   background: rgba(255,255,255,.84);
-  border: 1.5px solid var(--gold-pale);
+  border: 2px solid var(--pink-border);
   padding: 24px 14px 20px;
   transition: all .25s; cursor: pointer;
   text-decoration: none; color: inherit;
@@ -370,7 +383,7 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 
 .card {
   position: relative; display: block; color: inherit;
-  background: var(--white); border: 1.5px solid var(--gold-pale);
+  background: var(--white); border: 2px solid var(--pink-border);
   padding: 26px 28px 24px;
   transition: all .25s; overflow: hidden; cursor: pointer;
 }
@@ -410,7 +423,7 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
    RACHA
    ═══════════════════════════════════════════════════ */
 .streak-panel {
-  background: var(--white); border: 1.5px solid var(--gold-pale);
+  background: var(--white); border: 2px solid var(--pink-border);
   box-shadow: var(--shadow); overflow: hidden;
 }
 .streak-stats {
