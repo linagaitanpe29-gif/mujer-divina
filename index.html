@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Devocional diario para mujeres que buscan a Dios cada mañana." />
+  <meta name="description" content="Devocional diario para mujeres que buscan a Dios cada mañana — Mujer Divina." />
   <title>Mujer Divina — Devocional Diario</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -45,22 +45,26 @@
     <!-- HOME -->
     <section id="page-home" class="page">
 
+      <!-- HERO -->
       <div class="hero">
-        <div class="hero-corner hero-tl">❧</div>
-        <div class="hero-corner hero-tr">❧</div>
+        <div class="hero-corner hero-tl"></div>
+        <div class="hero-corner hero-tr"></div>
         <div class="hero-content">
           <p class="eyebrow">Devocional Diario</p>
           <img src="logo.png" alt="Mujer Divina" class="hero-logo" />
-          <div class="hero-divider">
-            <span>✦</span>
-          </div>
+          <div class="hero-divider"><span>✦</span></div>
           <div class="verse-badge">
-            <p class="hero-verse"><em>"Deléitate en el Señor,</em> y él te concederá los deseos de tu corazón."</p>
-            <p class="hero-ref">— Salmos 37:4</p>
+            <div class="verse-badge-inner">
+              <p class="hero-verse">
+                <em>"Deléitate en el Señor,</em>
+                y él te concederá los deseos de tu corazón."
+              </p>
+              <p class="hero-ref">— Salmos 37:4</p>
+            </div>
           </div>
         </div>
-        <div class="hero-corner hero-bl">❧</div>
-        <div class="hero-corner hero-br">❧</div>
+        <div class="hero-corner hero-bl"></div>
+        <div class="hero-corner hero-br"></div>
       </div>
 
       <!-- Devocional del día -->
@@ -68,7 +72,7 @@
         <div class="section-head">
           <p class="eyebrow">Hoy</p>
           <h2 class="section-title">Devocional del Día</h2>
-          <div class="gold-rule"></div>
+          <div class="gold-rule"><span>✦</span></div>
         </div>
         <div id="today-card"></div>
       </div>
@@ -78,30 +82,26 @@
         <div class="section-head">
           <p class="eyebrow">Archivo</p>
           <h2 class="section-title">Devocionales Recientes</h2>
-          <div class="gold-rule"></div>
+          <div class="gold-rule"><span>✦</span></div>
         </div>
         <div id="recent-grid" class="cards-grid"></div>
         <div class="center mt-6">
-          <a href="#/archivo" class="btn btn-outline">Ver todos los devocionales</a>
+          <a href="#/archivo" class="btn btn-outline">Ver todos los devocionales →</a>
         </div>
       </div>
 
       <!-- Suscripción -->
       <div class="section-wrap" id="suscribirse-section">
         <div class="subscribe-box">
-          <div class="subscribe-flower">❀</div>
+          <span class="subscribe-flower">❀</span>
           <h2 class="subscribe-title">Recibe el Devocional</h2>
-          <p class="subscribe-sub">Cada mañana, directo a tu correo. Sin spam, solo la Palabra.</p>
-
-          <!-- REEMPLAZA ESTE FORMULARIO CON TU CÓDIGO DE MAILCHIMP -->
+          <p class="subscribe-sub">Cada mañana, directo a tu correo.<br>Sin spam, solo la Palabra.</p>
           <form class="subscribe-form" id="sub-form">
             <input type="email" placeholder="Tu correo electrónico" class="sub-input" required />
             <button type="submit" class="btn btn-gold">Suscribirme</button>
           </form>
           <p id="sub-msg" class="sub-msg hidden"></p>
-          <!-- FIN BLOQUE MAILCHIMP -->
-
-          <p class="subscribe-note">❀ Puedes cancelar cuando quieras ❀</p>
+          <p class="subscribe-note">❀ &nbsp; Puedes cancelar cuando quieras &nbsp; ❀</p>
         </div>
       </div>
 
@@ -112,7 +112,7 @@
       <div class="page-hero">
         <p class="eyebrow">Todos los devocionales</p>
         <h1 class="page-hero-title">Archivo</h1>
-        <div class="gold-rule"></div>
+        <div class="gold-rule"><span>✦</span></div>
       </div>
       <div class="section-wrap">
         <div id="all-grid" class="cards-grid"></div>
@@ -131,16 +131,18 @@
 
   <!-- FOOTER -->
   <footer class="footer">
-    <p class="footer-brand">Mujer Divina</p>
-    <p class="footer-verse">"Yo y mi casa serviremos a Jehová." — Josué 24:15</p>
-    <div class="footer-links">
-      <a href="#/" class="footer-link">Inicio</a>
-      <span>·</span>
-      <a href="#/archivo" class="footer-link">Devocionales</a>
-      <span>·</span>
-      <a href="#/suscribirse" class="footer-link">Suscríbete</a>
+    <div class="footer-inner">
+      <p class="footer-brand">Mujer Divina</p>
+      <p class="footer-verse">"Yo y mi casa serviremos a Jehová." — Josué 24:15</p>
+      <div class="footer-links">
+        <a href="#/" class="footer-link">Inicio</a>
+        <span>·</span>
+        <a href="#/archivo" class="footer-link">Devocionales</a>
+        <span>·</span>
+        <a href="#/suscribirse" class="footer-link">Suscríbete</a>
+      </div>
+      <p class="footer-copy">© 2026 Mujer Divina · Todos los derechos reservados</p>
     </div>
-    <p class="footer-copy">© 2026 Mujer Divina · Todos los derechos reservados</p>
   </footer>
 
   <script src="app.js"></script>
