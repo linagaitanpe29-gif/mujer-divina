@@ -134,8 +134,8 @@ const App = {
           <div class="today-compact-right">
             <div class="today-streak">
               <span class="today-streak-num">
-                <svg class="streak-flame-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22C8.5 22 5 18.5 5 15C5 11.5 7.5 8.5 10 6.5C10.5 9 11.5 10 12 10.5C11.5 8 12.5 4.5 15.5 3C16 6.5 17.5 8 18 11C19.5 9.5 19.5 7.5 19 6C21 8.5 21 11.5 21 15C21 18.5 17.5 22 12 22Z"/>
+                <svg class="streak-flame-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 20 C6 15 2 11.5 2 7.5 C2 4.5 4.5 2.5 7.5 2.5 C9.5 2.5 11 3.5 12 5 C13 3.5 14.5 2.5 16.5 2.5 C19.5 2.5 22 4.5 22 7.5 C22 11.5 18 15 12 20Z"/>
                 </svg>
               </span>
               <span class="today-streak-label">Racha diaria</span>

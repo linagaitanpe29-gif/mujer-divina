@@ -154,48 +154,36 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 }
 .hero-divider::after { transform: scaleX(-1); }
 
-/* ─── Recuadro del versículo — usa el PNG de Canva ─── *
- * asset-badge.png = 1414 × 2000 px                      *
- *  · Marco: x 14-86 % ancho, y 35-63 % alto             *
- *  · background-size 135 % → frame llena el ancho        *
- *  · min-height 340 px → cubre el 28 % de alto del marco *
- *    a escala (frame = 28 % de 1031 px escalados = 289px)*
- *    más espacio de aire arriba/abajo                    *
- *  · mix-blend-mode: multiply en ::before elimina el     *
- *    rectángulo blanco sin afectar el texto              */
+/* ─── Recuadro del versículo — CSS puro, borde rosa fuerte ─ */
 .verse-badge {
   position: relative;
-  padding: 62px 80px 58px;
-  min-height: 340px;
-  max-width: 540px;
+  background: var(--pink);
+  border: 3px solid #C86080;
+  border-radius: 20px;
+  padding: 52px 72px 48px;
+  max-width: 520px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  border: none;
-  background: transparent;
 }
 .verse-badge::before {
   content: '';
-  position: absolute; inset: 0; z-index: 0;
-  background-image: url('asset-badge.png');
-  background-repeat: no-repeat;
-  background-size: 135% auto;
-  background-position: 50% 50%;
-  mix-blend-mode: multiply;
+  position: absolute; inset: 8px;
+  border: 1.5px solid rgba(200, 96, 128, .35);
+  border-radius: 14px;
   pointer-events: none;
 }
-.verse-badge > * { position: relative; z-index: 1; }
 .hero-verse {
-  font-family: var(--f-serif); font-size: clamp(.92rem, 2.6vw, 1.1rem);
+  font-family: var(--f-serif); font-size: clamp(1.05rem, 3vw, 1.28rem);
   color: var(--text-mid); margin-bottom: 10px; line-height: 1.72;
 }
 .hero-verse em {
-  font-family: var(--f-title); font-size: clamp(1.3rem, 3.2vw, 1.65rem);
+  font-family: var(--f-title); font-size: clamp(1.55rem, 4vw, 2rem);
   color: var(--gold); font-style: normal; display: block;
-  margin-bottom: 2px; font-weight: 600;
+  margin-bottom: 4px; font-weight: 600;
 }
 .hero-ref {
   font-size: .68rem; color: var(--gold); font-weight: 700;
@@ -609,11 +597,18 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   max-width: 600px; margin: 0 auto;
   text-align: center; padding: 60px var(--px);
 }
-.quote-flower { font-size: 1.8rem; color: var(--pink-mid); margin-bottom: 18px; display: block; }
+.quote-flower {
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.quote-flower svg {
+  width: 38px; height: 38px;
+  stroke: var(--pink-mid); color: var(--pink-mid);
+}
 .quote-text {
   font-family: var(--f-title);
   font-size: clamp(1.65rem, 4.5vw, 2.4rem);
-  font-weight: 400; color: var(--text);
+  font-weight: 400; color: #B05070;
   line-height: 1.45; margin-bottom: 16px; font-style: normal;
   letter-spacing: .3px;
 }
@@ -855,14 +850,8 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
    ═══════════════════════════════════════════════════ */
 @media (max-width: 720px) {
   .steps-grid { grid-template-columns: 1fr; gap: 14px; }
-  /* Tablet: min-height ajustada al ancho más angosto */
-  .verse-badge {
-    padding: 50px 64px 46px;
-    min-height: 300px;
-  }
-  .verse-badge::before {
-    background-size: 135% auto;
-  }
+  /* Tablet */
+  .verse-badge { padding: 44px 56px 40px; }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -880,15 +869,12 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   .hero-divider { margin: 10px 0 16px; }
 
   /* Badge — mobile: misma escala 135 %, min-height 28 % del alto escalado
-     340 px contenedor → scaled 459 × 649 px → frame ≈ 182 px → min 210 px */
   .verse-badge {
-    padding: 42px 44px 38px;
-    min-height: 230px;
+    padding: 38px 32px 34px;
     max-width: 100%;
+    border-radius: 16px;
   }
-  .verse-badge::before {
-    background-size: 135% auto;
-  }
+  .verse-badge::before { border-radius: 10px; }
 
   /* Sections */
   .section-inner       { padding: 38px var(--px); }
