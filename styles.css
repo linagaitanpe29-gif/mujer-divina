@@ -68,8 +68,8 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 }
 .logo { display: flex; align-items: center; }
 .logo-img {
-  height: 88px; width: auto; object-fit: contain;
-  filter: drop-shadow(0 2px 8px rgba(195,147,47,.2));
+  height: 108px; width: auto; object-fit: contain;
+  filter: drop-shadow(0 2px 10px rgba(195,147,47,.25));
 }
 .nav-links { display: flex; align-items: center; gap: 28px; }
 .nav-link {
@@ -111,7 +111,7 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 .floral-zone::before {
   content: '';
   position: absolute; inset: 0; z-index: 0;
-  background: rgba(253,250,244,.70);
+  background: rgba(253,250,244,.82);
   pointer-events: none;
 }
 .floral-zone > * { position: relative; z-index: 1; }
@@ -132,13 +132,17 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   color: var(--gold); font-weight: 700; margin-bottom: 10px;
   display: block; font-family: var(--f-sans);
 }
-/* Hero title image — asset-title.png es un banner 1215×140 px
-   Se muestra ancho para que el texto sea legible y prominente   */
-.hero-title-img {
-  width: min(680px, 96vw); height: auto;
-  margin: 0 auto 14px;
+/* Hero title — texto puro en Amoreza sobre el fondo floral suave */
+.hero-title-text {
+  font-family: var(--f-title);
+  font-size: clamp(3.4rem, 11vw, 5.8rem);
+  color: var(--gold);
   display: block;
-  /* La imagen ya tiene fondo crema/floral — mezcla naturalmente */
+  line-height: 1.05;
+  margin: 0 auto 14px;
+  font-weight: 400;
+  letter-spacing: .5px;
+  text-shadow: 0 2px 18px rgba(195,147,47,.22);
 }
 .hero-divider {
   display: flex; align-items: center; justify-content: center;
@@ -151,22 +155,18 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 .hero-divider::after { transform: scaleX(-1); }
 
 /* ─── Recuadro del versículo — usa el PNG de Canva ─── *
- * Matemática exacta (asset-badge.png = 1414 × 2000 px) :
- *  · El marco cartouche ocupa x 13-87 % = 74 % del ancho
- *  · background-size 135 % → escala imagen para que el
- *    74 % de ancho = 100 % del contenedor                *
- *  · El centro vertical del marco = 50 % de la imagen   *
- *    → background-position 50 % 50 % lo centra exacto   *
- *  · min-height 296 px = 28 % de alto del marco a escala *
- *    (1035 px alto escalado × 28 % = 290 px) + margen   */
+ * asset-badge.png = 1414 × 2000 px                      *
+ *  · Marco: x 14-86 % ancho, y 35-63 % alto             *
+ *  · background-size 135 % → frame llena el ancho        *
+ *  · min-height 340 px → cubre el 28 % de alto del marco *
+ *    a escala (frame = 28 % de 1031 px escalados = 289px)*
+ *    más espacio de aire arriba/abajo                    *
+ *  · mix-blend-mode: multiply en ::before elimina el     *
+ *    rectángulo blanco sin afectar el texto              */
 .verse-badge {
   position: relative;
-  background-image: url('asset-badge.png');
-  background-repeat: no-repeat;
-  background-size: 135% auto;
-  background-position: 50% 50%;
-  padding: 52px 76px 48px;
-  min-height: 296px;
+  padding: 62px 80px 58px;
+  min-height: 340px;
   max-width: 540px;
   margin: 0 auto;
   display: flex;
@@ -175,8 +175,19 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   justify-content: center;
   text-align: center;
   border: none;
-  background-color: transparent;
+  background: transparent;
 }
+.verse-badge::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background-image: url('asset-badge.png');
+  background-repeat: no-repeat;
+  background-size: 135% auto;
+  background-position: 50% 50%;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.verse-badge > * { position: relative; z-index: 1; }
 .hero-verse {
   font-family: var(--f-serif); font-size: clamp(.92rem, 2.6vw, 1.1rem);
   color: var(--text-mid); margin-bottom: 10px; line-height: 1.72;
@@ -482,6 +493,73 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 }
 
 /* ═══════════════════════════════════════════════════
+   ÍCONOS ESPIRITUALES — 3 pilares
+   ═══════════════════════════════════════════════════ */
+.features-wrap {
+  background: var(--cream-alt);
+  border-top: 1px solid var(--gold-pale);
+  border-bottom: 1px solid var(--gold-pale);
+  position: relative; overflow: hidden;
+}
+.features-wrap::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background-image: url('asset-floral.png');
+  background-size: cover; opacity: 0.05; pointer-events: none;
+}
+.features-wrap .section-inner { position: relative; z-index: 1; }
+.features-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.feature-card {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  background: rgba(255,255,255,.80);
+  border: 2px solid var(--pink-border);
+  padding: 36px 22px 30px;
+  position: relative; overflow: hidden;
+  transition: all .25s;
+}
+.feature-card::before {
+  content: '';
+  position: absolute; inset: 6px;
+  border: 1px solid transparent;
+  transition: border-color .25s; pointer-events: none;
+}
+.feature-card:hover {
+  background: var(--pink);
+  border-color: var(--gold);
+  transform: translateY(-4px); box-shadow: var(--shadow-h);
+}
+.feature-card:hover::before { border-color: rgba(195,147,47,.22); }
+.feature-card--center {
+  background: var(--pink);
+  border-color: var(--gold);
+}
+.feature-card--center::before { border-color: rgba(195,147,47,.2); }
+.feature-icon-wrap {
+  width: 100px; height: 110px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 18px;
+}
+.feature-icon-img {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 10px rgba(215,170,181,.4));
+}
+.feature-title {
+  font-family: var(--f-serif);
+  font-size: clamp(1rem, 2.4vw, 1.18rem);
+  color: var(--gold); line-height: 1.35;
+  margin-bottom: 12px; font-weight: 500;
+}
+.feature-desc {
+  font-size: .82rem; color: var(--text-mid);
+  line-height: 1.65; font-family: var(--f-sans);
+}
+
+/* ═══════════════════════════════════════════════════
    CÓMO FUNCIONA
    ═══════════════════════════════════════════════════ */
 .steps-grid {
@@ -773,12 +851,13 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
    ═══════════════════════════════════════════════════ */
 @media (max-width: 720px) {
   .steps-grid { grid-template-columns: 1fr; gap: 14px; }
-  /* Tablet: contenedor más estrecho → la misma matemática funciona
-     min-height ≈ 28 % del alto escalado a ese ancho               */
+  /* Tablet: min-height ajustada al ancho más angosto */
   .verse-badge {
+    padding: 50px 64px 46px;
+    min-height: 300px;
+  }
+  .verse-badge::before {
     background-size: 135% auto;
-    padding: 44px 60px 40px;
-    min-height: 260px;
   }
 }
 
@@ -789,20 +868,22 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   /* Nav */
   .nav-links { display: none; }
   .hamburger { display: flex; }
-  .logo-img  { height: 72px; }
+  .logo-img  { height: 86px; }
 
   /* Hero */
   .hero { padding: 36px 16px 40px; }
-  .hero-title-img { width: min(340px, 94vw); }
+  .hero-title-text { font-size: clamp(2.8rem, 14vw, 4rem); }
   .hero-divider { margin: 10px 0 16px; }
 
   /* Badge — mobile: misma escala 135 %, min-height 28 % del alto escalado
-     Ej. 340 px contenedor → imagen escalada 459 × 649 px → marco = 182 px */
+     340 px contenedor → scaled 459 × 649 px → frame ≈ 182 px → min 210 px */
   .verse-badge {
-    background-size: 135% auto;
-    padding: 38px 44px 34px;
-    min-height: 200px;
+    padding: 42px 44px 38px;
+    min-height: 230px;
     max-width: 100%;
+  }
+  .verse-badge::before {
+    background-size: 135% auto;
   }
 
   /* Sections */
@@ -814,6 +895,11 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   .today-compact-inner { padding: 22px 18px; gap: 16px; flex-direction: column; }
   .today-compact-right { flex-direction: row; align-items: center; gap: 12px; width: 100%; justify-content: space-between; }
   .today-compact-title { font-size: 1.4rem; }
+
+  /* Features */
+  .features-grid { grid-template-columns: 1fr; gap: 14px; }
+  .feature-card { padding: 26px 20px 22px; }
+  .feature-icon-wrap { width: 80px; height: 90px; margin-bottom: 14px; }
 
   /* Categories */
   .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
