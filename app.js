@@ -133,7 +133,11 @@ const App = {
           </div>
           <div class="today-compact-right">
             <div class="today-streak">
-              <span class="today-streak-num">🔥</span>
+              <span class="today-streak-num">
+                <svg class="streak-flame-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22C8.5 22 5 18.5 5 15C5 11.5 7.5 8.5 10 6.5C10.5 9 11.5 10 12 10.5C11.5 8 12.5 4.5 15.5 3C16 6.5 17.5 8 18 11C19.5 9.5 19.5 7.5 19 6C21 8.5 21 11.5 21 15C21 18.5 17.5 22 12 22Z"/>
+                </svg>
+              </span>
               <span class="today-streak-label">Racha diaria</span>
             </div>
             <a href="#/devocional/${d.slug}" class="btn btn-gold">Leer hoy →</a>
