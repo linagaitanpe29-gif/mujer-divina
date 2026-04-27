@@ -154,31 +154,30 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 }
 .hero-divider::after { transform: scaleX(-1); }
 
-/* ─── Recuadro del versículo — CSS puro, borde rosa fuerte ─ */
+/* ─── Recuadro del versículo — imagen PNG recortada del libro ─ *
+ * asset-badge-frame.png = 1100×655 px (aspect 1.68:1)           *
+ * El contenido se posiciona absolutamente encima del PNG         */
 .verse-badge {
   position: relative;
-  background: var(--pink);
-  border: 3px solid #C86080;
-  border-radius: 20px;
-  padding: 52px 72px 48px;
   max-width: 520px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  display: block;
 }
-.verse-badge::before {
-  content: '';
-  position: absolute; inset: 8px;
-  border: 1.5px solid rgba(200, 96, 128, .35);
-  border-radius: 14px;
-  pointer-events: none;
+.verse-badge-bg {
+  width: 100%; height: auto;
+  display: block;
+}
+.verse-badge-content {
+  position: absolute;
+  top: 14%; left: 15%;
+  right: 15%; bottom: 14%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
 }
 .hero-verse {
   font-family: var(--f-serif); font-size: clamp(1.05rem, 3vw, 1.28rem);
-  color: var(--text-mid); margin-bottom: 10px; line-height: 1.72;
+  color: #C8849A; margin-bottom: 10px; line-height: 1.72;
 }
 .hero-verse em {
   font-family: var(--f-title); font-size: clamp(1.55rem, 4vw, 2rem);
@@ -296,7 +295,7 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 }
 .today-compact-verse {
   font-family: var(--f-serif); font-style: italic;
-  font-size: .95rem; color: var(--text-mid); line-height: 1.65;
+  font-size: .95rem; color: #C86080; line-height: 1.65;
   border-left: 2px solid var(--gold); padding-left: 14px;
 }
 .today-compact-verse cite {
@@ -416,7 +415,7 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 }
 .card-verse {
   font-family: var(--f-serif); font-style: italic;
-  font-size: .88rem; color: var(--text-mid);
+  font-size: .88rem; color: #C86080;
   line-height: 1.55; margin-bottom: 6px;
   padding-left: 12px; border-left: 2px solid var(--gold-light);
 }
@@ -609,7 +608,7 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
 .quote-text {
   font-family: var(--f-title);
   font-size: clamp(1.65rem, 4.5vw, 2.4rem);
-  font-weight: 400; color: #B05070;
+  font-weight: 400; color: #C8849A;
   line-height: 1.45; margin-bottom: 16px; font-style: normal;
   letter-spacing: .3px;
 }
@@ -852,8 +851,8 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
    ═══════════════════════════════════════════════════ */
 @media (max-width: 720px) {
   .steps-grid { grid-template-columns: 1fr; gap: 14px; }
-  /* Tablet */
-  .verse-badge { padding: 44px 56px 40px; }
+  /* Tablet — badge se escala automáticamente con la imagen */
+  .verse-badge { max-width: 460px; }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -871,12 +870,9 @@ h1,h2,h3 { font-family: var(--f-serif); font-weight: 500; line-height: 1.2; colo
   .hero-divider { margin: 10px 0 16px; }
 
   /* Badge — mobile: misma escala 135 %, min-height 28 % del alto escalado
-  .verse-badge {
-    padding: 38px 32px 34px;
-    max-width: 100%;
-    border-radius: 16px;
-  }
-  .verse-badge::before { border-radius: 10px; }
+  /* Mobile — badge ocupa todo el ancho disponible */
+  .verse-badge { max-width: 100%; }
+  .verse-badge-content { top: 12%; bottom: 12%; left: 12%; right: 12%; }
 
   /* Sections */
   .section-inner       { padding: 38px var(--px); }
