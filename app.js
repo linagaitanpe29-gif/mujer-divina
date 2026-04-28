@@ -3,26 +3,58 @@
 const MD  = window.marked;
 const YML = window.jsyaml;
 
-const CATEGORIAS = {
-  'Fe':        '✦ Fe',
-  'Identidad': '✦ Identidad',
-  'Propósito': '✦ Propósito',
-  'Familia':   '✦ Familia',
-  'Relaciones':'✦ Relaciones',
-  'Finanzas':  '✦ Finanzas'
-};
+/* ── SUPABASE CONFIG ─────────────────────────────────
+   Reemplaza estos valores con los de tu proyecto Supabase:
+   Dashboard → Project Settings → API                    */
+const SUPABASE_URL  = 'https://TU-PROYECTO.supabase.co';
+const SUPABASE_KEY  = 'TU-ANON-PUBLIC-KEY';
+
+/* ── RUTAS PÚBLICAS (sin login) ──────────────────── */
+const PUBLIC_ROUTES = ['/ingresar', '/registrarse'];
 
 const App = {
   manifest: [],
+  user:     null,
+  sb:       null,   /* cliente Supabase */
 
-  init() {
+  /* ── INIT ─────────────────────────────────────────── */
+  async init() {
+    /* Inicializar Supabase si las credenciales están configuradas */
+    if (SUPABASE_URL !== 'https://TU-PROYECTO.supabase.co') {
+      this.sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+
     this.bindNav();
-    this.bindSubscribe();
-    this.loadManifest().then(() => this.route());
+    await this.initAuth();
+    await this.loadManifest();
+    this.route();
     window.addEventListener('hashchange', () => this.route());
     document.getElementById('logo-link').addEventListener('click', () => {
       window.location.hash = '/';
     });
+  },
+
+  /* ── AUTH INIT ────────────────────────────────────── */
+  async initAuth() {
+    if (!this.sb) { this.hideAuthLoading(); return; }
+
+    /* Sesión actual */
+    const { data: { session } } = await this.sb.auth.getSession();
+    this.user = session?.user ?? null;
+    this.updateNavForUser();
+    this.hideAuthLoading();
+
+    /* Escuchar cambios de sesión */
+    this.sb.auth.onAuthStateChange((event, session) => {
+      this.user = session?.user ?? null;
+      this.updateNavForUser();
+      if (event === 'SIGNED_IN')  { window.location.hash = '/'; }
+      if (event === 'SIGNED_OUT') { window.location.hash = '/ingresar'; }
+    });
+  },
+
+  hideAuthLoading() {
+    document.getElementById('auth-loading')?.classList.add('hidden');
   },
 
   /* ── NAV ─────────────────────────────────────────── */
@@ -38,25 +70,56 @@ const App = {
       e.preventDefault();
       window.location.hash = a.getAttribute('href').slice(1);
     });
+    /* Logout */
+    document.getElementById('nav-logout')?.addEventListener('click', () => this.logout());
+    document.getElementById('nav-logout-mob')?.addEventListener('click', () => this.logout());
   },
 
-  /* ── SUSCRIPCIÓN ──────────────────────────────────── */
-  bindSubscribe() {
-    const form = document.getElementById('sub-form');
-    const msg  = document.getElementById('sub-msg');
-    if (!form) return;
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      msg.className = 'sub-msg ok';
-      msg.textContent = '¡Gracias! Pronto recibirás el devocional en tu correo. ✦';
-      msg.classList.remove('hidden');
-      form.reset();
-    });
+  updateNavForUser() {
+    const wrap    = document.getElementById('nav-user-wrap');
+    const wrapMob = document.getElementById('nav-user-wrap-mob');
+    const nameEl  = document.getElementById('nav-user-name');
+    const nameMob = document.getElementById('nav-user-name-mob');
+
+    if (this.user) {
+      const nombre = this.user.user_metadata?.nombre
+        || this.user.email.split('@')[0];
+      if (nameEl)  nameEl.textContent  = nombre;
+      if (nameMob) nameMob.textContent = nombre;
+      wrap?.classList.remove('hidden');
+      wrapMob?.classList.remove('hidden');
+      /* Ocultar link "Comenzar" cuando ya hay sesión */
+      document.querySelectorAll('.nav-cta').forEach(el => el.classList.add('hidden'));
+    } else {
+      wrap?.classList.add('hidden');
+      wrapMob?.classList.add('hidden');
+      document.querySelectorAll('.nav-cta').forEach(el => el.classList.remove('hidden'));
+    }
+  },
+
+  async logout() {
+    if (this.sb) await this.sb.auth.signOut();
+    else { this.user = null; window.location.hash = '/ingresar'; }
   },
 
   /* ── ROUTER ───────────────────────────────────────── */
   route() {
     const hash = window.location.hash.replace('#', '') || '/';
+
+    /* Supabase no configurado → modo demo sin auth */
+    const authReady = !!this.sb;
+
+    /* Proteger rutas privadas */
+    if (authReady && !this.user && !PUBLIC_ROUTES.includes(hash)) {
+      window.location.hash = '/ingresar';
+      return;
+    }
+    /* Si ya hay sesión, no mostrar login/registro */
+    if (authReady && this.user && PUBLIC_ROUTES.includes(hash)) {
+      window.location.hash = '/';
+      return;
+    }
+
     this.hideAll();
 
     if (hash === '/' || hash === '') {
@@ -76,6 +139,12 @@ const App = {
       const slug = hash.replace('/devocional/', '');
       this.show('page-devocional');
       this.renderDevocional(slug);
+    } else if (hash === '/ingresar') {
+      this.show('page-login');
+      this.bindLoginForm();
+    } else if (hash === '/registrarse') {
+      this.show('page-register');
+      this.bindRegisterForm();
     }
 
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -87,6 +156,108 @@ const App = {
   show(id) {
     document.getElementById(id)?.classList.remove('hidden');
   },
+
+  /* ── LOGIN ────────────────────────────────────────── */
+  bindLoginForm() {
+    const form = document.getElementById('login-form');
+    if (!form || form._bound) return;
+    form._bound = true;
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const email    = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const errEl    = document.getElementById('login-error');
+      const btn      = form.querySelector('.auth-btn');
+
+      this.authSetLoading(btn, errEl, 'Ingresando...');
+
+      if (!this.sb) {
+        this.authShowError(errEl, btn, 'Configura las credenciales de Supabase en app.js', 'Ingresar →');
+        return;
+      }
+
+      const { error } = await this.sb.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        this.authShowError(errEl, btn, this.authMsg(error.message), 'Ingresar →');
+      }
+      /* Si es correcto: onAuthStateChange redirige automáticamente */
+    });
+  },
+
+  /* ── REGISTRO ─────────────────────────────────────── */
+  bindRegisterForm() {
+    const form = document.getElementById('register-form');
+    if (!form || form._bound) return;
+    form._bound = true;
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const nombre   = document.getElementById('register-name').value.trim();
+      const email    = document.getElementById('register-email').value.trim();
+      const password = document.getElementById('register-password').value;
+      const errEl    = document.getElementById('register-error');
+      const okEl     = document.getElementById('register-ok');
+      const btn      = form.querySelector('.auth-btn');
+
+      okEl.classList.add('hidden');
+      this.authSetLoading(btn, errEl, 'Creando cuenta...');
+
+      if (!this.sb) {
+        this.authShowError(errEl, btn, 'Configura las credenciales de Supabase en app.js', 'Crear mi cuenta →');
+        return;
+      }
+
+      const { data, error } = await this.sb.auth.signUp({
+        email, password,
+        options: { data: { nombre } }
+      });
+
+      if (error) {
+        this.authShowError(errEl, btn, this.authMsg(error.message), 'Crear mi cuenta →');
+        return;
+      }
+
+      /* Confirmación de email activada → mostrar mensaje */
+      if (data.user && !data.session) {
+        btn.disabled = false;
+        btn.textContent = 'Crear mi cuenta →';
+        okEl.textContent = '¡Revisa tu correo! Te enviamos un enlace de confirmación ✦';
+        okEl.classList.remove('hidden');
+      }
+      /* Si email confirmation está desactivado → onAuthStateChange redirige */
+    });
+  },
+
+  /* ── AUTH HELPERS ─────────────────────────────────── */
+  authSetLoading(btn, errEl, label) {
+    btn.disabled = true;
+    btn.textContent = label;
+    errEl.classList.add('hidden');
+  },
+  authShowError(errEl, btn, msg, btnLabel) {
+    errEl.textContent = msg;
+    errEl.classList.remove('hidden');
+    btn.disabled = false;
+    btn.textContent = btnLabel;
+  },
+  authMsg(msg) {
+    const map = {
+      'Invalid login credentials':       'Correo o contraseña incorrectos.',
+      'Email not confirmed':             'Confirma tu correo antes de ingresar.',
+      'User already registered':         'Este correo ya tiene una cuenta. Inicia sesión.',
+      'Password should be at least 6':   'La contraseña debe tener al menos 6 caracteres.',
+      'Unable to validate email address': 'Ingresa un correo válido.',
+    };
+    for (const [k, v] of Object.entries(map)) {
+      if (msg.includes(k)) return v;
+    }
+    return msg;
+  },
+
+  /* ── SUSCRIPCIÓN ──────────────────────────────────── */
+  bindSubscribe() {},   /* reservado para futuro */
 
   /* ── MANIFEST ─────────────────────────────────────── */
   async loadManifest() {
@@ -114,7 +285,6 @@ const App = {
     const list = this.sorted();
     if (!list.length) { el.innerHTML = '<p class="loading">Próximamente...</p>'; return; }
     const d = list[0];
-    // Actualiza el botón CTA del hero con el devocional de hoy
     const heroCta = document.getElementById('hero-cta');
     if (heroCta) heroCta.setAttribute('href', `#/devocional/${d.slug}`);
     el.innerHTML = `
@@ -189,10 +359,9 @@ const App = {
       const text = await res.text();
       const { fm, body } = this.parseMD(text);
 
-      const contexto = fm.contexto || '';
-      const promesa  = fm.promesa  || meta.promesa || '';
-      const oracion  = fm.oracion  || '';
-      const intro    = fm.intro    || meta.intro || '';
+      const promesa = fm.promesa || meta.promesa || '';
+      const oracion = fm.oracion || '';
+      const intro   = fm.intro   || meta.intro || '';
 
       let html = `
         <div class="devo-meta">
@@ -200,36 +369,25 @@ const App = {
           <span class="devo-date">${this.dateLong(meta.date)}</span>
         </div>
         <h1 class="devo-title">${meta.title}</h1>
-
         <div class="devo-verse">
           <p>"${meta.versiculo}"</p>
           <cite>— ${meta.referencia}</cite>
         </div>
-
         ${intro ? `<p class="devo-intro">${intro}</p>` : ''}
+        <div class="devo-body">${MD.parse(body)}</div>`;
 
-        <div class="devo-body">${MD.parse(body)}</div>
-      `;
+      if (promesa) html += `
+        <div class="promesa-wrap">
+          <p class="promesa-label">Promesa para tu vida</p>
+          <p class="promesa-text">${promesa}</p>
+        </div>`;
 
-      /* Promesa para tu vida */
-      if (promesa) {
-        html += `
-          <div class="promesa-wrap">
-            <p class="promesa-label">Promesa para tu vida</p>
-            <p class="promesa-text">${promesa}</p>
-          </div>`;
-      }
+      if (oracion) html += `
+        <div class="prayer-wrap">
+          <p class="prayer-label">Oración</p>
+          <p class="prayer-text">${oracion}</p>
+        </div>`;
 
-      /* Oración */
-      if (oracion) {
-        html += `
-          <div class="prayer-wrap">
-            <p class="prayer-label">Oración</p>
-            <p class="prayer-text">${oracion}</p>
-          </div>`;
-      }
-
-      /* Cierre */
       html += `
         <div class="closing-wrap">
           <p class="closing-declare">"Yo y mi casa serviremos a Jehová."</p>

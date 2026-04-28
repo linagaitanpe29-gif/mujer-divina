@@ -11,9 +11,18 @@
   <link href="https://fonts.cdnfonts.com/css/amoreza" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
+  <!-- AUTH LOADING OVERLAY -->
+  <div id="auth-loading" class="auth-loading hidden">
+    <div class="auth-loading-inner">
+      <img src="logo.png" alt="Mujer Divina" class="auth-loading-logo" />
+      <p class="auth-loading-dots"><span>✦</span><span>✦</span><span>✦</span></p>
+    </div>
+  </div>
 
   <!-- NAV -->
   <nav class="nav" id="nav">
@@ -24,7 +33,11 @@
       <div class="nav-links" id="nav-links">
         <a href="#/" class="nav-link">Inicio</a>
         <a href="#/archivo" class="nav-link">Devocionales</a>
-        <a href="#/suscribirse" class="nav-link nav-cta">Comenzar</a>
+        <div id="nav-user-wrap" class="nav-user-wrap hidden">
+          <span id="nav-user-name" class="nav-user-name"></span>
+          <button id="nav-logout" class="nav-logout">Salir</button>
+        </div>
+        <a href="#/registrarse" class="nav-link nav-cta">Comenzar</a>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Abrir menú">
         <span></span><span></span><span></span>
@@ -33,7 +46,11 @@
     <div class="nav-mobile" id="nav-mobile">
       <a href="#/" class="nav-link">Inicio</a>
       <a href="#/archivo" class="nav-link">Devocionales</a>
-      <a href="#/suscribirse" class="nav-link">Comenzar</a>
+      <a href="#/registrarse" class="nav-link">Comenzar</a>
+      <div id="nav-user-wrap-mob" class="nav-user-wrap-mob hidden">
+        <span id="nav-user-name-mob" class="nav-user-name-mob"></span>
+        <button id="nav-logout-mob" class="nav-logout nav-logout-mob">Salir</button>
+      </div>
     </div>
   </nav>
 
@@ -309,6 +326,63 @@
       </div>
     </section>
 
+    <!-- ══ INGRESAR ══════════════════════════════════════════ -->
+    <section id="page-login" class="page auth-page hidden">
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <div class="auth-logo-wrap">
+            <img src="logo.png" alt="Mujer Divina" class="auth-logo-img" />
+          </div>
+          <h1 class="auth-title">Bienvenida</h1>
+          <p class="auth-subtitle">Ingresa a tu espacio devocional</p>
+          <form id="login-form" class="auth-form" novalidate>
+            <div class="field-group">
+              <label class="field-label" for="login-email">Correo electrónico</label>
+              <input class="field-input" type="email" id="login-email" placeholder="tu@correo.com" autocomplete="email" required />
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="login-password">Contraseña</label>
+              <input class="field-input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" required />
+            </div>
+            <p id="login-error" class="auth-error hidden"></p>
+            <button type="submit" class="auth-btn btn btn-gold">Ingresar →</button>
+          </form>
+          <p class="auth-switch">¿Aún no tienes cuenta? <a href="#/registrarse" class="auth-link">Regístrate aquí</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ REGISTRARSE ═══════════════════════════════════════ -->
+    <section id="page-register" class="page auth-page hidden">
+      <div class="auth-wrap">
+        <div class="auth-card">
+          <div class="auth-logo-wrap">
+            <img src="logo.png" alt="Mujer Divina" class="auth-logo-img" />
+          </div>
+          <h1 class="auth-title">Crear mi cuenta</h1>
+          <p class="auth-subtitle">Comienza tu camino devocional</p>
+          <form id="register-form" class="auth-form" novalidate>
+            <div class="field-group">
+              <label class="field-label" for="register-name">Tu nombre</label>
+              <input class="field-input" type="text" id="register-name" placeholder="¿Cómo te llamamos?" autocomplete="given-name" required />
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="register-email">Correo electrónico</label>
+              <input class="field-input" type="email" id="register-email" placeholder="tu@correo.com" autocomplete="email" required />
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="register-password">Contraseña</label>
+              <input class="field-input" type="password" id="register-password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required minlength="6" />
+            </div>
+            <p id="register-error" class="auth-error hidden"></p>
+            <p id="register-ok" class="auth-ok hidden"></p>
+            <button type="submit" class="auth-btn btn btn-gold">Crear mi cuenta →</button>
+          </form>
+          <p class="auth-switch">¿Ya tienes cuenta? <a href="#/ingresar" class="auth-link">Ingresa aquí</a></p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- FOOTER -->
@@ -321,7 +395,9 @@
         <span>·</span>
         <a href="#/archivo" class="footer-link">Devocionales</a>
         <span>·</span>
-        <a href="#/suscribirse" class="footer-link">Comenzar</a>
+        <a href="#/ingresar" class="footer-link">Ingresar</a>
+        <span>·</span>
+        <a href="#/registrarse" class="footer-link">Registrarse</a>
       </div>
       <p class="footer-copy">© 2026 Mujer Divina · Todos los derechos reservados</p>
     </div>
