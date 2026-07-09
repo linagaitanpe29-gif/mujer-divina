@@ -78,7 +78,13 @@
                 <p class="hero-ref">— Salmos 37:4</p>
               </div>
             </div>
+            <div class="hero-cta-wrap">
             <a href="#/" class="btn btn-gold hero-cta" id="hero-cta">Leer hoy →</a>
+            <p class="hero-streak-badge" id="hero-streak-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
+              <span id="hero-streak-text">Tu momento de hoy te espera</span>
+            </p>
+            </div>
           </div>
         </div>
 
@@ -95,13 +101,13 @@
         <!-- CATEGORÍAS -->
         <div class="section-inner section-inner-last">
           <div class="section-head">
-            <p class="eyebrow">Explora</p>
+            <p class="eyebrow-script">Explora</p>
             <h2 class="section-title">Categorías</h2>
             <div class="gold-rule"><span>✦</span></div>
           </div>
           <div class="cat-list">
 
-            <a href="#/archivo" class="cat-row">
+            <a href="#/archivo" class="cat-row cat-fe">
               <span class="cat-icon">
                 <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20 28 C14 24 8 19 9 13 C9.5 10 12 8 15 9 C17 9.5 18.5 11 19 13"/>
@@ -117,7 +123,7 @@
               <span class="cat-arrow">›</span>
             </a>
 
-            <a href="#/archivo" class="cat-row">
+            <a href="#/archivo" class="cat-row cat-identidad">
               <span class="cat-icon">
                 <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M8 28 L10 16 L16 22 L20 10 L24 22 L30 16 L32 28 Z"/>
@@ -134,7 +140,7 @@
               <span class="cat-arrow">›</span>
             </a>
 
-            <a href="#/archivo" class="cat-row">
+            <a href="#/archivo" class="cat-row cat-proposito">
               <span class="cat-icon">
                 <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
                   <circle cx="20" cy="20" r="13"/>
@@ -153,7 +159,7 @@
               <span class="cat-arrow">›</span>
             </a>
 
-            <a href="#/archivo" class="cat-row">
+            <a href="#/archivo" class="cat-row cat-familia">
               <span class="cat-icon">
                 <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M6 18 L20 7 L34 18"/>
@@ -169,12 +175,12 @@
               <span class="cat-arrow">›</span>
             </a>
 
-            <a href="#/archivo" class="cat-row">
+            <a href="#/archivo" class="cat-row cat-relaciones">
               <span class="cat-icon">
                 <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="15" cy="20" r="9"/>
                   <circle cx="25" cy="20" r="9"/>
-                  <path d="M20 12.5 C22 14 23 17 23 20 C23 23 22 26 20 27.5 C18 26 17 23 17 20 C17 17 18 14 20 12.5Z" fill="rgba(205,163,73,.15)" stroke="none"/>
+                  <path d="M20 12.5 C22 14 23 17 23 20 C23 23 22 26 20 27.5 C18 26 17 23 17 20 C17 17 18 14 20 12.5Z" fill="rgba(200,90,130,.1)" stroke="none"/>
                 </svg>
               </span>
               <div class="cat-text">
@@ -184,7 +190,7 @@
               <span class="cat-arrow">›</span>
             </a>
 
-            <a href="#/archivo" class="cat-row" style="border-bottom:none;">
+            <a href="#/archivo" class="cat-row cat-finanzas" style="border-bottom:none;">
               <span class="cat-icon">
                 <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20 34 C20 34 8 28 8 16 C8 10 12 7 20 6"/>
@@ -207,6 +213,13 @@
         </div>
 
       </div><!-- /floral-zone -->
+
+      <!-- OLA SEPARADORA -->
+      <div class="wave-sep" aria-hidden="true">
+        <svg viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <path d="M0,24 C240,48 480,0 720,24 C960,48 1200,0 1440,24 L1440,48 L0,48 Z" fill="#FEECED"/>
+        </svg>
+      </div>
 
       <!-- ÍCONOS ESPIRITUALES — 3 pilares -->
       <div class="features-wrap">
@@ -336,13 +349,15 @@
       <!-- FRASE -->
       <div class="quote-zone">
         <div class="quote-section">
-          <p class="quote-flower">
-            <img src="icon-peony.png" alt="✿" class="quote-peony-img" />
-          </p>
-          <blockquote class="quote-text">
-            "Dios siempre habla a un corazón<br>dispuesto a escucharlo."
-          </blockquote>
-          <p class="quote-brand">— Mujer Divina</p>
+          <div class="quote-inner-frame">
+            <p class="quote-flower">
+              <img src="icon-peony.png" alt="✿" class="quote-peony-img" />
+            </p>
+            <blockquote class="quote-text">
+              "Dios siempre habla a un corazón<br>dispuesto a escucharlo."
+            </blockquote>
+            <p class="quote-brand">— Mujer Divina</p>
+          </div>
         </div>
       </div>
 

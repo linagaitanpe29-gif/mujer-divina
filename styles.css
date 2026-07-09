@@ -122,7 +122,7 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   position: absolute; inset: 0; z-index: 0;
   background-image: url('asset-floral.png');
   background-size: cover; background-position: center;
-  opacity: .06; pointer-events: none;
+  opacity: .11; pointer-events: none;
 }
 .floral-zone > * { position: relative; z-index: 1; }
 
@@ -427,9 +427,9 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   text-transform: uppercase; margin-bottom: 8px; font-weight: 500;
 }
 .card-title {
-  font-family: var(--f-title); font-size: 1.18rem;
-  color: var(--dark); margin-bottom: 12px; line-height: 1.3;
-  font-weight: 400;
+  font-family: var(--f-title); font-size: 1.28rem;
+  color: var(--dark); margin-bottom: 14px; line-height: 1.25;
+  font-weight: 400; letter-spacing: .2px;
 }
 .card-verse {
   font-family: var(--f-script);
@@ -505,8 +505,8 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
    ÍCONOS ESPIRITUALES — 3 pilares
    ═══════════════════════════════════════════════════ */
 .features-wrap {
-  background: var(--ivory);
-  border-top: 1px solid rgba(215,170,181,.3);
+  background: linear-gradient(180deg, #FEECED 0%, #FDF5F7 60%, #FDFDF8 100%);
+  border-top: none;
   border-bottom: 1px solid rgba(215,170,181,.3);
   position: relative; overflow: hidden;
 }
@@ -598,6 +598,70 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   color: var(--dark); margin-bottom: 8px; font-weight: 400;
 }
 .step-desc { font-size: .83rem; color: var(--text-mid); line-height: 1.65; }
+
+/* ═══════════════════════════════════════════════════
+   OLA SEPARADORA
+   ═══════════════════════════════════════════════════ */
+.wave-sep {
+  display: block; width: 100%; line-height: 0;
+  margin-bottom: -1px;
+}
+.wave-sep svg { display: block; width: 100%; }
+
+/* Hero streak badge */
+.hero-streak-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 16px;
+  font-size: .6rem; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold); font-weight: 600; font-family: var(--f-sans);
+  background: rgba(205,163,73,.1);
+  border: 1px solid rgba(205,163,73,.3);
+  padding: 5px 14px; border-radius: 50px;
+}
+.hero-cta-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+}
+.hero-streak-badge svg { width: 14px; height: 14px; stroke: var(--gold); }
+
+/* Eyebrow script variant */
+.eyebrow-script {
+  font-family: var(--f-script);
+  font-size: .95rem; letter-spacing: .5px; text-transform: none;
+  color: var(--rose-deep); font-weight: 400; margin-bottom: 4px;
+  display: block;
+}
+
+/* Category per-color accents */
+.cat-fe     .cat-icon { background: rgba(205,163,73,.15); border-color: rgba(205,163,73,.55); }
+.cat-fe     .cat-icon svg { color: #CDA349; stroke: #CDA349; }
+
+.cat-identidad .cat-icon { background: rgba(175,120,210,.12); border-color: rgba(175,120,210,.4); }
+.cat-identidad .cat-icon svg { color: #A878C8; stroke: #A878C8; }
+
+.cat-proposito .cat-icon { background: rgba(80,155,175,.1); border-color: rgba(80,155,175,.4); }
+.cat-proposito .cat-icon svg { color: #5A9BAA; stroke: #5A9BAA; }
+
+.cat-familia .cat-icon { background: rgba(205,135,80,.1); border-color: rgba(205,135,80,.4); }
+.cat-familia .cat-icon svg { color: #C08050; stroke: #C08050; }
+
+.cat-relaciones .cat-icon { background: rgba(210,90,130,.12); border-color: rgba(210,90,130,.4); }
+.cat-relaciones .cat-icon svg { color: #C85A82; stroke: #C85A82; }
+
+.cat-finanzas .cat-icon { background: rgba(90,145,95,.1); border-color: rgba(90,145,95,.4); }
+.cat-finanzas .cat-icon svg { color: #5A9160; stroke: #5A9160; }
+
+/* Quote zone frame */
+.quote-inner-frame {
+  border: 1px solid rgba(195,137,151,.35);
+  padding: 40px 48px;
+  position: relative;
+}
+.quote-inner-frame::before {
+  content: '';
+  position: absolute; inset: 7px;
+  border: 1px solid rgba(195,137,151,.18);
+  pointer-events: none;
+}
 
 /* ═══════════════════════════════════════════════════
    FRASE FINAL
