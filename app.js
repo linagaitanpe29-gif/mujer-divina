@@ -288,30 +288,18 @@ const App = {
     const heroCta = document.getElementById('hero-cta');
     if (heroCta) heroCta.setAttribute('href', `#/devocional/${d.slug}`);
     el.innerHTML = `
-      <div class="today-compact">
-        <div class="today-compact-inner">
-          <div class="today-compact-left">
-            <div class="today-compact-tag">
-              ${d.categoria ? `<span class="today-compact-cat">${d.categoria}</span>` : ''}
-              <span class="today-compact-date">${this.dateLong(d.date)}</span>
-            </div>
-            <h2 class="today-compact-title">${d.title}</h2>
-            <div class="today-compact-verse">
-              "${d.versiculo}"
-              <cite>— ${d.referencia}</cite>
-            </div>
+      <div class="today-editorial">
+        <div class="today-ed-inner">
+          <div class="today-ed-meta">
+            ${d.categoria ? `<span class="today-ed-cat">${d.categoria}</span>` : ''}
+            <span class="today-ed-date">${this.dateLong(d.date)}</span>
           </div>
-          <div class="today-compact-right">
-            <div class="today-streak">
-              <span class="today-streak-num">
-                <svg class="streak-flame-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 20 C6 15 2 11.5 2 7.5 C2 4.5 4.5 2.5 7.5 2.5 C9.5 2.5 11 3.5 12 5 C13 3.5 14.5 2.5 16.5 2.5 C19.5 2.5 22 4.5 22 7.5 C22 11.5 18 15 12 20Z"/>
-                </svg>
-              </span>
-              <span class="today-streak-label">Racha diaria</span>
-            </div>
-            <a href="#/devocional/${d.slug}" class="btn btn-gold">Leer hoy →</a>
+          <h2 class="today-ed-title">${d.title}</h2>
+          <div class="today-ed-verse">
+            "${d.versiculo}"
+            <cite>${d.referencia}</cite>
           </div>
+          <a href="#/devocional/${d.slug}" class="btn btn-gold">Leer hoy →</a>
         </div>
       </div>`;
   },
