@@ -10,7 +10,7 @@ const SUPABASE_URL  = 'https://TU-PROYECTO.supabase.co';
 const SUPABASE_KEY  = 'TU-ANON-PUBLIC-KEY';
 
 /* ── RUTAS PÚBLICAS (sin login) ──────────────────── */
-const PUBLIC_ROUTES = ['/ingresar', '/registrarse'];
+const PUBLIC_ROUTES = ['/ingresar', '/registrarse', '/tienda'];
 
 const App = {
   manifest: [],
@@ -145,6 +145,9 @@ const App = {
     } else if (hash === '/registrarse') {
       this.show('page-register');
       this.bindRegisterForm();
+    } else if (hash === '/tienda') {
+      this.show('page-tienda');
+      this.initTienda();
     }
 
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -155,6 +158,37 @@ const App = {
   },
   show(id) {
     document.getElementById(id)?.classList.remove('hidden');
+  },
+
+  /* ── TIENDA ───────────────────────────────────────── */
+  initTienda() {
+    const slides = document.getElementById('tienda-slides');
+    const dotsWrap = document.getElementById('tienda-dots');
+    if (!slides || this._tiendaInit) return;
+    this._tiendaInit = true;
+
+    const total = slides.children.length;
+    let current = 0;
+
+    dotsWrap.innerHTML = Array.from({length: total}, (_, i) =>
+      `<div class="tienda-dot${i === 0 ? ' active' : ''}" data-i="${i}"></div>`
+    ).join('');
+
+    const go = (n) => {
+      current = (n + total) % total;
+      slides.style.transform = `translateX(-${current * 100}%)`;
+      dotsWrap.querySelectorAll('.tienda-dot').forEach((d, i) =>
+        d.classList.toggle('active', i === current)
+      );
+    };
+
+    document.getElementById('tienda-prev').onclick = () => go(current - 1);
+    document.getElementById('tienda-next').onclick = () => go(current + 1);
+    dotsWrap.addEventListener('click', e => {
+      if (e.target.dataset.i !== undefined) go(+e.target.dataset.i);
+    });
+
+    setInterval(() => go(current + 1), 4500);
   },
 
   /* ── LOGIN ────────────────────────────────────────── */
@@ -414,3 +448,10 @@ const App = {
 };
 
 document.addEventListener('DOMContentLoaded', () => App.init());
+
+function switchImg(mainId, thumb) {
+  document.getElementById(mainId).src = thumb.src;
+  thumb.closest('.prod-gallery').querySelectorAll('.prod-thumb')
+    .forEach(t => t.classList.remove('active'));
+  thumb.classList.add('active');
+}
