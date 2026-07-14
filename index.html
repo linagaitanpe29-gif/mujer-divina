@@ -58,176 +58,166 @@
     <!-- ══ HOME ══════════════════════════════════════════════ -->
     <section id="page-home" class="page">
 
-      <!-- ZONA FLORAL CONTINUA: hero + hoy + categorías -->
+      <!-- ── HERO — fondo rosa profundo con floral ─────────── -->
       <div class="floral-zone">
-
-        <!-- HERO -->
+        <div class="hero-blob"></div>
         <div class="hero">
           <div class="hero-content">
-            <p class="eyebrow">Devocional Diario</p>
+            <span class="eyebrow">Devocional Diario</span>
             <span class="hero-title-text">Mujer Divina</span>
-            <p class="hero-subtitle">Tu momento diario con Dios</p>
-            <div class="hero-divider"><span>✦</span></div>
+            <p class="hero-subtitle">Tu momento íntimo con Dios</p>
+            <div class="orn orn-light">
+              <div class="orn-line"></div>
+              <div class="orn-dia"></div>
+              <span class="orn-center">◆</span>
+              <div class="orn-dia"></div>
+              <div class="orn-line"></div>
+            </div>
             <div class="verse-open">
               <div class="verse-open-rule"></div>
               <p class="verse-open-text">"Deléitate en el Señor,<br>y Él te concederá los deseos de tu corazón."</p>
-              <span class="verse-open-ref">— Salmos 37:4</span>
+              <span class="verse-open-ref">Salmos 37:4</span>
               <div class="verse-open-rule"></div>
             </div>
             <div class="hero-cta-wrap">
-            <a href="#/" class="btn btn-gold hero-cta" id="hero-cta">Leer hoy →</a>
-            <p class="hero-streak-badge" id="hero-streak-badge">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
-              <span id="hero-streak-text">Tu momento de hoy te espera</span>
-            </p>
+              <a href="#/" class="btn btn-gold hero-cta" id="hero-cta">Leer devocional de hoy</a>
+              <p class="hero-streak-badge" id="hero-streak-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span id="hero-streak-text">Tu momento de hoy te espera</span>
+              </p>
             </div>
           </div>
         </div>
 
-        <!-- DEVOCIONAL DE HOY -->
-        <div class="section-inner">
-          <div class="section-head">
-            <p class="eyebrow">Hoy</p>
-            <h2 class="section-title">Devocional del Día</h2>
-            <div class="gold-rule"><span>✦</span></div>
+        <!-- ola inferior: de rosa a crema -->
+        <div class="hero-wave" aria-hidden="true">
+          <svg viewBox="0 0 1440 64" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0,32 C360,64 720,0 1080,32 C1260,48 1380,24 1440,32 L1440,64 L0,64 Z" fill="#FDFDF8"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ── DEVOCIONAL DE HOY ───────────────────────────── -->
+      <div class="s-cream">
+        <div class="s-inner s-inner-lg" style="max-width:var(--max);margin:0 auto;">
+          <div class="s-head">
+            <span class="s-label">Hoy</span>
+            <div class="orn">
+              <div class="orn-line"></div>
+              <div class="orn-dia"></div>
+              <span class="orn-center">◆</span>
+              <div class="orn-dia"></div>
+              <div class="orn-line"></div>
+            </div>
+            <h2 class="s-title s-title-dark" style="margin-top:8px;">Devocional del Día</h2>
+            <div class="gold-bar" style="margin-top:14px;"></div>
           </div>
           <div id="today-card"></div>
         </div>
+      </div>
 
-        <!-- CATEGORÍAS -->
-        <div class="section-inner section-inner-last">
-          <div class="section-head">
-            <p class="eyebrow-script">Explora</p>
-            <h2 class="section-title">Categorías</h2>
-            <div class="gold-rule"><span>✦</span></div>
+      <!-- ola crema → blush -->
+      <svg class="s-wave" viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,0 C480,48 960,0 1440,24 L1440,48 L0,48 Z" fill="#FEECED"/>
+      </svg>
+
+      <!-- ── CATEGORÍAS ──────────────────────────────────── -->
+      <div class="s-blush">
+        <div class="s-inner" style="max-width:var(--max);margin:0 auto;">
+          <div class="s-head">
+            <span class="s-label">Explora</span>
+            <h2 class="s-title s-title-dark" style="margin-top:4px;">Categorías</h2>
+            <div class="gold-bar" style="margin-top:12px;"></div>
           </div>
-          <div class="cat-grid-soft">
+          <div class="cat-pillars">
 
-            <a href="#/archivo" class="cat-soft-item cat-soft-fe">
-              <span class="cat-soft-icon">
-                <!-- Paloma / Fe -->
-                <svg viewBox="0 0 48 48" fill="none" stroke="#CDA349" stroke-width="1.2">
-                  <path d="M8 30 C12 24 20 20 28 22 C34 24 40 20 43 15"/>
-                  <path d="M28 22 C30 27 28 33 24 37 C21 39 17 39 15 36"/>
-                  <path d="M43 15 C45 13 46 14 45 16 C44 17 42 17 40 16"/>
-                  <path d="M15 36 C12 37 9 36 8 34"/>
-                  <circle cx="43" cy="14" r="2" fill="#CDA349" stroke="none"/>
-                </svg>
-              </span>
-              <h3 class="cat-soft-name">Fe</h3>
-              <p class="cat-soft-desc">Confía en el proceso de Dios</p>
+            <a href="#/archivo" class="cat-pillar cat-fe">
+              <div class="cat-p-icon">
+                <svg viewBox="0 0 48 48"><path d="M8 30 C12 24 20 20 28 22 C34 24 40 20 43 15"/><path d="M28 22 C30 27 28 33 24 37 C21 39 17 39 15 36"/><path d="M43 15 C45 13 46 14 45 16 C44 17 42 17 40 16"/><path d="M15 36 C12 37 9 36 8 34"/><circle cx="43" cy="14" r="2" fill="#CDA349" stroke="none"/></svg>
+              </div>
+              <div class="cat-p-body">
+                <p class="cat-p-name">Fe</p>
+                <p class="cat-p-desc">Confía en el proceso de Dios</p>
+              </div>
+              <span class="cat-p-arrow">›</span>
             </a>
 
-            <a href="#/archivo" class="cat-soft-item cat-soft-identidad">
-              <span class="cat-soft-icon">
-                <!-- Flor de magnolia / Identidad -->
-                <svg viewBox="0 0 48 48" fill="none" stroke="#A878C8" stroke-width="1.2">
-                  <ellipse cx="24" cy="15" rx="4" ry="9" transform="rotate(0 24 24)"/>
-                  <ellipse cx="24" cy="15" rx="4" ry="9" transform="rotate(60 24 24)"/>
-                  <ellipse cx="24" cy="15" rx="4" ry="9" transform="rotate(120 24 24)"/>
-                  <ellipse cx="24" cy="15" rx="4" ry="9" transform="rotate(180 24 24)"/>
-                  <ellipse cx="24" cy="15" rx="4" ry="9" transform="rotate(240 24 24)"/>
-                  <ellipse cx="24" cy="15" rx="4" ry="9" transform="rotate(300 24 24)"/>
-                  <circle cx="24" cy="24" r="4" fill="rgba(168,120,200,.15)" stroke="#A878C8"/>
-                </svg>
-              </span>
-              <h3 class="cat-soft-name">Identidad</h3>
-              <p class="cat-soft-desc">Descubre quién eres en Él</p>
+            <a href="#/archivo" class="cat-pillar cat-identidad">
+              <div class="cat-p-icon">
+                <svg viewBox="0 0 48 48"><ellipse cx="24" cy="15" rx="4" ry="9" transform="rotate(0 24 24)"/><ellipse cx="24" cy="15" rx="4" ry="9" transform="rotate(60 24 24)"/><ellipse cx="24" cy="15" rx="4" ry="9" transform="rotate(120 24 24)"/><ellipse cx="24" cy="15" rx="4" ry="9" transform="rotate(180 24 24)"/><ellipse cx="24" cy="15" rx="4" ry="9" transform="rotate(240 24 24)"/><ellipse cx="24" cy="15" rx="4" ry="9" transform="rotate(300 24 24)"/><circle cx="24" cy="24" r="4" fill="rgba(168,120,200,.15)" stroke="#A878C8"/></svg>
+              </div>
+              <div class="cat-p-body">
+                <p class="cat-p-name">Identidad</p>
+                <p class="cat-p-desc">Descubre quién eres en Él</p>
+              </div>
+              <span class="cat-p-arrow">›</span>
             </a>
 
-            <a href="#/archivo" class="cat-soft-item cat-soft-proposito">
-              <span class="cat-soft-icon">
-                <!-- Estrella norte / Propósito -->
-                <svg viewBox="0 0 48 48" fill="none" stroke="#5A9BAA" stroke-width="1.2">
-                  <path d="M24 6 L26.5 21.5 L24 24 L21.5 21.5 Z" fill="rgba(90,155,170,.12)"/>
-                  <path d="M42 24 L26.5 26.5 L24 24 L26.5 21.5 Z" fill="rgba(90,155,170,.12)"/>
-                  <path d="M24 42 L21.5 26.5 L24 24 L26.5 26.5 Z" fill="rgba(90,155,170,.12)"/>
-                  <path d="M6 24 L21.5 21.5 L24 24 L21.5 26.5 Z" fill="rgba(90,155,170,.12)"/>
-                  <path d="M24 6 L26.5 21.5 L24 24 L21.5 21.5 Z"/>
-                  <path d="M42 24 L26.5 26.5 L24 24 L26.5 21.5 Z"/>
-                  <path d="M24 42 L21.5 26.5 L24 24 L26.5 26.5 Z"/>
-                  <path d="M6 24 L21.5 21.5 L24 24 L21.5 26.5 Z"/>
-                  <circle cx="24" cy="24" r="2.5" fill="#5A9BAA" stroke="none"/>
-                </svg>
-              </span>
-              <h3 class="cat-soft-name">Propósito</h3>
-              <p class="cat-soft-desc">Camina con dirección divina</p>
+            <a href="#/archivo" class="cat-pillar cat-proposito">
+              <div class="cat-p-icon">
+                <svg viewBox="0 0 48 48"><path d="M24 6 L26.5 21.5 L24 24 L21.5 21.5 Z" fill="rgba(90,155,170,.15)"/><path d="M42 24 L26.5 26.5 L24 24 L26.5 21.5 Z" fill="rgba(90,155,170,.15)"/><path d="M24 42 L21.5 26.5 L24 24 L26.5 26.5 Z" fill="rgba(90,155,170,.15)"/><path d="M6 24 L21.5 21.5 L24 24 L21.5 26.5 Z" fill="rgba(90,155,170,.15)"/><path d="M24 6 L26.5 21.5 L24 24 L21.5 21.5 Z"/><path d="M42 24 L26.5 26.5 L24 24 L26.5 21.5 Z"/><path d="M24 42 L21.5 26.5 L24 24 L26.5 26.5 Z"/><path d="M6 24 L21.5 21.5 L24 24 L21.5 26.5 Z"/><circle cx="24" cy="24" r="2.5" fill="#5A9BAA" stroke="none"/></svg>
+              </div>
+              <div class="cat-p-body">
+                <p class="cat-p-name">Propósito</p>
+                <p class="cat-p-desc">Camina con dirección divina</p>
+              </div>
+              <span class="cat-p-arrow">›</span>
             </a>
 
-            <a href="#/archivo" class="cat-soft-item cat-soft-familia">
-              <span class="cat-soft-icon">
-                <!-- Rama con nido / Familia -->
-                <svg viewBox="0 0 48 48" fill="none" stroke="#C08050" stroke-width="1.2">
-                  <path d="M8 36 C14 30 22 28 30 30 C36 32 40 30 42 26"/>
-                  <path d="M18 28 C18 28 16 22 20 18 C22 16 26 16 28 18 C30 20 30 24 28 26"/>
-                  <path d="M28 26 C30 24 32 22 32 20 C32 18 30 16 28 18"/>
-                  <path d="M20 18 C20 18 22 12 26 10 C28 9 30 10 30 12"/>
-                  <path d="M16 32 C14 28 14 24 16 22"/>
-                  <path d="M32 30 C34 26 35 22 34 20"/>
-                </svg>
-              </span>
-              <h3 class="cat-soft-name">Familia</h3>
-              <p class="cat-soft-desc">El corazón del hogar</p>
+            <a href="#/archivo" class="cat-pillar cat-familia">
+              <div class="cat-p-icon">
+                <svg viewBox="0 0 48 48"><path d="M8 36 C14 30 22 28 30 30 C36 32 40 30 42 26"/><path d="M18 28 C18 28 16 22 20 18 C22 16 26 16 28 18 C30 20 30 24 28 26"/><path d="M28 26 C30 24 32 22 32 20 C32 18 30 16 28 18"/><path d="M20 18 C20 18 22 12 26 10 C28 9 30 10 30 12"/></svg>
+              </div>
+              <div class="cat-p-body">
+                <p class="cat-p-name">Familia</p>
+                <p class="cat-p-desc">El corazón del hogar</p>
+              </div>
+              <span class="cat-p-arrow">›</span>
             </a>
 
-            <a href="#/archivo" class="cat-soft-item cat-soft-relaciones">
-              <span class="cat-soft-icon">
-                <!-- Dos hojas entrelazadas / Relaciones -->
-                <svg viewBox="0 0 48 48" fill="none" stroke="#C85A82" stroke-width="1.2">
-                  <path d="M24 40 C24 40 10 32 10 20 C10 12 16 8 24 10"/>
-                  <path d="M24 10 C28 9 34 10 38 16 C42 22 40 32 24 40"/>
-                  <path d="M24 40 C24 40 12 34 14 22 C15 16 20 14 24 16"/>
-                  <path d="M24 16 C28 14 34 16 36 24 C38 32 32 38 24 40"/>
-                  <line x1="24" y1="10" x2="24" y2="40" stroke-width=".8" stroke-dasharray="2 3"/>
-                </svg>
-              </span>
-              <h3 class="cat-soft-name">Relaciones</h3>
-              <p class="cat-soft-desc">Vínculos que edifican</p>
+            <a href="#/archivo" class="cat-pillar cat-relaciones">
+              <div class="cat-p-icon">
+                <svg viewBox="0 0 48 48"><path d="M24 40 C24 40 10 32 10 20 C10 12 16 8 24 10"/><path d="M24 10 C28 9 34 10 38 16 C42 22 40 32 24 40"/><path d="M24 40 C24 40 12 34 14 22 C15 16 20 14 24 16"/><path d="M24 16 C28 14 34 16 36 24 C38 32 32 38 24 40"/><line x1="24" y1="10" x2="24" y2="40" stroke-width=".8" stroke-dasharray="2 3"/></svg>
+              </div>
+              <div class="cat-p-body">
+                <p class="cat-p-name">Relaciones</p>
+                <p class="cat-p-desc">Vínculos que edifican</p>
+              </div>
+              <span class="cat-p-arrow">›</span>
             </a>
 
-            <a href="#/archivo" class="cat-soft-item cat-soft-finanzas">
-              <span class="cat-soft-icon">
-                <!-- Rama de olivo / Finanzas -->
-                <svg viewBox="0 0 48 48" fill="none" stroke="#5A9160" stroke-width="1.2">
-                  <path d="M24 42 C24 42 14 34 12 22 C11 14 16 8 24 8 C32 8 37 14 36 22 C34 34 24 42 24 42Z"/>
-                  <line x1="24" y1="8" x2="24" y2="42"/>
-                  <path d="M17 16 C19 13 22 14 24 18"/>
-                  <path d="M31 16 C29 13 26 14 24 18"/>
-                  <path d="M15 24 C17 21 21 22 24 26"/>
-                  <path d="M33 24 C31 21 27 22 24 26"/>
-                  <path d="M18 32 C20 29 22 30 24 33"/>
-                  <path d="M30 32 C28 29 26 30 24 33"/>
-                </svg>
-              </span>
-              <h3 class="cat-soft-name">Finanzas</h3>
-              <p class="cat-soft-desc">Mayordomía y abundancia</p>
+            <a href="#/archivo" class="cat-pillar cat-finanzas">
+              <div class="cat-p-icon">
+                <svg viewBox="0 0 48 48"><path d="M24 42 C24 42 14 34 12 22 C11 14 16 8 24 8 C32 8 37 14 36 22 C34 34 24 42 24 42Z"/><line x1="24" y1="8" x2="24" y2="42"/><path d="M17 16 C19 13 22 14 24 18"/><path d="M31 16 C29 13 26 14 24 18"/><path d="M15 24 C17 21 21 22 24 26"/><path d="M33 24 C31 21 27 22 24 26"/></svg>
+              </div>
+              <div class="cat-p-body">
+                <p class="cat-p-name">Finanzas</p>
+                <p class="cat-p-desc">Mayordomía y abundancia</p>
+              </div>
+              <span class="cat-p-arrow">›</span>
             </a>
 
           </div>
         </div>
-
-      </div><!-- /floral-zone -->
-
-      <!-- OLA SEPARADORA -->
-      <div class="wave-sep" aria-hidden="true">
-        <svg viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <path d="M0,24 C240,48 480,0 720,24 C960,48 1200,0 1440,24 L1440,48 L0,48 Z" fill="#FEECED"/>
-        </svg>
       </div>
 
-      <!-- ÍCONOS ESPIRITUALES — 3 pilares -->
-      <div class="features-wrap">
-        <div class="section-inner">
-          <div class="section-head">
-            <p class="eyebrow">Tu experiencia</p>
-            <h2 class="section-title">Cada mañana con propósito</h2>
-            <div class="gold-rule"><span>✦</span></div>
+      <!-- ola blush → crema -->
+      <svg class="s-wave" viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,24 C360,0 720,48 1080,24 C1260,12 1380,36 1440,24 L1440,48 L0,48 Z" fill="#FDFDF8"/>
+      </svg>
+
+      <!-- ── 3 PILARES / EXPERIENCIA ─────────────────────── -->
+      <div class="s-cream">
+        <div class="s-inner s-inner-lg" style="max-width:var(--max);margin:0 auto;">
+          <div class="s-head">
+            <span class="s-label">Tu experiencia</span>
+            <h2 class="s-title s-title-dark" style="margin-top:4px;">Cada mañana con propósito</h2>
+            <div class="gold-bar" style="margin-top:12px;"></div>
           </div>
           <div class="features-floating">
 
             <div class="feature-col">
               <div class="feature-col-icon">
-                <!-- Luna creciente + estrella / quietud matutina -->
                 <svg viewBox="0 0 60 60" fill="none" stroke="#CDA349" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M36 12 C28 14 22 22 22 30 C22 40 30 48 40 48 C44 48 48 46 50 44 C44 44 34 38 30 28 C27 20 30 14 36 12Z" fill="rgba(205,163,73,.08)"/>
                   <circle cx="14" cy="18" r="2" fill="#CDA349" stroke="none"/>
@@ -242,15 +232,11 @@
 
             <div class="feature-col">
               <div class="feature-col-icon">
-                <!-- Pluma + libro / palabra viva -->
                 <svg viewBox="0 0 60 60" fill="none" stroke="#CDA349" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 18 C12 18 20 16 30 18 C40 16 48 18 48 18 L48 46 C48 46 40 44 30 46 C20 44 12 46 12 46 Z" fill="rgba(205,163,73,.06)"/>
                   <line x1="30" y1="18" x2="30" y2="46"/>
-                  <path d="M18 26 L26 26"/>
-                  <path d="M18 32 L26 32"/>
-                  <path d="M34 26 L42 26"/>
-                  <path d="M34 32 L42 32"/>
-                  <!-- Pluma sobre el libro -->
+                  <path d="M18 26 L26 26"/><path d="M18 32 L26 32"/>
+                  <path d="M34 26 L42 26"/><path d="M34 32 L42 32"/>
                   <path d="M30 6 C36 8 40 14 38 18 C36 22 30 18 30 18 C30 18 28 12 30 6Z" fill="rgba(205,163,73,.12)"/>
                   <line x1="30" y1="18" x2="28" y2="24" stroke-width=".9"/>
                 </svg>
@@ -261,7 +247,6 @@
 
             <div class="feature-col">
               <div class="feature-col-icon">
-                <!-- Mariposa orgánica / transformación -->
                 <svg viewBox="0 0 60 60" fill="none" stroke="#CDA349" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M30 30 C30 30 18 16 10 14 C6 13 5 17 7 21 C9 25 18 28 30 30Z" fill="rgba(205,163,73,.1)"/>
                   <path d="M30 30 C30 30 42 16 50 14 C54 13 55 17 53 21 C51 25 42 28 30 30Z" fill="rgba(215,170,181,.18)"/>
@@ -279,13 +264,18 @@
         </div>
       </div>
 
-      <!-- DEVOCIONALES RECIENTES — sección rosada -->
-      <div class="section-pink-wrap">
-        <div class="section-inner">
-          <div class="section-head">
-            <p class="eyebrow">Archivo</p>
-            <h2 class="section-title">Devocionales Recientes</h2>
-            <div class="gold-rule"><span>✦</span></div>
+      <!-- ola crema → blush (para recientes) -->
+      <svg class="s-wave" viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,24 C480,0 960,48 1440,24 L1440,48 L0,48 Z" fill="#FEECED"/>
+      </svg>
+
+      <!-- ── DEVOCIONALES RECIENTES ────────────────────────── -->
+      <div class="s-blush">
+        <div class="s-inner" style="max-width:var(--max);margin:0 auto;">
+          <div class="s-head">
+            <span class="s-label">Archivo</span>
+            <h2 class="s-title s-title-dark" style="margin-top:4px;">Devocionales Recientes</h2>
+            <div class="gold-bar" style="margin-top:12px;"></div>
           </div>
           <div id="recent-grid" class="cards-grid"></div>
           <div class="center mt-6">
@@ -294,57 +284,29 @@
         </div>
       </div>
 
-      <!-- RACHA -->
-      <div class="section-inner">
-        <div class="section-head">
-          <p class="eyebrow">Tu progreso</p>
-          <h2 class="section-title">Tu Racha</h2>
-          <div class="gold-rule"><span>✦</span></div>
-        </div>
-        <div class="streak-panel">
-          <div class="streak-stats">
-            <div class="streak-stat-box">
-              <span class="streak-big">—</span>
-              <span class="streak-lbl">Días seguidos</span>
-            </div>
-            <div class="streak-divider"></div>
-            <div class="streak-week">
-              <p class="streak-week-title">Esta semana</p>
-              <div class="streak-days" id="streak-days">
-                <div class="sday"><span class="sday-dot"></span><span class="sday-name">L</span></div>
-                <div class="sday"><span class="sday-dot"></span><span class="sday-name">M</span></div>
-                <div class="sday"><span class="sday-dot"></span><span class="sday-name">M</span></div>
-                <div class="sday"><span class="sday-dot"></span><span class="sday-name">J</span></div>
-                <div class="sday"><span class="sday-dot"></span><span class="sday-name">V</span></div>
-                <div class="sday"><span class="sday-dot"></span><span class="sday-name">S</span></div>
-                <div class="sday"><span class="sday-dot"></span><span class="sday-name">D</span></div>
-              </div>
-            </div>
-            <div class="streak-divider"></div>
-            <div class="streak-stat-box">
-              <span class="streak-big">—</span>
-              <span class="streak-lbl">Total leídos</span>
-            </div>
-          </div>
-          <div class="streak-cta">
-            <p class="streak-cta-text">Activa tu acceso con el código QR de tu cuaderno para registrar tu racha</p>
-            <a href="#/suscribirse" class="btn btn-gold">Activar mi acceso →</a>
-          </div>
-        </div>
-      </div>
+      <!-- ola blush → rosa profundo (frase cierre) -->
+      <svg class="s-wave" viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,0 C360,48 720,0 1080,36 C1260,52 1380,16 1440,0 L1440,48 L0,48 Z" fill="#C38997"/>
+      </svg>
 
-      <!-- FRASE -->
-      <div class="quote-zone">
-        <div class="quote-section">
-          <div class="quote-inner-frame">
-            <p class="quote-flower">
-              <img src="icon-peony.png" alt="✿" class="quote-peony-img" />
-            </p>
-            <blockquote class="quote-text">
-              "Dios siempre habla a un corazón<br>dispuesto a escucharlo."
-            </blockquote>
-            <p class="quote-brand">— Mujer Divina</p>
+      <!-- ── FRASE CIERRE — sobre fondo rosa ───────────────── -->
+      <div class="s-rose">
+        <div style="position:absolute;inset:0;background-image:url('asset-floral.png');background-size:cover;background-position:center;opacity:.12;mix-blend-mode:multiply;pointer-events:none;z-index:0;"></div>
+        <div class="quote-section" style="position:relative;z-index:1;">
+          <div class="orn orn-light" style="margin-bottom:20px;">
+            <div class="orn-line"></div>
+            <div class="orn-dia"></div>
+            <span class="orn-center">◆</span>
+            <div class="orn-dia"></div>
+            <div class="orn-line"></div>
           </div>
+          <p class="quote-flower">
+            <img src="icon-peony.png" alt="✿" class="quote-peony-img" />
+          </p>
+          <blockquote class="quote-text">
+            "Dios siempre habla<br>a un corazón dispuesto."
+          </blockquote>
+          <p class="quote-brand">— Mujer Divina</p>
         </div>
       </div>
 
