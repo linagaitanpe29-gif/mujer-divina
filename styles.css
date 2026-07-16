@@ -705,9 +705,9 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   object-position: center center;
   filter: brightness(.97) saturate(1.1) contrast(1.02);
 }
-/* Foto 1 — Camila y Lina: subir para mostrar rostros */
+/* Foto 1 — Camila y Lina */
 .tienda-slide:nth-child(1) img {
-  object-position: center 18%;
+  object-position: center 30%;
 }
 /* Fotos 2-5 — ya vienen color-gradeadas */
 .tienda-slide:nth-child(2) img { object-position: center 40%; filter: none; }
