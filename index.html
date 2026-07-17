@@ -422,7 +422,7 @@
               <div class="prod-price-wrap">
                 <span class="prod-price">$99.000</span>
               </div>
-              <a href="#" class="btn btn-gold prod-cta">Comprar ahora →</a>
+              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('La Santa Biblia','$99.000','https://checkout.wompi.co/l/BMLVay')">Comprar ahora →</button>
             </div>
           </div>
 
@@ -459,7 +459,7 @@
               <div class="prod-price-wrap">
                 <span class="prod-price">$60.000</span>
               </div>
-              <a href="#" class="btn btn-gold prod-cta">Comprar ahora →</a>
+              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('Cuaderno Devocional','$60.000','#')">Comprar ahora →</button>
             </div>
           </div>
 
@@ -495,7 +495,7 @@
               <div class="prod-price-wrap">
                 <span class="prod-price">$85.000</span>
               </div>
-              <a href="#" class="btn btn-gold prod-cta">Comprar ahora →</a>
+              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('Caja de Promesas','$85.000','#')">Comprar ahora →</button>
             </div>
           </div>
 
@@ -539,7 +539,7 @@
                   <span class="kit-saving">Ahorras $14.000</span>
                 </div>
               </div>
-              <a href="#" class="btn btn-gold kit-cta">Quiero mi Kit →</a>
+              <button class="btn btn-gold kit-cta" onclick="App.openCheckout('Kit Completo Mujer Divina','$230.000','#')">Quiero mi Kit →</button>
               <p class="kit-note">Envío a todo Colombia · Pago seguro con Wompi</p>
             </div>
           </div>
@@ -584,7 +584,7 @@
               <div class="prod-price-wrap">
                 <span class="prod-price">$30.000</span>
               </div>
-              <a href="#" class="btn btn-gold prod-cta">Comprar ahora →</a>
+              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('Índices Bíblicos','$30.000','#')">Comprar ahora →</button>
             </div>
           </div>
         </div>
@@ -689,5 +689,45 @@
   </footer>
 
   <script src="app.js"></script>
+
+  <!-- MODAL CHECKOUT -->
+  <div id="checkout-modal" class="co-overlay" style="display:none" onclick="if(event.target===this)App.closeCheckout()">
+    <div class="co-modal">
+      <button class="co-close" onclick="App.closeCheckout()">✕</button>
+      <div class="co-header">
+        <span class="co-eyebrow">Datos de tu pedido</span>
+        <h3 class="co-title" id="co-product-name">Producto</h3>
+        <p class="co-price" id="co-product-price"></p>
+      </div>
+      <form id="co-form" class="co-form" onsubmit="App.submitCheckout(event)">
+        <div class="co-field">
+          <label>Nombre completo *</label>
+          <input type="text" id="co-nombre" placeholder="Tu nombre completo" required />
+        </div>
+        <div class="co-field">
+          <label>Correo electrónico *</label>
+          <input type="email" id="co-email" placeholder="tucorreo@email.com" required />
+        </div>
+        <div class="co-field">
+          <label>Celular *</label>
+          <input type="tel" id="co-cel" placeholder="300 000 0000" required />
+        </div>
+        <div class="co-field">
+          <label>Ciudad *</label>
+          <input type="text" id="co-ciudad" placeholder="Ciudad de entrega" required />
+        </div>
+        <div class="co-field">
+          <label>Dirección completa *</label>
+          <input type="text" id="co-direccion" placeholder="Calle, número, barrio" required />
+        </div>
+        <div class="co-field">
+          <label>Indicaciones adicionales</label>
+          <input type="text" id="co-notas" placeholder="Apartamento, torre, referencia..." />
+        </div>
+        <button type="submit" class="btn btn-gold co-submit">Continuar al pago →</button>
+        <p class="co-secure">🔒 Pago seguro con Wompi · Envío a todo Colombia</p>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

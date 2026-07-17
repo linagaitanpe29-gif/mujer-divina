@@ -449,6 +449,46 @@ const App = {
 
 document.addEventListener('DOMContentLoaded', () => App.init());
 
+/* ── CHECKOUT MODAL ───────────────────────────────── */
+App._coWompi = '#';
+
+App.openCheckout = function(product, price, wompiUrl) {
+  App._coWompi = wompiUrl;
+  document.getElementById('co-product-name').textContent = product;
+  document.getElementById('co-product-price').textContent = price;
+  document.getElementById('co-form').reset();
+  const modal = document.getElementById('checkout-modal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+};
+
+App.closeCheckout = function() {
+  document.getElementById('checkout-modal').style.display = 'none';
+  document.body.style.overflow = '';
+};
+
+App.submitCheckout = function(e) {
+  e.preventDefault();
+  const nombre    = document.getElementById('co-nombre').value.trim();
+  const email     = document.getElementById('co-email').value.trim();
+  const cel       = document.getElementById('co-cel').value.trim();
+  const ciudad    = document.getElementById('co-ciudad').value.trim();
+  const direccion = document.getElementById('co-direccion').value.trim();
+  const notas     = document.getElementById('co-notas').value.trim();
+  const producto  = document.getElementById('co-product-name').textContent;
+  const precio    = document.getElementById('co-product-price').textContent;
+
+  // Enviar datos a Formspree (se activa cuando Lina vincule el endpoint)
+  // fetch('https://formspree.io/f/XXXXXXXX', { method:'POST', ... })
+
+  App.closeCheckout();
+  if (App._coWompi && App._coWompi !== '#') {
+    window.open(App._coWompi, '_blank');
+  } else {
+    alert('El link de pago estará disponible muy pronto. ¡Gracias por tu interés!');
+  }
+};
+
 function switchImg(mainId, thumb) {
   document.getElementById(mainId).src = thumb.src;
   thumb.closest('.prod-gallery').querySelectorAll('.prod-thumb')

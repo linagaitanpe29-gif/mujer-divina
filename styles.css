@@ -910,3 +910,72 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   .lapicero-card { flex-direction: column; text-align: center; }
   .lapicero-img { width: 120px; height: 120px; }
 }
+
+/* ── CHECKOUT MODAL ───────────────────────────────── */
+.co-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(58,28,37,.55); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  animation: coFadeIn .22s ease;
+}
+@keyframes coFadeIn { from { opacity:0 } to { opacity:1 } }
+
+.co-modal {
+  background: var(--ivory); border-radius: 24px;
+  width: 100%; max-width: 480px; max-height: 92vh; overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(58,28,37,.22);
+  position: relative;
+  animation: coSlideUp .28s cubic-bezier(.22,1,.36,1);
+}
+@keyframes coSlideUp { from { transform: translateY(24px); opacity:0 } to { transform: translateY(0); opacity:1 } }
+
+.co-close {
+  position: absolute; top: 16px; right: 16px;
+  background: rgba(205,163,73,.12); border: none; border-radius: 50%;
+  width: 32px; height: 32px; cursor: pointer;
+  font-size: .85rem; color: var(--gold); display: flex; align-items: center; justify-content: center;
+}
+.co-close:hover { background: rgba(205,163,73,.25); }
+
+.co-header {
+  background: radial-gradient(ellipse at 60% 0%, #F5C8D0 0%, #EDAFC0 50%, #D7AAB5 100%);
+  border-radius: 24px 24px 0 0; padding: 32px 28px 24px; text-align: center;
+}
+.co-eyebrow {
+  font-size: .6rem; letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(255,255,242,.8); font-family: var(--f-sans); display: block; margin-bottom: 8px;
+}
+.co-title {
+  font-family: var(--f-title); font-size: 1.6rem; color: var(--ivory);
+  margin: 0 0 6px; line-height: 1.15;
+}
+.co-price {
+  font-family: var(--f-sans); font-size: 1.1rem; font-weight: 600;
+  color: var(--gold-lt); margin: 0;
+}
+
+.co-form { padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 14px; }
+
+.co-field { display: flex; flex-direction: column; gap: 5px; }
+.co-field label {
+  font-size: .72rem; font-weight: 600; letter-spacing: .5px;
+  text-transform: uppercase; color: var(--rose-deep); font-family: var(--f-sans);
+}
+.co-field input {
+  border: 1.5px solid rgba(205,163,73,.25); border-radius: 12px;
+  padding: 12px 14px; font-size: .95rem; font-family: var(--f-sans);
+  color: var(--text); background: #fff; outline: none;
+  transition: border-color .2s;
+}
+.co-field input:focus { border-color: var(--gold); }
+.co-field input::placeholder { color: rgba(90,60,70,.35); }
+
+.co-submit {
+  width: 100%; margin-top: 6px; padding: 15px;
+  font-size: 1rem; letter-spacing: 1px;
+}
+.co-secure {
+  text-align: center; font-size: .72rem; color: rgba(90,60,70,.5);
+  margin: 4px 0 0; font-family: var(--f-sans);
+}
