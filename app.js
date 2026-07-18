@@ -13,6 +13,28 @@ const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 /* Solo /roadmap requiere login — todo lo demás es público */
 const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional', '/archivo'];
 
+/* ── CORREOS APROBADOS para El Mapa de Ella ──────── */
+const APPROVED_EMAILS = [
+  'valentinalzate1@gmail.com',
+  'estefanip345@gmail.com',
+  'anadeliapatinobotero@gmail.com',
+  'korague.97@outlook.com',
+  'ylpaez@hotmail.com',
+  'luz.fr94@gmail.com',
+  'yeslie-galvan@hotmail.com',
+  'sstvanessagiraldoj@gmail.com',
+  'julianitaosorio92@gmail.com',
+  'lizbenjumea@gmail.com',
+  'kiana.acevedo@gmail.com',
+  'kalimupica@gmail.com',
+  'luciafonseca.expo@gmail.com',
+  'mariacristinaort@gmail.com',
+  'natarethc@gmail.com',
+  'luzdmoreno2026@gmail.com',
+  'vs4744042@gmail.com',
+  'linagaitanpe29@gmail.com',
+];
+
 const App = {
   manifest: [],
   user:     null,
@@ -49,7 +71,7 @@ const App = {
     this.sb.auth.onAuthStateChange((event, session) => {
       this.user = session?.user ?? null;
       this.updateNavForUser();
-      if (event === 'SIGNED_IN')  { window.location.hash = '/devocional'; }
+      if (event === 'SIGNED_IN')  { window.location.hash = '/roadmap'; }
       if (event === 'SIGNED_OUT') { window.location.hash = '/ingresar'; }
     });
   },
@@ -251,6 +273,12 @@ const App = {
 
       if (!this.sb) {
         this.authShowError(errEl, btn, 'Configura las credenciales de Supabase en app.js', 'Crear mi cuenta →');
+        return;
+      }
+
+      /* Verificar que el correo esté en la lista aprobada */
+      if (!APPROVED_EMAILS.includes(email.toLowerCase())) {
+        this.authShowError(errEl, btn, 'Tu correo no está registrado para este evento. Escríbele a Lina para verificar.', 'Crear mi cuenta →');
         return;
       }
 
