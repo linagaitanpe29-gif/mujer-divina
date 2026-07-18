@@ -10,7 +10,8 @@ const SUPABASE_URL  = 'https://jrkauaukgvcdnmaslsvb.supabase.co';
 const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impya2F1YXVrZ3ZjZG5tYXNsc3ZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjM0NDIsImV4cCI6MjA5OTkzOTQ0Mn0.Z3EeRrx0w6vVciW7gwcjhkJr41rTE90BYuNNoHFN6S8';
 
 /* ── RUTAS PÚBLICAS (sin login) ──────────────────── */
-const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda'];
+/* Solo /roadmap requiere login — todo lo demás es público */
+const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional', '/archivo'];
 
 const App = {
   manifest: [],
@@ -109,8 +110,9 @@ const App = {
     /* Supabase no configurado → modo demo sin auth */
     const authReady = !!this.sb;
 
-    /* Proteger rutas privadas */
-    if (authReady && !this.user && !PUBLIC_ROUTES.includes(hash)) {
+    /* Proteger rutas privadas — solo /roadmap requiere login */
+    const isPublic = PUBLIC_ROUTES.includes(hash) || hash.startsWith('/devocional/');
+    if (authReady && !this.user && !isPublic) {
       window.location.hash = '/ingresar';
       return;
     }
