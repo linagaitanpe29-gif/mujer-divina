@@ -751,7 +751,30 @@
         <!-- Mapa radial -->
         <div class="crea-card map-card">
           <h3 class="map-heading">Mi mapa de vida</h3>
-          <p class="map-desc">Dale puntuación a cada área del 1 al 10 — el mapa se dibuja solo.</p>
+
+          <!-- Explicación del concepto -->
+          <div class="map-explainer">
+            <p class="map-explainer-title">¿Qué es esto?</p>
+            <p class="map-explainer-text">
+              Tu vida tiene 5 grandes áreas. Cuando todas están en equilibrio, tu vida "rueda" con fluidez.
+              Cuando hay áreas muy bajas y otras muy altas, el camino se siente accidentado — aunque en papel todo parezca bien.
+            </p>
+            <div class="map-explainer-steps">
+              <div class="map-step">
+                <span class="map-step-num">1</span>
+                <span>Selecciona <strong>● Hoy</strong> y ponle nota a cada área del <strong>1 al 10</strong> según cómo te sientes <em>ahora mismo</em>. El 1 es "en el piso" y el 10 es "plena".</span>
+              </div>
+              <div class="map-step">
+                <span class="map-step-num">2</span>
+                <span>Selecciona <strong>✦ Como ella</strong> y ponle nota a cómo quieres estar en 21 días. Esta es la versión de ti que Dios ya ve.</span>
+              </div>
+              <div class="map-step">
+                <span class="map-step-num">3</span>
+                <span>Mira el mapa: el área donde hay más diferencia entre hoy y ella es tu <strong>área pivote</strong> — el punto de partida del cambio.</span>
+              </div>
+            </div>
+          </div>
+
           <div class="map-mode-toggle">
             <button class="map-btn active" id="map-btn-hoy">● Hoy</button>
             <button class="map-btn" id="map-btn-ella">✦ Como ella (meta)</button>
@@ -761,6 +784,7 @@
           </div>
           <!-- Rating rows -->
           <div class="map-rating-wrap" id="map-rating-wrap"></div>
+          <p class="map-footer-note">El área con mayor diferencia entre hoy y ella es tu punto de partida ✦</p>
         </div>
 
         <!-- Silueta de identidad -->
