@@ -10,7 +10,7 @@ const SUPABASE_URL  = 'https://TU-PROYECTO.supabase.co';
 const SUPABASE_KEY  = 'TU-ANON-PUBLIC-KEY';
 
 /* ── RUTAS PÚBLICAS (sin login) ──────────────────── */
-const PUBLIC_ROUTES = ['/ingresar', '/registrarse', '/tienda'];
+const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda'];
 
 const App = {
   manifest: [],
@@ -48,7 +48,7 @@ const App = {
     this.sb.auth.onAuthStateChange((event, session) => {
       this.user = session?.user ?? null;
       this.updateNavForUser();
-      if (event === 'SIGNED_IN')  { window.location.hash = '/'; }
+      if (event === 'SIGNED_IN')  { window.location.hash = '/devocional'; }
       if (event === 'SIGNED_OUT') { window.location.hash = '/ingresar'; }
     });
   },
@@ -115,14 +115,17 @@ const App = {
       return;
     }
     /* Si ya hay sesión, no mostrar login/registro */
-    if (authReady && this.user && PUBLIC_ROUTES.includes(hash)) {
-      window.location.hash = '/';
+    if (authReady && this.user && ['/ingresar', '/registrarse'].includes(hash)) {
+      window.location.hash = '/devocional';
       return;
     }
 
     this.hideAll();
 
     if (hash === '/' || hash === '') {
+      this.show('page-tienda');
+      this.initTienda();
+    } else if (hash === '/devocional') {
       this.show('page-home');
       this.renderHome();
     } else if (hash === '/archivo') {
@@ -146,6 +149,9 @@ const App = {
       this.show('page-register');
       this.bindRegisterForm();
     } else if (hash === '/tienda') {
+      this.show('page-tienda');
+      this.initTienda();
+    } else {
       this.show('page-tienda');
       this.initTienda();
     }
