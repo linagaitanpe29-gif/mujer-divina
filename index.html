@@ -751,14 +751,16 @@
         <!-- Mapa radial -->
         <div class="crea-card map-card">
           <h3 class="map-heading">Mi mapa de vida</h3>
-          <p class="map-desc">Mueve los puntos: <strong>●</strong> dónde estás hoy · <strong>○</strong> dónde quiere llevarte Dios</p>
+          <p class="map-desc">Dale puntuación a cada área del 1 al 10 — el mapa se dibuja solo.</p>
           <div class="map-mode-toggle">
             <button class="map-btn active" id="map-btn-hoy">● Hoy</button>
-            <button class="map-btn" id="map-btn-ella">○ Ella (meta)</button>
+            <button class="map-btn" id="map-btn-ella">✦ Como ella (meta)</button>
           </div>
           <div class="map-svg-wrap">
             <svg id="map-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"></svg>
           </div>
+          <!-- Rating rows -->
+          <div class="map-rating-wrap" id="map-rating-wrap"></div>
         </div>
 
         <!-- Silueta de identidad -->
@@ -789,22 +791,20 @@
 
         <div class="crea-card">
           <h3 class="crea-sub">Mi meta de 21 días</h3>
-          <p class="crea-hint">Completa la fórmula:</p>
-          <div class="goal-formula">
-            <span class="gf-label">En 21 días voy a</span>
-            <div class="gf-input" contenteditable="true" data-key="meta-accion" data-placeholder="lograr / avanzar en / comenzar..."></div>
-            <span class="gf-label">para que</span>
-            <div class="gf-input" contenteditable="true" data-key="meta-proposito" data-placeholder="el propósito más profundo..."></div>
-            <span class="gf-label">y así glorificar a Dios en</span>
-            <div class="gf-input" contenteditable="true" data-key="meta-gloria" data-placeholder="tu área de impacto..."></div>
-          </div>
+          <p class="crea-hint">Completa la fórmula — puedes agregar más de una meta:</p>
+          <div id="metas-container"></div>
+          <button class="add-meta-btn" id="add-meta-btn">+ Agregar otra meta</button>
         </div>
 
         <div class="crea-card">
           <h3 class="crea-sub">¿Qué estás soltando hoy?</h3>
-          <div class="write-lines" data-lines="3" data-key="rinde-soltando"></div>
+          <p class="crea-hint">Ej: el miedo a no ser suficiente, el control sobre el resultado, la opinión de esa persona...</p>
+          <div class="addable-lines" id="soltando-lines" data-key="rinde-soltando"></div>
+          <button class="add-line-btn" onclick="App._addLine('soltando-lines','rinde-soltando')">+ Agregar</button>
           <h3 class="crea-sub" style="margin-top:1.5rem">¿Qué estás recibiendo de Dios?</h3>
-          <div class="write-lines" data-lines="3" data-key="rinde-recibiendo"></div>
+          <p class="crea-hint">Ej: paz para avanzar, claridad sobre mi propósito, fe para creer en lo que no veo todavía...</p>
+          <div class="addable-lines" id="recibiendo-lines" data-key="rinde-recibiendo"></div>
+          <button class="add-line-btn" onclick="App._addLine('recibiendo-lines','rinde-recibiendo')">+ Agregar</button>
         </div>
 
         <div class="crea-nav-btns">
@@ -826,7 +826,7 @@
             <button class="pivot-btn" data-area="Proyecto de vida">Proyecto de vida</button>
             <button class="pivot-btn" data-area="Negocio">Negocio</button>
             <button class="pivot-btn" data-area="Dinero">Dinero</button>
-            <button class="pivot-btn" data-area="Pareja">Pareja</button>
+            <button class="pivot-btn" data-area="Relaciones & Familia">Relaciones & Familia</button>
             <button class="pivot-btn" data-area="Cuerpo">Cuerpo</button>
           </div>
           <h3 class="crea-sub" style="margin-top:1.2rem">¿Por qué esta área primero?</h3>

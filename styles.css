@@ -1634,3 +1634,98 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   .tracker-circle { width: 18px; height: 18px; }
   .crea-card { padding: 1rem 1rem; }
 }
+
+/* ── Rating rows del mapa ─────────────────────────── */
+.map-rating-wrap {
+  margin-top: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+}
+.map-rating-row {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+}
+.map-rating-label {
+  font-family: var(--f-sans);
+  font-size: .78rem;
+  color: var(--text-mid);
+  min-width: 120px;
+}
+.map-score-dots {
+  display: flex;
+  gap: 4px;
+}
+.map-score-dot {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--rose);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background .15s, border-color .15s;
+  flex-shrink: 0;
+}
+.map-score-dot.active {
+  background: var(--rose-deep);
+  border-color: var(--rose-deep);
+}
+/* Modo ella — dots dorados */
+.map-rating-wrap.mode-ella .map-score-dot.active {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+@media (max-width: 480px) {
+  .map-rating-label { min-width: 90px; font-size: .72rem; }
+  .map-score-dot { width: 17px; height: 17px; }
+}
+
+/* ── Metas múltiples ──────────────────────────────── */
+.meta-block + .meta-block { margin-top: 1.4rem; }
+.meta-sep {
+  font-family: var(--f-sans);
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: .6rem;
+  padding-top: .8rem;
+  border-top: 1px dashed var(--gold-lt);
+}
+.add-meta-btn {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: .55rem 1rem;
+  background: transparent;
+  border: 1px dashed var(--gold-lt);
+  border-radius: 8px;
+  font-family: var(--f-sans);
+  font-size: .82rem;
+  color: var(--gold);
+  cursor: pointer;
+  transition: background .2s;
+}
+.add-meta-btn:hover { background: var(--gold-faint); }
+
+/* ── Líneas añadibles ─────────────────────────────── */
+.addable-lines {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin-bottom: .5rem;
+}
+.add-line-btn {
+  font-family: var(--f-sans);
+  font-size: .78rem;
+  color: var(--rose-deep);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  margin-bottom: .5rem;
+}
+.add-line-btn:hover { text-decoration: underline; }

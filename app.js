@@ -569,6 +569,13 @@ App.initRoadmap = function() {
   /* Mapa radial SVG */
   App._initMap();
 
+  /* Metas múltiples */
+  App._initMetas();
+
+  /* Líneas soltando/recibiendo */
+  App._initAddableLines('soltando-lines', 'rinde-soltando', 3);
+  App._initAddableLines('recibiendo-lines', 'rinde-recibiendo', 3);
+
   /* Tracker NAVI */
   App._initTracker();
 
@@ -599,132 +606,114 @@ App._syncTrackerMeta = function() {
 
 /* ── MAPA RADIAL ─────────────────────────────────────── */
 App._initMap = function() {
-  const svg = document.getElementById('map-svg');
-  if (!svg) return;
+  const svg     = document.getElementById('map-svg');
+  const ratingW = document.getElementById('map-rating-wrap');
+  if (!svg || !ratingW) return;
 
-  const CX = 300, CY = 300, ARM = 200, N = 5;
-  const AREAS = ['Proyecto\nde vida','Negocio','Dinero','Pareja','Cuerpo'];
-  const ANGLES = [-90, -18, 54, 126, 198]; // grados
+  const CX = 300, CY = 300, ARM = 210, N = 5;
+  const AREAS  = ['Proyecto de vida','Negocio','Dinero','Relaciones\n& Familia','Cuerpo'];
+  const ANGLES = [-90, -18, 54, 126, 198];
+  const MAX    = 10;
 
-  let mode = 'hoy'; // 'hoy' | 'ella'
+  let mode = 'hoy';
   const statesHoy  = JSON.parse(localStorage.getItem('map_hoy')  || '[5,5,5,5,5]');
-  const statesElla = JSON.parse(localStorage.getItem('map_ella') || '[9,9,9,9,9]');
-  const MAX = 10;
+  const statesElla = JSON.parse(localStorage.getItem('map_ella') || '[8,8,8,8,8]');
 
   const toXY = (angle, r) => {
-    const rad = (angle * Math.PI) / 180;
+    const rad = angle * Math.PI / 180;
     return [CX + r * Math.cos(rad), CY + r * Math.sin(rad)];
   };
 
-  /* Grid lines */
+  /* ── Construir SVG ── */
   svg.innerHTML = '';
-  for (let level = 2; level <= 10; level += 2) {
-    const pts = ANGLES.map(a => toXY(a, (ARM * level) / MAX));
+  /* Grid */
+  for (let lv = 2; lv <= 10; lv += 2) {
+    const pts = ANGLES.map(a => toXY(a, ARM * lv / MAX));
     const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-    poly.setAttribute('points', pts.map(p => p.join(',')).join(' '));
-    poly.setAttribute('class', 'map-grid');
+    poly.setAttribute('points', pts.map(p=>p.join(',')).join(' '));
+    poly.setAttribute('class','map-grid');
     svg.appendChild(poly);
   }
-
-  /* Arms */
+  /* Arms + labels */
   ANGLES.forEach((a, i) => {
-    const [ex, ey] = toXY(a, ARM);
-    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1', CX); line.setAttribute('y1', CY);
-    line.setAttribute('x2', ex); line.setAttribute('y2', ey);
-    line.setAttribute('class', 'map-arm');
-    svg.appendChild(line);
-    /* Label */
-    const [lx, ly] = toXY(a, ARM + 28);
-    const text = document.createElementNS('http://www.w3.org/2000/svg','text');
-    text.setAttribute('x', lx); text.setAttribute('y', ly);
-    text.setAttribute('class', 'map-label');
-    text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('dominant-baseline', 'middle');
-    AREAS[i].split('\n').forEach((line, li) => {
-      const tspan = document.createElementNS('http://www.w3.org/2000/svg','tspan');
-      tspan.setAttribute('x', lx);
-      tspan.setAttribute('dy', li === 0 ? '0' : '1.2em');
-      tspan.textContent = line;
-      text.appendChild(tspan);
+    const [ex,ey] = toXY(a, ARM);
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',CX); ln.setAttribute('y1',CY);
+    ln.setAttribute('x2',ex); ln.setAttribute('y2',ey);
+    ln.setAttribute('class','map-arm');
+    svg.appendChild(ln);
+    const [lx,ly] = toXY(a, ARM + 32);
+    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x',lx); txt.setAttribute('y',ly);
+    txt.setAttribute('class','map-label');
+    txt.setAttribute('text-anchor','middle');
+    txt.setAttribute('dominant-baseline','middle');
+    AREAS[i].split('\n').forEach((seg,si) => {
+      const ts = document.createElementNS('http://www.w3.org/2000/svg','tspan');
+      ts.setAttribute('x',lx);
+      ts.setAttribute('dy', si === 0 ? '0' : '1.25em');
+      ts.textContent = seg;
+      txt.appendChild(ts);
     });
-    svg.appendChild(text);
+    svg.appendChild(txt);
   });
-
   /* Centro */
-  const centerCircle = document.createElementNS('http://www.w3.org/2000/svg','circle');
-  centerCircle.setAttribute('cx', CX); centerCircle.setAttribute('cy', CY);
-  centerCircle.setAttribute('r', 18); centerCircle.setAttribute('class', 'map-center');
-  svg.appendChild(centerCircle);
-  const centerText = document.createElementNS('http://www.w3.org/2000/svg','text');
-  centerText.setAttribute('x', CX); centerText.setAttribute('y', CY);
-  centerText.setAttribute('class', 'map-center-text');
-  centerText.setAttribute('text-anchor', 'middle');
-  centerText.setAttribute('dominant-baseline', 'middle');
-  centerText.textContent = 'Dios';
-  svg.appendChild(centerText);
-
-  /* Polígono ella (fondo dorado) */
+  const cc = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  cc.setAttribute('cx',CX); cc.setAttribute('cy',CY); cc.setAttribute('r',20);
+  cc.setAttribute('class','map-center'); svg.appendChild(cc);
+  const ct = document.createElementNS('http://www.w3.org/2000/svg','text');
+  ct.setAttribute('x',CX); ct.setAttribute('y',CY);
+  ct.setAttribute('class','map-center-text');
+  ct.setAttribute('text-anchor','middle'); ct.setAttribute('dominant-baseline','middle');
+  ct.textContent='Dios'; svg.appendChild(ct);
+  /* Polígonos */
   const polyElla = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-  polyElla.setAttribute('class', 'map-poly-ella');
-  svg.appendChild(polyElla);
-
-  /* Polígono hoy (relleno rosa) */
-  const polyHoy = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-  polyHoy.setAttribute('class', 'map-poly-hoy');
-  svg.appendChild(polyHoy);
-
-  /* Puntos arrastrables */
-  const dots = ANGLES.map((a, i) => {
-    const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    dot.setAttribute('r', 10);
-    dot.setAttribute('class', 'map-dot map-dot-hoy');
-    svg.appendChild(dot);
-    return dot;
-  });
+  polyElla.setAttribute('class','map-poly-ella'); svg.appendChild(polyElla);
+  const polyHoy  = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  polyHoy.setAttribute('class','map-poly-hoy');  svg.appendChild(polyHoy);
 
   const render = () => {
-    /* Polígono hoy */
-    const ptsHoy = ANGLES.map((a, i) => toXY(a, (ARM * statesHoy[i]) / MAX));
-    polyHoy.setAttribute('points', ptsHoy.map(p => p.join(',')).join(' '));
-    /* Polígono ella */
-    const ptsElla = ANGLES.map((a, i) => toXY(a, (ARM * statesElla[i]) / MAX));
-    polyElla.setAttribute('points', ptsElla.map(p => p.join(',')).join(' '));
-    /* Dots */
-    const states = mode === 'hoy' ? statesHoy : statesElla;
-    dots.forEach((dot, i) => {
-      const [dx, dy] = toXY(ANGLES[i], (ARM * states[i]) / MAX);
-      dot.setAttribute('cx', dx); dot.setAttribute('cy', dy);
-      dot.setAttribute('class', mode === 'hoy' ? 'map-dot map-dot-hoy' : 'map-dot map-dot-ella');
+    const ptsH = ANGLES.map((a,i) => toXY(a, ARM * statesHoy[i]  / MAX));
+    const ptsE = ANGLES.map((a,i) => toXY(a, ARM * statesElla[i] / MAX));
+    polyHoy.setAttribute('points',  ptsH.map(p=>p.join(',')).join(' '));
+    polyElla.setAttribute('points', ptsE.map(p=>p.join(',')).join(' '));
+    /* Actualizar rating rows */
+    const rw = document.getElementById('map-rating-wrap');
+    if (rw) rw.classList.toggle('mode-ella', mode === 'ella');
+    document.querySelectorAll('.map-rating-row').forEach((row,i) => {
+      const val = mode === 'hoy' ? statesHoy[i] : statesElla[i];
+      row.querySelectorAll('.map-score-dot').forEach((dot,di) => {
+        dot.classList.toggle('active', di < val);
+      });
     });
   };
 
-  /* Drag en SVG */
-  let dragging = null;
-  dots.forEach((dot, i) => {
-    dot.addEventListener('mousedown', e => { dragging = i; e.preventDefault(); });
-    dot.addEventListener('touchstart', e => { dragging = i; e.preventDefault(); }, { passive: false });
+  /* ── Rating rows ── */
+  ratingW.innerHTML = '';
+  AREAS.forEach((area, i) => {
+    const row = document.createElement('div');
+    row.className = 'map-rating-row';
+    const label = document.createElement('span');
+    label.className = 'map-rating-label';
+    label.textContent = area.replace('\n',' ');
+    row.appendChild(label);
+    const dots = document.createElement('div');
+    dots.className = 'map-score-dots';
+    for (let d = 1; d <= 10; d++) {
+      const dot = document.createElement('button');
+      dot.className = 'map-score-dot';
+      dot.title = d;
+      dot.addEventListener('click', () => {
+        const states = mode === 'hoy' ? statesHoy : statesElla;
+        states[i] = d;
+        localStorage.setItem(mode === 'hoy' ? 'map_hoy' : 'map_ella', JSON.stringify(states));
+        render();
+      });
+      dots.appendChild(dot);
+    }
+    row.appendChild(dots);
+    ratingW.appendChild(row);
   });
-  const onMove = (ex, ey) => {
-    if (dragging === null) return;
-    const rect = svg.getBoundingClientRect();
-    const sx = (ex - rect.left) * (600 / rect.width) - CX;
-    const sy = (ey - rect.top)  * (600 / rect.height) - CY;
-    const arm_angle = ANGLES[dragging] * Math.PI / 180;
-    let proj = sx * Math.cos(arm_angle) + sy * Math.sin(arm_angle);
-    proj = Math.max(0, Math.min(ARM, proj));
-    const val = Math.round((proj / ARM) * MAX);
-    if (mode === 'hoy') { statesHoy[dragging] = val; localStorage.setItem('map_hoy', JSON.stringify(statesHoy)); }
-    else { statesElla[dragging] = val; localStorage.setItem('map_ella', JSON.stringify(statesElla)); }
-    render();
-  };
-  svg.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
-  svg.addEventListener('mouseup', () => { dragging = null; });
-  svg.addEventListener('touchmove', e => {
-    const t = e.touches[0];
-    onMove(t.clientX, t.clientY);
-  }, { passive: false });
-  svg.addEventListener('touchend', () => { dragging = null; });
 
   /* Toggle modo */
   document.getElementById('map-btn-hoy')?.addEventListener('click', () => {
@@ -741,6 +730,87 @@ App._initMap = function() {
   });
 
   render();
+};
+
+/* ── METAS MÚLTIPLES ─────────────────────────────────── */
+App._initMetas = function() {
+  const container = document.getElementById('metas-container');
+  const addBtn    = document.getElementById('add-meta-btn');
+  if (!container || !addBtn) return;
+
+  const saved = JSON.parse(localStorage.getItem('crea_metas') || 'null')
+    || [{ accion:'', proposito:'', gloria:'' }];
+  App._metasData = saved;
+
+  const saveAll = () => localStorage.setItem('crea_metas', JSON.stringify(App._metasData));
+
+  const renderMeta = (idx) => {
+    const m = App._metasData[idx];
+    const wrap = document.createElement('div');
+    wrap.className = 'goal-formula meta-block';
+    wrap.dataset.idx = idx;
+    if (idx > 0) {
+      const sep = document.createElement('div');
+      sep.className = 'meta-sep';
+      sep.textContent = `Meta ${idx + 1}`;
+      wrap.appendChild(sep);
+    }
+    const fields = [
+      { key:'accion',    pre:'En 21 días voy a',         ph:'lograr / avanzar en / comenzar...' },
+      { key:'proposito', pre:'para que',                  ph:'el propósito más profundo...' },
+      { key:'gloria',    pre:'y así glorificar a Dios en',ph:'tu área de impacto...' },
+    ];
+    fields.forEach(f => {
+      const lbl = document.createElement('span');
+      lbl.className = 'gf-label'; lbl.textContent = f.pre;
+      const inp = document.createElement('div');
+      inp.className = 'gf-input';
+      inp.contentEditable = 'true';
+      inp.dataset.placeholder = f.ph;
+      if (m[f.key]) inp.textContent = m[f.key];
+      inp.addEventListener('input', () => {
+        App._metasData[idx][f.key] = inp.textContent;
+        saveAll();
+      });
+      wrap.appendChild(lbl);
+      wrap.appendChild(inp);
+    });
+    container.appendChild(wrap);
+  };
+
+  App._metasData.forEach((_, i) => renderMeta(i));
+
+  addBtn.addEventListener('click', () => {
+    App._metasData.push({ accion:'', proposito:'', gloria:'' });
+    saveAll();
+    renderMeta(App._metasData.length - 1);
+  });
+};
+
+/* ── LÍNEAS AÑADIBLES ────────────────────────────────── */
+App._initAddableLines = function(containerId, storageKey, initialCount) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const saved = JSON.parse(localStorage.getItem('addable_' + storageKey) || '[]');
+  const count  = Math.max(initialCount, saved.length);
+  for (let i = 0; i < count; i++) {
+    App._addLine(containerId, storageKey, saved[i] || '');
+  }
+};
+
+App._addLine = function(containerId, storageKey, initialValue) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const div = document.createElement('div');
+  div.className = 'write-line';
+  div.contentEditable = 'true';
+  div.dataset.placeholder = 'Escribe aquí...';
+  if (initialValue) div.textContent = initialValue;
+  div.addEventListener('input', () => {
+    const vals = [...container.querySelectorAll('.write-line')].map(d => d.textContent);
+    localStorage.setItem('addable_' + storageKey, JSON.stringify(vals));
+  });
+  container.appendChild(div);
 };
 
 /* ── TRACKER NAVI ────────────────────────────────────── */
