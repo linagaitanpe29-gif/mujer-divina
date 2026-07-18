@@ -151,6 +151,9 @@ const App = {
     } else if (hash === '/tienda') {
       this.show('page-tienda');
       this.initTienda();
+    } else if (hash === '/roadmap') {
+      this.show('page-roadmap');
+      this.initRoadmap();
     } else {
       this.show('page-tienda');
       this.initTienda();
@@ -501,3 +504,340 @@ function switchImg(mainId, thumb) {
     .forEach(t => t.classList.remove('active'));
   thumb.classList.add('active');
 }
+
+/* ── ROADMAP (Sistema CREA) ───────────────────────────── */
+App.initRoadmap = function() {
+  if (this._roadmapInit) return;
+  this._roadmapInit = true;
+
+  /* Fecha */
+  const fechaEl = document.getElementById('roadmap-fecha');
+  if (fechaEl) {
+    const d = new Date();
+    const meses = ['enero','febrero','marzo','abril','mayo','junio',
+      'julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    fechaEl.textContent = `${d.getDate()} de ${meses[d.getMonth()]} de ${d.getFullYear()}`;
+  }
+
+  /* Navegación CREA */
+  document.querySelectorAll('.crea-next-btn').forEach(btn => {
+    btn.addEventListener('click', () => App._creaGoto(+btn.dataset.goto));
+  });
+  document.querySelectorAll('.crea-back-btn').forEach(btn => {
+    btn.addEventListener('click', () => App._creaGoto(+btn.dataset.goto));
+  });
+
+  /* Persistencia contenteditable */
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const k = 'crea_' + el.dataset.key;
+    const saved = localStorage.getItem(k);
+    if (saved) el.textContent = saved;
+    el.addEventListener('input', () => localStorage.setItem(k, el.textContent));
+  });
+
+  /* Área pivote */
+  document.querySelectorAll('.pivot-btn').forEach(btn => {
+    const k = 'crea_estructura-area';
+    if (localStorage.getItem(k) === btn.dataset.area) btn.classList.add('selected');
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.pivot-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      localStorage.setItem(k, btn.dataset.area);
+    });
+  });
+
+  /* Write-lines */
+  document.querySelectorAll('.write-lines').forEach(wrap => {
+    const n = +wrap.dataset.lines || 3;
+    const k = wrap.dataset.key;
+    const saved = JSON.parse(localStorage.getItem('crea_lines_' + k) || '[]');
+    wrap.innerHTML = '';
+    for (let i = 0; i < n; i++) {
+      const div = document.createElement('div');
+      div.className = 'write-line';
+      div.contentEditable = 'true';
+      div.dataset.placeholder = 'Escribe aquí...';
+      if (saved[i]) div.textContent = saved[i];
+      div.addEventListener('input', () => {
+        const vals = [...wrap.querySelectorAll('.write-line')].map(d => d.textContent);
+        localStorage.setItem('crea_lines_' + k, JSON.stringify(vals));
+      });
+      wrap.appendChild(div);
+    }
+  });
+
+  /* Mapa radial SVG */
+  App._initMap();
+
+  /* Tracker NAVI */
+  App._initTracker();
+
+  /* Meta anclaje en sección A */
+  App._syncTrackerMeta();
+};
+
+App._creaGoto = function(step) {
+  const ids = ['crea-c','crea-r','crea-e','crea-a'];
+  ids.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('hidden', i + 1 !== step);
+  });
+  document.querySelectorAll('.rp-step').forEach(s => {
+    s.classList.toggle('active', +s.dataset.step <= step);
+  });
+  if (step === 4) App._syncTrackerMeta();
+  document.querySelector('.roadmap-wrap')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+App._syncTrackerMeta = function() {
+  const el = document.getElementById('tracker-meta-display');
+  if (!el) return;
+  const accion   = localStorage.getItem('crea_meta-accion') || '___';
+  const proposito= localStorage.getItem('crea_meta-proposito') || '___';
+  el.innerHTML = `En 21 días voy a <strong>${accion}</strong> para que <strong>${proposito}</strong>`;
+};
+
+/* ── MAPA RADIAL ─────────────────────────────────────── */
+App._initMap = function() {
+  const svg = document.getElementById('map-svg');
+  if (!svg) return;
+
+  const CX = 300, CY = 300, ARM = 200, N = 5;
+  const AREAS = ['Proyecto\nde vida','Negocio','Dinero','Pareja','Cuerpo'];
+  const ANGLES = [-90, -18, 54, 126, 198]; // grados
+
+  let mode = 'hoy'; // 'hoy' | 'ella'
+  const statesHoy  = JSON.parse(localStorage.getItem('map_hoy')  || '[5,5,5,5,5]');
+  const statesElla = JSON.parse(localStorage.getItem('map_ella') || '[9,9,9,9,9]');
+  const MAX = 10;
+
+  const toXY = (angle, r) => {
+    const rad = (angle * Math.PI) / 180;
+    return [CX + r * Math.cos(rad), CY + r * Math.sin(rad)];
+  };
+
+  /* Grid lines */
+  svg.innerHTML = '';
+  for (let level = 2; level <= 10; level += 2) {
+    const pts = ANGLES.map(a => toXY(a, (ARM * level) / MAX));
+    const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    poly.setAttribute('points', pts.map(p => p.join(',')).join(' '));
+    poly.setAttribute('class', 'map-grid');
+    svg.appendChild(poly);
+  }
+
+  /* Arms */
+  ANGLES.forEach((a, i) => {
+    const [ex, ey] = toXY(a, ARM);
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1', CX); line.setAttribute('y1', CY);
+    line.setAttribute('x2', ex); line.setAttribute('y2', ey);
+    line.setAttribute('class', 'map-arm');
+    svg.appendChild(line);
+    /* Label */
+    const [lx, ly] = toXY(a, ARM + 28);
+    const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+    text.setAttribute('x', lx); text.setAttribute('y', ly);
+    text.setAttribute('class', 'map-label');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'middle');
+    AREAS[i].split('\n').forEach((line, li) => {
+      const tspan = document.createElementNS('http://www.w3.org/2000/svg','tspan');
+      tspan.setAttribute('x', lx);
+      tspan.setAttribute('dy', li === 0 ? '0' : '1.2em');
+      tspan.textContent = line;
+      text.appendChild(tspan);
+    });
+    svg.appendChild(text);
+  });
+
+  /* Centro */
+  const centerCircle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  centerCircle.setAttribute('cx', CX); centerCircle.setAttribute('cy', CY);
+  centerCircle.setAttribute('r', 18); centerCircle.setAttribute('class', 'map-center');
+  svg.appendChild(centerCircle);
+  const centerText = document.createElementNS('http://www.w3.org/2000/svg','text');
+  centerText.setAttribute('x', CX); centerText.setAttribute('y', CY);
+  centerText.setAttribute('class', 'map-center-text');
+  centerText.setAttribute('text-anchor', 'middle');
+  centerText.setAttribute('dominant-baseline', 'middle');
+  centerText.textContent = 'Dios';
+  svg.appendChild(centerText);
+
+  /* Polígono ella (fondo dorado) */
+  const polyElla = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  polyElla.setAttribute('class', 'map-poly-ella');
+  svg.appendChild(polyElla);
+
+  /* Polígono hoy (relleno rosa) */
+  const polyHoy = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  polyHoy.setAttribute('class', 'map-poly-hoy');
+  svg.appendChild(polyHoy);
+
+  /* Puntos arrastrables */
+  const dots = ANGLES.map((a, i) => {
+    const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    dot.setAttribute('r', 10);
+    dot.setAttribute('class', 'map-dot map-dot-hoy');
+    svg.appendChild(dot);
+    return dot;
+  });
+
+  const render = () => {
+    /* Polígono hoy */
+    const ptsHoy = ANGLES.map((a, i) => toXY(a, (ARM * statesHoy[i]) / MAX));
+    polyHoy.setAttribute('points', ptsHoy.map(p => p.join(',')).join(' '));
+    /* Polígono ella */
+    const ptsElla = ANGLES.map((a, i) => toXY(a, (ARM * statesElla[i]) / MAX));
+    polyElla.setAttribute('points', ptsElla.map(p => p.join(',')).join(' '));
+    /* Dots */
+    const states = mode === 'hoy' ? statesHoy : statesElla;
+    dots.forEach((dot, i) => {
+      const [dx, dy] = toXY(ANGLES[i], (ARM * states[i]) / MAX);
+      dot.setAttribute('cx', dx); dot.setAttribute('cy', dy);
+      dot.setAttribute('class', mode === 'hoy' ? 'map-dot map-dot-hoy' : 'map-dot map-dot-ella');
+    });
+  };
+
+  /* Drag en SVG */
+  let dragging = null;
+  dots.forEach((dot, i) => {
+    dot.addEventListener('mousedown', e => { dragging = i; e.preventDefault(); });
+    dot.addEventListener('touchstart', e => { dragging = i; e.preventDefault(); }, { passive: false });
+  });
+  const onMove = (ex, ey) => {
+    if (dragging === null) return;
+    const rect = svg.getBoundingClientRect();
+    const sx = (ex - rect.left) * (600 / rect.width) - CX;
+    const sy = (ey - rect.top)  * (600 / rect.height) - CY;
+    const arm_angle = ANGLES[dragging] * Math.PI / 180;
+    let proj = sx * Math.cos(arm_angle) + sy * Math.sin(arm_angle);
+    proj = Math.max(0, Math.min(ARM, proj));
+    const val = Math.round((proj / ARM) * MAX);
+    if (mode === 'hoy') { statesHoy[dragging] = val; localStorage.setItem('map_hoy', JSON.stringify(statesHoy)); }
+    else { statesElla[dragging] = val; localStorage.setItem('map_ella', JSON.stringify(statesElla)); }
+    render();
+  };
+  svg.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+  svg.addEventListener('mouseup', () => { dragging = null; });
+  svg.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    onMove(t.clientX, t.clientY);
+  }, { passive: false });
+  svg.addEventListener('touchend', () => { dragging = null; });
+
+  /* Toggle modo */
+  document.getElementById('map-btn-hoy')?.addEventListener('click', () => {
+    mode = 'hoy';
+    document.getElementById('map-btn-hoy').classList.add('active');
+    document.getElementById('map-btn-ella').classList.remove('active');
+    render();
+  });
+  document.getElementById('map-btn-ella')?.addEventListener('click', () => {
+    mode = 'ella';
+    document.getElementById('map-btn-ella').classList.add('active');
+    document.getElementById('map-btn-hoy').classList.remove('active');
+    render();
+  });
+
+  render();
+};
+
+/* ── TRACKER NAVI ────────────────────────────────────── */
+const HABIT_DEFAULTS = [
+  { type: 'conexion',     name: 'Oración y lectura' },
+  { type: 'ejecucion',    name: 'Acción de mi meta' },
+  { type: 'sostenimiento',name: 'Descanso intencional' },
+];
+
+App._trackerData = JSON.parse(localStorage.getItem('navi_habits') || 'null') || HABIT_DEFAULTS.map(h => ({
+  ...h, states: Array(21).fill(0)
+}));
+
+App._saveTracker = function() {
+  localStorage.setItem('navi_habits', JSON.stringify(App._trackerData));
+};
+
+App._initTracker = function() {
+  const container = document.getElementById('tracker-habits');
+  if (!container) return;
+  container.innerHTML = '';
+  App._trackerData.forEach((habit, hi) => App._renderHabitRow(container, habit, hi));
+  App._updateTrackerStats();
+};
+
+App._renderHabitRow = function(container, habit, hi) {
+  const row = document.createElement('div');
+  row.className = `tracker-row tracker-row-${habit.type}`;
+  row.dataset.hi = hi;
+
+  const nameInput = document.createElement('input');
+  nameInput.type = 'text';
+  nameInput.className = 'tracker-habit-name';
+  nameInput.value = habit.name;
+  nameInput.placeholder = 'Nombre del hábito';
+  nameInput.addEventListener('input', () => {
+    App._trackerData[hi].name = nameInput.value;
+    App._saveTracker();
+  });
+
+  const circles = document.createElement('div');
+  circles.className = 'tracker-circles';
+
+  let clickTimer = null;
+  for (let d = 0; d < 21; d++) {
+    const c = document.createElement('div');
+    c.className = 'tracker-circle';
+    App._updateCircleEl(c, habit.states[d]);
+    c.addEventListener('click', () => {
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => {
+        App._trackerData[hi].states[d] = App._trackerData[hi].states[d] === 1 ? 0 : 1;
+        App._updateCircleEl(c, App._trackerData[hi].states[d]);
+        App._saveTracker();
+        App._updateTrackerStats();
+      }, 180);
+    });
+    c.addEventListener('dblclick', () => {
+      clearTimeout(clickTimer);
+      App._trackerData[hi].states[d] = App._trackerData[hi].states[d] === 2 ? 0 : 2;
+      App._updateCircleEl(c, App._trackerData[hi].states[d]);
+      App._saveTracker();
+      App._updateTrackerStats();
+    });
+    circles.appendChild(c);
+  }
+
+  row.appendChild(nameInput);
+  row.appendChild(circles);
+  container.appendChild(row);
+};
+
+App._updateCircleEl = function(el, state) {
+  el.className = 'tracker-circle';
+  if (state === 1) el.classList.add('full');
+  if (state === 2) el.classList.add('essential');
+};
+
+App._updateTrackerStats = function() {
+  const statsEl = document.getElementById('tracker-stats');
+  if (!statsEl) return;
+  let completas = 0, esenciales = 0, total = 0;
+  App._trackerData.forEach(h => h.states.forEach(s => {
+    total++;
+    if (s === 1) completas++;
+    if (s === 2) esenciales++;
+  }));
+  const pct = total ? Math.round(((completas + esenciales) / total) * 100) : 0;
+  statsEl.innerHTML = `
+    <span class="stat-item"><strong>${completas}</strong> Completas</span>
+    <span class="stat-item essential"><strong>${esenciales}</strong> Esenciales</span>
+    <span class="stat-item pct"><strong>${pct}%</strong> Avance</span>`;
+};
+
+App.addHabit = function(type) {
+  App._trackerData.push({ type, name: '', states: Array(21).fill(0) });
+  App._saveTracker();
+  const container = document.getElementById('tracker-habits');
+  App._renderHabitRow(container, App._trackerData[App._trackerData.length - 1], App._trackerData.length - 1);
+};

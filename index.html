@@ -32,6 +32,7 @@
       <div class="nav-links" id="nav-links">
         <a href="#/devocional" class="nav-link">Devocional diario</a>
         <a href="#/" class="nav-link">Tienda</a>
+        <a href="#/roadmap" class="nav-link">El Mapa de Ella</a>
         <div id="nav-user-wrap" class="nav-user-wrap hidden">
           <span id="nav-user-name" class="nav-user-name"></span>
           <button id="nav-logout" class="nav-logout">Salir</button>
@@ -44,6 +45,7 @@
     <div class="nav-mobile" id="nav-mobile">
       <a href="#/devocional" class="nav-link">Devocional diario</a>
       <a href="#/" class="nav-link">Tienda</a>
+      <a href="#/roadmap" class="nav-link">El Mapa de Ella</a>
       <div id="nav-user-wrap-mob" class="nav-user-wrap-mob hidden">
         <span id="nav-user-name-mob" class="nav-user-name-mob"></span>
         <button id="nav-logout-mob" class="nav-logout nav-logout-mob">Salir</button>
@@ -709,5 +711,215 @@
       </form>
     </div>
   </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       PÁGINA: ROADMAP — El Mapa de Ella (Sistema CREA)
+       ══════════════════════════════════════════════════════ -->
+  <section id="page-roadmap" class="page hidden">
+    <div class="roadmap-wrap">
+
+      <!-- ENCABEZADO -->
+      <div class="roadmap-header">
+        <p class="roadmap-label">evento mujer divina</p>
+        <h1 class="roadmap-title">El Mapa de Ella</h1>
+        <p class="roadmap-subtitle">La hoja de ruta para cumplir los sueños que Dios puso en ti</p>
+        <div class="roadmap-progress" id="roadmap-progress">
+          <div class="rp-step active" data-step="1"><span>C</span><small>Conecta</small></div>
+          <div class="rp-line"></div>
+          <div class="rp-step" data-step="2"><span>R</span><small>Rinde</small></div>
+          <div class="rp-line"></div>
+          <div class="rp-step" data-step="3"><span>E</span><small>Estructura</small></div>
+          <div class="rp-line"></div>
+          <div class="rp-step" data-step="4"><span>A</span><small>Acciona</small></div>
+        </div>
+      </div>
+
+      <!-- ── C: CONECTA ────────────────────────────────── -->
+      <div class="crea-section" id="crea-c" data-step="1">
+        <div class="crea-badge">C · Conecta</div>
+        <h2 class="crea-heading">¿Quién eres tú realmente?</h2>
+        <p class="crea-intro">Antes de saber a dónde vas, necesitas saber desde dónde partes. Tu identidad en Dios es tu punto de partida.</p>
+
+        <!-- Declaración de identidad -->
+        <div class="crea-card identity-card">
+          <p class="identity-decl">Soy una <strong>Mujer Divina</strong> en Cristo.</p>
+          <p class="identity-decl">Soy hija del Rey.</p>
+          <p class="identity-decl">Mi nombre es <span class="identity-name" contenteditable="true" data-placeholder="tu nombre">_________________</span></p>
+          <p class="identity-decl">y Dios tiene un propósito eterno en mí.</p>
+        </div>
+
+        <!-- Mapa radial -->
+        <div class="crea-card map-card">
+          <h3 class="map-heading">Mi mapa de vida</h3>
+          <p class="map-desc">Mueve los puntos: <strong>●</strong> dónde estás hoy · <strong>○</strong> dónde quiere llevarte Dios</p>
+          <div class="map-mode-toggle">
+            <button class="map-btn active" id="map-btn-hoy">● Hoy</button>
+            <button class="map-btn" id="map-btn-ella">○ Ella (meta)</button>
+          </div>
+          <div class="map-svg-wrap">
+            <svg id="map-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+        </div>
+
+        <!-- Silueta de identidad -->
+        <div class="crea-card">
+          <h3 class="crea-sub">Así es esa mujer</h3>
+          <div class="write-lines" data-lines="4" data-key="identidad-es"></div>
+          <h3 class="crea-sub" style="margin-top:1.5rem">Sus sueños son</h3>
+          <div class="write-lines" data-lines="3" data-key="identidad-suenos"></div>
+          <h3 class="crea-sub" style="margin-top:1.5rem">Sus acciones lo demuestran</h3>
+          <div class="write-lines" data-lines="3" data-key="identidad-acciones"></div>
+        </div>
+
+        <button class="crea-next-btn" data-goto="2">Continuar → R · Rinde</button>
+      </div>
+
+      <!-- ── R: RINDE ───────────────────────────────────── -->
+      <div class="crea-section hidden" id="crea-r" data-step="2">
+        <div class="crea-badge">R · Rinde</div>
+        <h2 class="crea-heading">Suelta el control. Recibe la dirección.</h2>
+        <p class="crea-intro">La mujer que Dios diseñó no avanza con sus propias fuerzas — avanza con la suya. Este paso es una rendición, no una derrota.</p>
+
+        <div class="crea-card prayer-card">
+          <p class="prayer-text">
+            <em>"Señor, si esto no es tuyo, quítamelo.<br>
+            Y si es tuyo, sostenme mientras lo construyo."</em>
+          </p>
+        </div>
+
+        <div class="crea-card">
+          <h3 class="crea-sub">Mi meta de 21 días</h3>
+          <p class="crea-hint">Completa la fórmula:</p>
+          <div class="goal-formula">
+            <span class="gf-label">En 21 días voy a</span>
+            <div class="gf-input" contenteditable="true" data-key="meta-accion" data-placeholder="lograr / avanzar en / comenzar..."></div>
+            <span class="gf-label">para que</span>
+            <div class="gf-input" contenteditable="true" data-key="meta-proposito" data-placeholder="el propósito más profundo..."></div>
+            <span class="gf-label">y así glorificar a Dios en</span>
+            <div class="gf-input" contenteditable="true" data-key="meta-gloria" data-placeholder="tu área de impacto..."></div>
+          </div>
+        </div>
+
+        <div class="crea-card">
+          <h3 class="crea-sub">¿Qué estás soltando hoy?</h3>
+          <div class="write-lines" data-lines="3" data-key="rinde-soltando"></div>
+          <h3 class="crea-sub" style="margin-top:1.5rem">¿Qué estás recibiendo de Dios?</h3>
+          <div class="write-lines" data-lines="3" data-key="rinde-recibiendo"></div>
+        </div>
+
+        <div class="crea-nav-btns">
+          <button class="crea-back-btn" data-goto="1">← Conecta</button>
+          <button class="crea-next-btn" data-goto="3">Continuar → E · Estructura</button>
+        </div>
+      </div>
+
+      <!-- ── E: ESTRUCTURA ──────────────────────────────── -->
+      <div class="crea-section hidden" id="crea-e" data-step="3">
+        <div class="crea-badge">E · Estructura</div>
+        <h2 class="crea-heading">Diseña tu plan con intención.</h2>
+        <p class="crea-intro">La fe sin obras está muerta. Una meta sin estructura es solo un sueño. Aquí construyes el camino, paso a paso.</p>
+
+        <div class="crea-card">
+          <h3 class="crea-sub">1. Mi área pivote</h3>
+          <p class="crea-hint">El área de tu vida donde Dios está pidiendo movimiento primero:</p>
+          <div class="pivot-select">
+            <button class="pivot-btn" data-area="Proyecto de vida">Proyecto de vida</button>
+            <button class="pivot-btn" data-area="Negocio">Negocio</button>
+            <button class="pivot-btn" data-area="Dinero">Dinero</button>
+            <button class="pivot-btn" data-area="Pareja">Pareja</button>
+            <button class="pivot-btn" data-area="Cuerpo">Cuerpo</button>
+          </div>
+          <h3 class="crea-sub" style="margin-top:1.2rem">¿Por qué esta área primero?</h3>
+          <div class="write-lines" data-lines="2" data-key="estructura-porq"></div>
+        </div>
+
+        <div class="crea-card">
+          <h3 class="crea-sub">2. Mi primer paso concreto</h3>
+          <p class="crea-hint">¿Qué acción pequeña y específica puedo tomar esta semana?</p>
+          <div class="write-lines" data-lines="2" data-key="estructura-paso1"></div>
+        </div>
+
+        <div class="crea-card">
+          <h3 class="crea-sub">3. El costo real</h3>
+          <p class="crea-hint">Todo sí tiene un no incluido. Para decir sí a esta meta:</p>
+          <div class="cost-formula">
+            <span class="gf-label">Le digo que no a</span>
+            <div class="gf-input" contenteditable="true" data-key="estructura-no" data-placeholder="lo que dejarás ir..."></div>
+          </div>
+        </div>
+
+        <div class="crea-card">
+          <h3 class="crea-sub">4. Mi evidencia diaria</h3>
+          <p class="crea-hint">¿Cómo sabrá la Mujer Divina que está actuando desde ese lugar?</p>
+          <div class="evidence-formula">
+            <span class="gf-label">Ella hace</span>
+            <div class="gf-input" contenteditable="true" data-key="estructura-evidencia" data-placeholder="acción diaria observable..."></div>
+            <span class="gf-label">todos los días.</span>
+          </div>
+        </div>
+
+        <div class="crea-card goal-anchor-card">
+          <h3 class="crea-sub">Lo que Dios puso en mi corazón para estos 21 días</h3>
+          <div class="goal-anchor" contenteditable="true" data-key="estructura-corazon" data-placeholder="Escribe aquí lo que Dios está hablando a tu vida en este momento..."></div>
+        </div>
+
+        <div class="crea-nav-btns">
+          <button class="crea-back-btn" data-goto="2">← Rinde</button>
+          <button class="crea-next-btn" data-goto="4">Continuar → A · Acciona</button>
+        </div>
+      </div>
+
+      <!-- ── A: ACCIONA ─────────────────────────────────── -->
+      <div class="crea-section hidden" id="crea-a" data-step="4">
+        <div class="crea-badge">A · Acciona</div>
+        <h2 class="crea-heading">21 días actuando como ella.</h2>
+        <p class="crea-intro">La transformación no ocurre en un instante — ocurre en la fidelidad de cada día. Aquí registras tu camino.</p>
+
+        <!-- Meta anclaje -->
+        <div class="crea-card goal-anchor-card">
+          <h3 class="crea-sub">Mi meta de 21 días</h3>
+          <div id="tracker-meta-display" class="tracker-meta-display"></div>
+        </div>
+
+        <!-- Tracker -->
+        <div class="crea-card tracker-card" id="navi-tracker">
+          <div class="tracker-header-row">
+            <span class="tracker-col-habit">Hábito</span>
+            <div class="tracker-days-header">
+              <span class="tracker-days-label">Días 1 — 21</span>
+            </div>
+          </div>
+
+          <div id="tracker-habits" class="tracker-habits"></div>
+
+          <div class="tracker-add-row">
+            <button class="tracker-add-btn rose" data-type="conexion" onclick="App.addHabit('conexion')">+ Conexión</button>
+            <button class="tracker-add-btn gold" data-type="ejecucion" onclick="App.addHabit('ejecucion')">+ Ejecución</button>
+            <button class="tracker-add-btn malva" data-type="sostenimiento" onclick="App.addHabit('sostenimiento')">+ Sostenimiento</button>
+          </div>
+
+          <div class="tracker-stats" id="tracker-stats"></div>
+        </div>
+
+        <!-- Fecha y firma -->
+        <div class="crea-card firma-card">
+          <p class="firma-prayer"><em>"Señor, si esto no es tuyo, quítamelo. Y si es tuyo, sostenme mientras lo construyo."</em></p>
+          <div class="firma-line">
+            <div class="firma-field" contenteditable="true" data-placeholder="Tu nombre y firma"></div>
+            <span class="firma-fecha" id="roadmap-fecha"></span>
+          </div>
+          <p class="firma-brand">Mujer Divina ✦</p>
+        </div>
+
+        <div class="crea-nav-btns">
+          <button class="crea-back-btn" data-goto="3">← Estructura</button>
+          <button class="roadmap-print-btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+        </div>
+      </div>
+
+    </div><!-- /.roadmap-wrap -->
+  </section>
+  <!-- ── FIN ROADMAP ──────────────────────────────────── -->
+
 </body>
 </html>
