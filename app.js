@@ -566,8 +566,18 @@ App.initRoadmap = function() {
     }
   });
 
-  /* Mapa radial SVG */
-  App._initMap();
+  /* Esferas — persistencia de campos */
+  document.querySelectorAll('[data-key^="esf-"]').forEach(el => {
+    const k = 'crea_' + el.dataset.key;
+    const saved = localStorage.getItem(k);
+    if (saved) el.textContent = saved;
+    el.addEventListener('input', () => localStorage.setItem(k, el.textContent));
+  });
+
+  /* Líneas addables — identidad */
+  App._initAddableLines('identidad-es-lines',      'identidad-es',      3);
+  App._initAddableLines('identidad-suenos-lines',   'identidad-suenos',  3);
+  App._initAddableLines('identidad-acciones-lines', 'identidad-acciones',3);
 
   /* Metas múltiples */
   App._initMetas();

@@ -1788,3 +1788,65 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   margin: .8rem 0 0;
   letter-spacing: .04em;
 }
+
+/* ── Fotografía de vida — 5 esferas ──────────────── */
+.esferas-card { padding: 1.4rem 1.4rem 1rem; }
+
+.esfera-area {
+  border-bottom: 1px solid #f0e0e4;
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.esfera-label {
+  font-family: var(--f-title);
+  font-size: .88rem;
+  letter-spacing: .06em;
+  margin-bottom: .7rem;
+  display: inline-block;
+  padding: .2rem .75rem;
+  border-radius: 999px;
+}
+.esfera-label--vida       { background: rgba(205,163,73,.15);  color: var(--gold); }
+.esfera-label--negocio    { background: rgba(215,170,181,.2);  color: var(--rose-deep); }
+.esfera-label--dinero     { background: rgba(205,163,73,.12);  color: var(--gold); }
+.esfera-label--relaciones { background: rgba(215,170,181,.2);  color: var(--rose-deep); }
+.esfera-label--cuerpo     { background: rgba(205,163,73,.1);   color: var(--gold); }
+
+.esfera-row {
+  display: flex;
+  align-items: flex-start;
+  gap: .7rem;
+  margin-bottom: .6rem;
+}
+.esfera-tag {
+  font-family: var(--f-sans);
+  font-size: .7rem;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: .25rem .55rem;
+  white-space: nowrap;
+  margin-top: .35rem;
+  flex-shrink: 0;
+}
+.esfera-tag.hoy  { background: var(--blush);      color: var(--rose-deep); }
+.esfera-tag.ella { background: var(--gold-faint);  color: var(--gold); }
+
+.esfera-row .write-line {
+  flex: 1;
+  border-bottom: 1px solid var(--rose);
+  padding: .3rem .2rem;
+  font-family: var(--f-sans);
+  font-size: .88rem;
+  color: var(--text);
+  outline: none;
+  min-height: 1.6rem;
+  background: transparent;
+}
+.esfera-row .write-line:empty::before {
+  content: attr(data-placeholder);
+  color: var(--text-lt);
+  pointer-events: none;
+  font-style: italic;
+}
