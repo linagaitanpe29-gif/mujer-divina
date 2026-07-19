@@ -798,9 +798,18 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
 .prod-features li::before {
   content: '✦'; position: absolute; left: 0; color: var(--gold); font-size: .55rem; top: 3px;
 }
-.prod-price-wrap { margin-bottom: 20px; }
+.prod-price-wrap { margin-bottom: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.prod-price-before {
+  font-family: var(--f-sans); font-size: 1rem; color: var(--text-lt);
+  text-decoration: line-through; font-weight: 400;
+}
 .prod-price {
   font-family: var(--f-title); font-size: 2rem; color: var(--dark); font-weight: 400;
+}
+.prod-price-tag {
+  background: var(--gold-pale); color: var(--gold); font-family: var(--f-sans);
+  font-size: .72rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 20px;
 }
 .prod-cta { width: 100%; text-align: center; }
 
