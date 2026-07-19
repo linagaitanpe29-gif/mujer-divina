@@ -522,12 +522,6 @@ App.submitCheckout = function(e) {
   // Enviar datos a Formspree (se activa cuando Lina vincule el endpoint)
   // fetch('https://formspree.io/f/XXXXXXXX', { method:'POST', ... })
 
-  // Notificar por WhatsApp
-  const wa = `https://wa.me/573044174849?text=${encodeURIComponent(
-    `✦ Nueva venta Mujer Divina\n\nProducto: ${producto} — ${precio}\nNombre: ${nombre}\nCorreo: ${email}\nCelular: ${cel}\nCiudad: ${ciudad}\nDirección: ${direccion}${notas ? `\nNotas: ${notas}` : ''}`
-  )}`;
-  window.open(wa, '_blank');
-
   App.closeCheckout();
   if (App._coWompi && App._coWompi !== '#') {
     window.open(App._coWompi, '_blank');
