@@ -90,8 +90,10 @@ const App = {
     document.addEventListener('click', e => {
       const a = e.target.closest('a[href^="#"]');
       if (!a) return;
+      const href = a.getAttribute('href');
+      if (!href.startsWith('#/')) return; // scroll anchors (e.g. #tienda-productos) pass through
       e.preventDefault();
-      window.location.hash = a.getAttribute('href').slice(1);
+      window.location.hash = href.slice(1);
     });
     /* Logout */
     document.getElementById('nav-logout')?.addEventListener('click', () => this.logout());
