@@ -547,6 +547,11 @@ App.submitCheckout = function(e) {
     producto, precio, nombre, email_cliente: email, cel, ciudad,
     direccion, notas, envio: envio.label
   });
+  // Confirmación a la clienta
+  emailjs.send('service_zptlabd', 'template_1ypsbzc', {
+    producto, precio, nombre, email_cliente: email, ciudad,
+    direccion, envio: envio.label
+  });
 
   App.closeCheckout();
   // Primero abre el pago del producto
