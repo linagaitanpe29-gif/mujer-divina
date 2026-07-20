@@ -522,6 +522,11 @@ App.submitCheckout = function(e) {
   // Enviar datos a Formspree (se activa cuando Lina vincule el endpoint)
   // fetch('https://formspree.io/f/XXXXXXXX', { method:'POST', ... })
 
+  // Notificación a Camila
+  emailjs.send('service_zptlabd', 'template_6fwpfzf', {
+    producto, precio, nombre, email_cliente: email, cel, ciudad, direccion, notas
+  });
+
   App.closeCheckout();
   if (App._coWompi && App._coWompi !== '#') {
     window.open(App._coWompi, '_blank');
