@@ -493,11 +493,31 @@ document.addEventListener('DOMContentLoaded', () => App.init());
 /* ── CHECKOUT MODAL ───────────────────────────────── */
 App._coWompi = '#';
 
+const ENVIO_LINKS = {
+  medellin: { label: '$8.000', url: 'https://checkout.wompi.co/l/epJaH2' },
+  metro:    { label: '$10.000', url: 'https://checkout.wompi.co/l/yFKej2' },
+  nacional: { label: '$15.000', url: 'https://checkout.wompi.co/l/QKt9FC' },
+  lejano:   { label: '$22.000', url: 'https://checkout.wompi.co/l/T9t7vH' },
+};
+
+App.updateEnvio = function() {
+  const select = document.getElementById('co-ciudad');
+  const info = document.getElementById('co-envio-info');
+  const precioEl = document.getElementById('co-envio-precio');
+  const val = select.value;
+  if (!val) { info.style.display = 'none'; return; }
+  const zona = val.split('|')[1];
+  const envio = ENVIO_LINKS[zona];
+  precioEl.textContent = envio.label;
+  info.style.display = 'flex';
+};
+
 App.openCheckout = function(product, price, wompiUrl) {
   App._coWompi = wompiUrl;
   document.getElementById('co-product-name').textContent = product;
   document.getElementById('co-product-price').textContent = price;
   document.getElementById('co-form').reset();
+  document.getElementById('co-envio-info').style.display = 'none';
   const modal = document.getElementById('checkout-modal');
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -513,26 +533,28 @@ App.submitCheckout = function(e) {
   const nombre    = document.getElementById('co-nombre').value.trim();
   const email     = document.getElementById('co-email').value.trim();
   const cel       = document.getElementById('co-cel').value.trim();
-  const ciudad    = document.getElementById('co-ciudad').value.trim();
+  const ciudadVal = document.getElementById('co-ciudad').value;
+  const ciudad    = ciudadVal.split('|')[0];
+  const zona      = ciudadVal.split('|')[1];
   const direccion = document.getElementById('co-direccion').value.trim();
   const notas     = document.getElementById('co-notas').value.trim();
   const producto  = document.getElementById('co-product-name').textContent;
   const precio    = document.getElementById('co-product-price').textContent;
-
-  // Enviar datos a Formspree (se activa cuando Lina vincule el endpoint)
-  // fetch('https://formspree.io/f/XXXXXXXX', { method:'POST', ... })
+  const envio     = ENVIO_LINKS[zona];
 
   // Notificación a Camila
   emailjs.send('service_zptlabd', 'template_6fwpfzf', {
-    producto, precio, nombre, email_cliente: email, cel, ciudad, direccion, notas
+    producto, precio, nombre, email_cliente: email, cel, ciudad,
+    direccion, notas, envio: envio.label
   });
 
   App.closeCheckout();
+  // Primero abre el pago del producto
   if (App._coWompi && App._coWompi !== '#') {
     window.open(App._coWompi, '_blank');
-  } else {
-    alert('El link de pago estará disponible muy pronto. ¡Gracias por tu interés!');
   }
+  // Luego abre el pago del envío
+  setTimeout(() => window.open(envio.url, '_blank'), 800);
 };
 
 function switchImg(mainId, thumb) {
