@@ -130,12 +130,14 @@ const App = {
   /* ── ROUTER ───────────────────────────────────────── */
   route() {
     const hash = window.location.hash.replace('#', '') || '/';
+    document.title = 'Mujer Divina — Devocional Diario';
 
     /* Supabase no configurado → modo demo sin auth */
     const authReady = !!this.sb;
 
     /* Proteger rutas privadas — solo /roadmap requiere login */
-    const isPublic = PUBLIC_ROUTES.includes(hash) || hash.startsWith('/devocional/');
+    const isPublic = PUBLIC_ROUTES.includes(hash)
+      || hash.startsWith('/devocional/') || hash.startsWith('/producto/');
     if (authReady && !this.user && !isPublic) {
       window.location.hash = '/ingresar';
       return;
@@ -168,6 +170,10 @@ const App = {
       const slug = hash.replace('/devocional/', '');
       this.show('page-devocional');
       this.renderDevocional(slug);
+    } else if (hash.startsWith('/producto/')) {
+      const slug = hash.replace('/producto/', '');
+      this.show('page-producto');
+      this.renderProducto(slug);
     } else if (hash === '/ingresar') {
       this.show('page-login');
       this.bindLoginForm();
@@ -200,6 +206,7 @@ const App = {
 
   /* ── TIENDA ───────────────────────────────────────── */
   initTienda() {
+    this.decorarTienda();
     const slides = document.getElementById('tienda-slides');
     const dotsWrap = document.getElementById('tienda-dots');
     if (!slides || this._tiendaInit) return;
@@ -675,11 +682,66 @@ App.confirmarPago = function() {
 };
 
 function switchImg(mainId, thumb) {
-  document.getElementById(mainId).src = thumb.src;
-  thumb.closest('.prod-gallery').querySelectorAll('.prod-thumb')
-    .forEach(t => t.classList.remove('active'));
+  const gallery = thumb.closest('.prod-gallery');
+  // Busca la imagen principal por posición (no por id) para que también
+  // funcione en la página individual del producto, que es un clon.
+  const main = gallery.querySelector('.prod-gallery-main img')
+    || document.getElementById(mainId);
+  if (main) main.src = thumb.src;
+  gallery.querySelectorAll('.prod-thumb').forEach(t => t.classList.remove('active'));
   thumb.classList.add('active');
 }
+
+/* ── PRODUCTO INDIVIDUAL (link propio por producto) ───── */
+// Agrega a cada producto de la tienda su link "Ver página" y "Copiar enlace"
+App.decorarTienda = function() {
+  document.querySelectorAll('#page-tienda [data-slug]').forEach(card => {
+    if (card.querySelector('.prod-share-row')) return; // ya decorado
+    const slug = card.getAttribute('data-slug');
+    const cta = card.querySelector('.prod-cta, .kit-dark-cta');
+    if (!cta) return;
+    const row = document.createElement('div');
+    row.className = 'prod-share-row';
+    row.innerHTML =
+      `<a class="prod-verlink" href="#/producto/${slug}">Ver página del producto →</a>` +
+      `<button type="button" class="prod-sharebtn" onclick="App.copiarLink('${slug}', this)">🔗 Copiar enlace</button>`;
+    cta.insertAdjacentElement('afterend', row);
+  });
+};
+
+// Muestra un solo producto (clona su tarjeta de la tienda para no duplicar contenido)
+App.renderProducto = function(slug) {
+  this.decorarTienda();
+  const cont = document.getElementById('producto-detail');
+  const src = document.querySelector(`#page-tienda [data-slug="${slug}"]`);
+  if (!src || !cont) { window.location.hash = '/tienda'; return; }
+  const clone = src.cloneNode(true);
+  clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+  const ver = clone.querySelector('.prod-verlink'); // redundante estando ya en su página
+  if (ver) ver.remove();
+  cont.innerHTML = '';
+  cont.appendChild(clone);
+  const nombre = src.querySelector('.prod-name, .kit-dark-title');
+  document.title = nombre ? `${nombre.textContent} · Mujer Divina` : 'Mujer Divina';
+};
+
+// Copia al portapapeles el link propio del producto
+App.copiarLink = function(slug, btn) {
+  const url = `${location.origin}${location.pathname}#/producto/${slug}`;
+  const feedback = () => {
+    const prev = btn.getAttribute('data-label') || btn.textContent;
+    btn.setAttribute('data-label', prev);
+    btn.textContent = '✓ ¡Enlace copiado!';
+    btn.classList.add('copiado');
+    clearTimeout(btn._t);
+    btn._t = setTimeout(() => { btn.textContent = prev; btn.classList.remove('copiado'); }, 2200);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(feedback).catch(() => prompt('Copia este enlace:', url));
+  } else {
+    prompt('Copia este enlace:', url);
+  }
+};
 
 /* ── ROADMAP (Sistema CREA) ───────────────────────────── */
 App.initRoadmap = function() {

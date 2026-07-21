@@ -45,11 +45,21 @@ GIT_SSH_COMMAND="ssh -i /Users/lina/.ssh/mujer_divina_key -o StrictHostKeyChecki
 | `#/devocional` | Devocional del día | No |
 | `#/archivo` | Archivo de devocionales | No |
 | `#/devocional/<slug>` | Devocional específico | No |
+| `#/producto/<slug>` | Página propia de un producto (link compartible) | No |
 | `#/gracias` | Página post-pago | No |
 | `#/roadmap` | El Mapa de Ella (Sistema CREA) | **Sí** |
 | `#/ingresar`, `#/registrarse` | Login / registro | No |
 
 Solo `#/roadmap` es privada. La lista está en `PUBLIC_ROUTES` (arriba de `app.js`).
+
+**Páginas propias por producto:** cada producto tiene su link compartible
+`#/producto/<slug>` (slugs: `caja-de-promesas`, `la-santa-biblia`,
+`cuaderno-devocional`, `indices-biblicos`, `kit-mujer-divina`). No se duplica
+contenido: `App.renderProducto` **clona** la tarjeta del producto de la tienda
+(identificada con `data-slug`) y la muestra sola. `App.decorarTienda` inyecta en
+cada producto los enlaces "Ver página del producto →" y "🔗 Copiar enlace"
+(`App.copiarLink`). Para agregar/quitar un producto: basta con ponerle
+`data-slug` a su tarjeta en `index.html`.
 
 ### Diseño / marca
 - Fuentes: Marcellus (`--f-title`), Italiana (`--f-script`), Jost (`--f-sans`).

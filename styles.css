@@ -1147,6 +1147,41 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   margin: 4px 0 0; font-family: var(--f-sans);
 }
 
+/* ══ PRODUCTO INDIVIDUAL — link propio por producto ══ */
+.prod-share-row {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px;
+  margin-top: 12px;
+}
+.prod-verlink {
+  font-family: var(--f-sans); font-size: .9rem; font-weight: 600;
+  color: var(--gold); text-decoration: none; letter-spacing: .01em;
+}
+.prod-verlink:hover { text-decoration: underline; }
+.prod-sharebtn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--f-sans); font-size: .85rem; color: var(--text-mid);
+  background: transparent; border: 1.5px solid var(--gold-pale);
+  border-radius: 999px; padding: 7px 14px; cursor: pointer;
+  transition: all .2s;
+}
+.prod-sharebtn:hover { border-color: var(--gold); color: var(--text); }
+.prod-sharebtn.copiado { border-color: var(--gold); color: var(--gold); font-weight: 600; }
+
+/* En la página oscura del Kit, los enlaces se ven en claro */
+.s-kit-dark .prod-verlink { color: var(--gold); }
+.s-kit-dark .prod-sharebtn { color: rgba(255,255,255,.8); border-color: rgba(255,255,255,.3); }
+.s-kit-dark .prod-sharebtn:hover { color: #fff; border-color: rgba(255,255,255,.6); }
+
+.prod-page { padding-top: 28px; padding-bottom: 48px; min-height: 60vh; }
+.prod-back {
+  display: inline-block; margin-bottom: 20px;
+  font-family: var(--f-sans); font-size: .92rem; font-weight: 600;
+  color: var(--text-mid); text-decoration: none;
+}
+.prod-back:hover { color: var(--text); }
+/* En su página individual, la tarjeta del Kit no necesita márgenes de sección */
+#producto-detail .s-kit-dark { border-radius: 20px; overflow: hidden; }
+
 /* ══════════════════════════════════════════════════════
    ROADMAP — Sistema CREA · El Mapa de Ella
    ══════════════════════════════════════════════════════ */
