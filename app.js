@@ -508,7 +508,7 @@ App.updateEnvio = function() {
   if (!val) { info.style.display = 'none'; return; }
   const zona = val.split('|')[1];
   const envio = ENVIO_LINKS[zona];
-  precioEl.textContent = envio.label;
+  precioEl.textContent = `${envio.label} · se paga al recibir`;
   info.style.display = 'flex';
 };
 
@@ -542,24 +542,24 @@ App.submitCheckout = function(e) {
   const precio    = document.getElementById('co-product-price').textContent;
   const envio     = ENVIO_LINKS[zona];
 
+  const envioTxt = `${envio.label} (se paga contra entrega)`;
+
   // Notificación a Camila
   emailjs.send('service_zptlabd', 'template_6fwpfzf', {
     producto, precio, nombre, email_cliente: email, cel, ciudad,
-    direccion, notas, envio: envio.label
+    direccion, notas, envio: envioTxt
   });
   // Confirmación a la clienta
   emailjs.send('service_zptlabd', 'template_1ypsbzc', {
     producto, precio, nombre, email_cliente: email, ciudad,
-    direccion, envio: envio.label
+    direccion, envio: envioTxt
   });
 
   App.closeCheckout();
-  // Primero abre el pago del producto
+  // Solo se paga el producto en línea; el envío es contra entrega
   if (App._coWompi && App._coWompi !== '#') {
     window.open(App._coWompi, '_blank');
   }
-  // Luego abre el pago del envío
-  setTimeout(() => window.open(envio.url, '_blank'), 800);
 };
 
 function switchImg(mainId, thumb) {
