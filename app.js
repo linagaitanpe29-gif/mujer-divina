@@ -507,12 +507,19 @@ App.updateEnvio = function() {
   const select = document.getElementById('co-ciudad');
   const info = document.getElementById('co-envio-info');
   const precioEl = document.getElementById('co-envio-precio');
+  const otraWrap = document.getElementById('co-otra-ciudad-wrap');
   const val = select.value;
-  if (!val) { info.style.display = 'none'; return; }
+  if (!val) {
+    info.style.display = 'none';
+    if (otraWrap) otraWrap.style.display = 'none';
+    return;
+  }
   const zona = val.split('|')[1];
   const envio = ENVIO_LINKS[zona];
   precioEl.textContent = `${envio.label} · se paga al recibir`;
   info.style.display = 'flex';
+  // Si la clienta no encontró su ciudad, se le pide escribirla
+  if (otraWrap) otraWrap.style.display = (zona === 'lejano') ? 'block' : 'none';
 };
 
 App.openCheckout = function(product, price, wompiUrl) {
@@ -521,6 +528,8 @@ App.openCheckout = function(product, price, wompiUrl) {
   document.getElementById('co-product-price').textContent = price;
   document.getElementById('co-form').reset();
   document.getElementById('co-envio-info').style.display = 'none';
+  const otraWrap = document.getElementById('co-otra-ciudad-wrap');
+  if (otraWrap) otraWrap.style.display = 'none';
   const modal = document.getElementById('checkout-modal');
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -537,8 +546,18 @@ App.submitCheckout = function(e) {
   const email     = document.getElementById('co-email').value.trim();
   const cel       = document.getElementById('co-cel').value.trim();
   const ciudadVal = document.getElementById('co-ciudad').value;
-  const ciudad    = ciudadVal.split('|')[0];
+  let   ciudad    = ciudadVal.split('|')[0];
   const zona      = ciudadVal.split('|')[1];
+  // Si eligió "Mi ciudad no está en la lista", se usa el nombre que escribió
+  if (zona === 'lejano') {
+    const otra = document.getElementById('co-otra-ciudad').value.trim();
+    if (!otra) {
+      alert('Por favor escribe el nombre de tu ciudad.');
+      document.getElementById('co-otra-ciudad').focus();
+      return;
+    }
+    ciudad = otra;
+  }
   const direccion = document.getElementById('co-direccion').value.trim();
   const notas     = document.getElementById('co-notas').value.trim();
   const producto  = document.getElementById('co-product-name').textContent;
