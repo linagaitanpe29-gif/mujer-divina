@@ -548,7 +548,10 @@ App.submitCheckout = function(e) {
   const envioTxt = `${envio.label} (se paga contra entrega)`;
 
   const pedido = { producto, precio, nombre, email_cliente: email, cel,
-    ciudad, direccion, notas, envio: envioTxt };
+    ciudad, direccion, notas, envio: envioTxt,
+    // Alias de la ciudad bajo varios nombres para que la plantilla de EmailJS
+    // muestre el nombre de la ciudad sin importar cómo esté escrita la variable.
+    city: ciudad, Ciudad: ciudad, ciudad_cliente: ciudad };
   localStorage.setItem('md_pedido_pendiente', JSON.stringify(pedido));
 
   // SOLO aviso de CARRITO (lead). Aún NO es una venta: la clienta todavía no ha pagado.
@@ -579,6 +582,7 @@ App.confirmarPagoManual = function() {
   emailjs.send('service_zptlabd', 'template_1ypsbzc', {
     producto: p.producto, precio: p.precio, nombre: p.nombre,
     email_cliente: p.email_cliente, ciudad: p.ciudad,
+    city: p.ciudad, Ciudad: p.ciudad, ciudad_cliente: p.ciudad,
     direccion: p.direccion, envio: p.envio
   });
 
