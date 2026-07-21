@@ -1172,6 +1172,12 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
 .s-kit-dark .prod-sharebtn { color: rgba(255,255,255,.8); border-color: rgba(255,255,255,.3); }
 .s-kit-dark .prod-sharebtn:hover { color: #fff; border-color: rgba(255,255,255,.6); }
 
+/* Producto clicable en la tienda (foto y nombre abren su página) */
+.prod-clickable { cursor: pointer; }
+.prod-gallery-main.prod-clickable, .kit-dark-img.prod-clickable { transition: transform .25s, box-shadow .25s; }
+.prod-gallery-main.prod-clickable:hover, .kit-dark-img.prod-clickable:hover { transform: translateY(-3px); }
+h3.prod-name.prod-clickable:hover, .kit-dark-title.prod-clickable:hover { color: var(--gold); transition: color .2s; }
+
 .prod-page { padding-top: 28px; padding-bottom: 48px; min-height: 60vh; }
 .prod-back {
   display: inline-block; margin-bottom: 20px;

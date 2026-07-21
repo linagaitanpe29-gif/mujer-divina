@@ -706,6 +706,11 @@ App.decorarTienda = function() {
       `<a class="prod-verlink" href="#/producto/${slug}">Ver página del producto →</a>` +
       `<button type="button" class="prod-sharebtn" onclick="App.copiarLink('${slug}', this)">🔗 Copiar enlace</button>`;
     cta.insertAdjacentElement('afterend', row);
+
+    // Al dar clic sobre la foto principal o el nombre, se abre la página del producto
+    const abrir = () => { window.location.hash = '/producto/' + slug; };
+    card.querySelectorAll('.prod-gallery-main, .prod-name, .kit-dark-img, .kit-dark-title')
+      .forEach(el => { el.classList.add('prod-clickable'); el.addEventListener('click', abrir); });
   });
 };
 
@@ -717,7 +722,9 @@ App.renderProducto = function(slug) {
   if (!src || !cont) { window.location.hash = '/tienda'; return; }
   const clone = src.cloneNode(true);
   clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
-  const ver = clone.querySelector('.prod-verlink'); // redundante estando ya en su página
+  // En su propia página ya no tiene sentido "abrir el producto" ni el enlace redundante
+  clone.querySelectorAll('.prod-clickable').forEach(el => el.classList.remove('prod-clickable'));
+  const ver = clone.querySelector('.prod-verlink');
   if (ver) ver.remove();
   cont.innerHTML = '';
   cont.appendChild(clone);
