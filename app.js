@@ -575,6 +575,9 @@ App.openCheckout = function(product, price, wompiUrl) {
   document.getElementById('co-product-price').textContent = price;
   document.getElementById('co-form').reset();
   document.getElementById('co-envio-info').style.display = 'none';
+  // La cartica personalizada solo aplica al Kit Mujer Divina
+  const cartaWrap = document.getElementById('co-carta-wrap');
+  if (cartaWrap) cartaWrap.style.display = /kit/i.test(product) ? 'block' : 'none';
   document.getElementById('co-ciudad').value = '';
   document.getElementById('co-ciudad-input').value = '';
   const list = document.getElementById('co-ciudad-list');
@@ -626,8 +629,26 @@ App.submitCheckout = function(e) {
 
   const envioTxt = `${envio.label} (se paga contra entrega)`;
 
+  // Cartica personalizada (solo Kit Mujer Divina)
+  const esKit = /kit/i.test(producto);
+  let carta_nombre = '', carta_nota = '', notasFinal = notas;
+  if (esKit) {
+    carta_nombre = document.getElementById('co-carta-nombre').value.trim();
+    carta_nota   = document.getElementById('co-carta-nota').value.trim();
+    const partes = [];
+    if (carta_nombre) partes.push(`carta dirigida a: ${carta_nombre}`);
+    if (carta_nota)   partes.push(`dedicatoria: ${carta_nota}`);
+    if (partes.length) {
+      // Se incrusta también en "notas" para que Camila lo vea sí o sí en el correo
+      const cartaTxt = `🎁 CARTICA PERSONALIZADA — ${partes.join(' · ')}`;
+      notasFinal = [cartaTxt, notas].filter(Boolean).join('  |  ');
+    }
+  }
+
   const pedido = { producto, precio, nombre, email_cliente: email, cel,
-    ciudad, direccion, notas, envio: envioTxt,
+    ciudad, direccion, notas: notasFinal, envio: envioTxt,
+    // Datos de la cartica (por si quieres usarlos como variables aparte en EmailJS)
+    carta_nombre, carta_nota,
     // Alias de la ciudad bajo varios nombres para que la plantilla de EmailJS
     // muestre el nombre de la ciudad sin importar cómo esté escrita la variable.
     city: ciudad, Ciudad: ciudad, ciudad_cliente: ciudad };

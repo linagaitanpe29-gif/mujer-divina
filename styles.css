@@ -1096,6 +1096,28 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
 .co-envio-label { font-family: var(--f-sans); font-size: .85rem; color: var(--text-mid); }
 .co-envio-precio { font-family: var(--f-title); font-size: 1.2rem; color: var(--gold); }
 
+/* Cartica personalizada (solo Kit) */
+.co-carta {
+  display: flex; flex-direction: column; gap: 12px;
+  background: var(--gold-faint); border: 1px solid var(--gold-pale);
+  border-radius: 14px; padding: 16px;
+}
+.co-carta-head {
+  font-family: var(--f-title); font-size: 1.05rem; color: var(--dark);
+}
+.co-carta-sub {
+  margin: -6px 0 0; font-family: var(--f-sans); font-size: .82rem;
+  color: var(--text-mid); line-height: 1.4;
+}
+.co-field textarea {
+  border: 1.5px solid rgba(205,163,73,.25); border-radius: 12px;
+  padding: 12px 14px; font-size: .95rem; font-family: var(--f-sans);
+  color: var(--text); background: #fff; outline: none; resize: vertical;
+  transition: border-color .2s; width: 100%;
+}
+.co-field textarea:focus { border-color: var(--gold); }
+.co-field textarea::placeholder { color: rgba(90,60,70,.35); }
+
 /* Buscador de ciudad con autocompletado */
 .co-ciudad-field { position: relative; }
 .co-ac-list {
