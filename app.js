@@ -549,28 +549,54 @@ App.submitCheckout = function(e) {
 
   const pedido = { producto, precio, nombre, email_cliente: email, cel,
     ciudad, direccion, notas, envio: envioTxt };
+  localStorage.setItem('md_pedido_pendiente', JSON.stringify(pedido));
 
-  // Aviso a Camila: PEDIDO INICIADO (lead). El pago real se confirma en Wompi → Transacciones.
+  // SOLO aviso de CARRITO (lead). Aún NO es una venta: la clienta todavía no ha pagado.
   emailjs.send('service_zptlabd', 'template_6fwpfzf', Object.assign({}, pedido, {
-    estado: '🛒 PEDIDO INICIADO — la clienta llenó sus datos. Verifica en Wompi → Transacciones si el pago se completó. Si NO aparece allí, es un abandono de carrito: contáctala para cerrar la venta.'
+    estado: '🛒 CARRITO — la clienta llenó sus datos pero AÚN NO ha pagado. Si no te llega un correo de "✅ VENTA PAGADA" para este pedido, es un abandono de carrito: contáctala para cerrar la venta.'
   }));
-  // Confirmación a la clienta (recibimos tu solicitud de pedido)
-  emailjs.send('service_zptlabd', 'template_1ypsbzc', {
-    producto, precio, nombre, email_cliente: email, ciudad,
-    direccion, envio: envioTxt
-  });
 
   App.closeCheckout();
-  // Solo se paga el producto en línea; el envío es contra entrega
+  // Se manda a pagar el producto y se lleva a la página de gracias
   if (App._coWompi && App._coWompi !== '#') {
     window.open(App._coWompi, '_blank');
-  } else {
-    window.location.hash = '/gracias';
   }
+  window.location.hash = '/gracias';
 };
 
-// Página de gracias tras el pago (informativa; el pago real se ve en Wompi)
-App.confirmarPago = function() {};
+// La clienta confirma que ya pagó → recién ahí se registra la VENTA
+App.confirmarPagoManual = function() {
+  const raw = localStorage.getItem('md_pedido_pendiente');
+  if (!raw) return;
+  localStorage.removeItem('md_pedido_pendiente');
+  const p = JSON.parse(raw);
+
+  // Aviso a Camila: VENTA PAGADA
+  emailjs.send('service_zptlabd', 'template_6fwpfzf', Object.assign({}, p, {
+    estado: '✅ VENTA PAGADA — la clienta confirmó que ya pagó el producto en Wompi. Verifica en Wompi → Transacciones y despacha. El envío lo paga contra entrega.'
+  }));
+  // Confirmación a la clienta
+  emailjs.send('service_zptlabd', 'template_1ypsbzc', {
+    producto: p.producto, precio: p.precio, nombre: p.nombre,
+    email_cliente: p.email_cliente, ciudad: p.ciudad,
+    direccion: p.direccion, envio: p.envio
+  });
+
+  // Feedback visual
+  const btn = document.getElementById('gracias-confirm-btn');
+  const done = document.getElementById('gracias-done');
+  if (btn) btn.style.display = 'none';
+  if (done) done.style.display = 'block';
+};
+
+App.confirmarPago = function() {
+  // Reinicia el estado de la página de gracias en cada visita
+  const btn = document.getElementById('gracias-confirm-btn');
+  const done = document.getElementById('gracias-done');
+  const hasPedido = !!localStorage.getItem('md_pedido_pendiente');
+  if (btn) btn.style.display = hasPedido ? 'inline-block' : 'none';
+  if (done) done.style.display = 'none';
+};
 
 function switchImg(mainId, thumb) {
   document.getElementById(mainId).src = thumb.src;

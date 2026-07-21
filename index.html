@@ -341,10 +341,14 @@
       <div class="gracias-wrap">
         <div class="gracias-card">
           <div class="gracias-orn">✦</div>
-          <h1 class="gracias-title">¡Gracias por tu compra!</h1>
-          <p class="gracias-text">Recibimos tu pedido con amor. Pronto nos pondremos en contacto contigo para coordinar tu envío.</p>
-          <p class="gracias-sub">Tu confirmación llegó a tu correo. El envío se paga contra entrega con Interrapidísimo (entre 2 y 5 días hábiles).</p>
-          <a href="#/tienda" class="btn btn-gold gracias-btn">Volver a la tienda →</a>
+          <h1 class="gracias-title">Un último paso</h1>
+          <p class="gracias-text">Abrimos tu pago en una ventana de Wompi. Una vez completes el pago del producto, confírmanos aquí para registrar tu pedido.</p>
+          <button id="gracias-confirm-btn" class="btn btn-gold gracias-btn" onclick="App.confirmarPagoManual()">✅ Ya realicé mi pago</button>
+          <div id="gracias-done" style="display:none;">
+            <p class="gracias-text" style="color:var(--gold);font-weight:500;">¡Gracias por tu compra! ✦</p>
+            <p class="gracias-sub">Recibimos tu pedido con amor. Tu confirmación llegó a tu correo. El envío se paga contra entrega con Interrapidísimo (entre 2 y 5 días hábiles).</p>
+            <a href="#/tienda" class="btn btn-gold gracias-btn">Volver a la tienda →</a>
+          </div>
         </div>
       </div>
     </section>
