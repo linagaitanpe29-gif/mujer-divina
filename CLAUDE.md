@@ -95,6 +95,17 @@ la etiqueta de precio; los links de Wompi de envío ya no se abren):
   Valledupar) → $15.000
 - **Resto de Colombia** → $22.000
 
+> **Buscador de ciudad:** el checkout tiene un campo con autocompletado sobre los
+> **1.104 municipios de Colombia** (archivo `ciudades.js`, fuente DANE). Cada municipio
+> trae su zona (`z`) y se muestra como "Municipio, Departamento" para desambiguar nombres
+> repetidos (ej. Armenia/Antioquia vs Armenia/Quindío). Es obligatorio elegir de la lista.
+> Para regenerar `ciudades.js`, ver el script en el commit que lo creó (asigna las zonas).
+
+> **Dirección estructurada:** la clienta arma la dirección con campos separados
+> (tipo de vía · número · # · placa · barrio) y `submitCheckout` los une en un solo texto
+> ("Carrera 20B # 15-43, Barrio La Ford"). Así no falta nomenclatura. El apto/torre va en
+> "Indicaciones adicionales" (`notas`).
+
 ### El flujo de checkout paso a paso (`App.submitCheckout` en `app.js`)
 1. La clienta llena el formulario (nombre, correo, celular, **ciudad**, dirección, notas)
    y da "Continuar al pago".

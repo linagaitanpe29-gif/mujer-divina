@@ -694,6 +694,7 @@
     </div>
   </footer>
 
+  <script src="ciudades.js"></script>
   <script src="app.js"></script>
 
   <!-- MODAL CHECKOUT -->
@@ -718,61 +719,51 @@
           <label>Celular *</label>
           <input type="tel" id="co-cel" placeholder="300 000 0000" required />
         </div>
-        <div class="co-field">
+        <div class="co-field co-ciudad-field">
           <label>Ciudad de entrega *</label>
-          <select id="co-ciudad" required onchange="App.updateEnvio()">
-            <option value="">Selecciona tu ciudad</option>
-            <optgroup label="Medellín">
-              <option value="Medellín|medellin">Medellín</option>
-            </optgroup>
-            <optgroup label="Área Metropolitana">
-              <option value="Bello|metro">Bello</option>
-              <option value="Itagüí|metro">Itagüí</option>
-              <option value="Envigado|metro">Envigado</option>
-              <option value="Sabaneta|metro">Sabaneta</option>
-              <option value="La Estrella|metro">La Estrella</option>
-              <option value="Caldas|metro">Caldas</option>
-              <option value="Copacabana|metro">Copacabana</option>
-              <option value="Girardota|metro">Girardota</option>
-              <option value="Barbosa|metro">Barbosa</option>
-            </optgroup>
-            <optgroup label="Nacional — ciudades principales">
-              <option value="Bogotá|nacional">Bogotá</option>
-              <option value="Cali|nacional">Cali</option>
-              <option value="Barranquilla|nacional">Barranquilla</option>
-              <option value="Cartagena|nacional">Cartagena</option>
-              <option value="Bucaramanga|nacional">Bucaramanga</option>
-              <option value="Pereira|nacional">Pereira</option>
-              <option value="Manizales|nacional">Manizales</option>
-              <option value="Armenia|nacional">Armenia</option>
-              <option value="Santa Marta|nacional">Santa Marta</option>
-              <option value="Cúcuta|nacional">Cúcuta</option>
-              <option value="Ibagué|nacional">Ibagué</option>
-              <option value="Villavicencio|nacional">Villavicencio</option>
-              <option value="Pasto|nacional">Pasto</option>
-              <option value="Montería|nacional">Montería</option>
-              <option value="Valledupar|nacional">Valledupar</option>
-            </optgroup>
-            <optgroup label="Resto de Colombia">
-              <option value="Otra ciudad|lejano">Mi ciudad no está en la lista…</option>
-            </optgroup>
-          </select>
-        </div>
-        <div class="co-field" id="co-otra-ciudad-wrap" style="display:none;">
-          <label>Escribe tu ciudad *</label>
-          <input type="text" id="co-otra-ciudad" placeholder="Nombre de tu ciudad o municipio" />
+          <input type="text" id="co-ciudad-input" placeholder="Escribe y elige tu ciudad…"
+                 autocomplete="off" oninput="App.filtrarCiudades()"
+                 onfocus="App.filtrarCiudades()" />
+          <input type="hidden" id="co-ciudad" />
+          <ul id="co-ciudad-list" class="co-ac-list" style="display:none;"></ul>
         </div>
         <div class="co-envio-info" id="co-envio-info" style="display:none;">
           <span class="co-envio-label">Envío (Interrapidísimo):</span>
           <span class="co-envio-precio" id="co-envio-precio"></span>
         </div>
         <div class="co-field">
-          <label>Dirección completa *</label>
-          <input type="text" id="co-direccion" placeholder="Calle, número, barrio" required />
+          <label>Dirección *</label>
+          <div class="co-dir-grid">
+            <select id="co-via-tipo" required>
+              <option value="">Tipo de vía…</option>
+              <option value="Calle">Calle</option>
+              <option value="Carrera">Carrera</option>
+              <option value="Avenida">Avenida</option>
+              <option value="Avenida Calle">Avenida Calle</option>
+              <option value="Avenida Carrera">Avenida Carrera</option>
+              <option value="Diagonal">Diagonal</option>
+              <option value="Transversal">Transversal</option>
+              <option value="Circular">Circular</option>
+              <option value="Circunvalar">Circunvalar</option>
+              <option value="Autopista">Autopista</option>
+              <option value="Kilómetro">Kilómetro</option>
+              <option value="Vereda">Vereda</option>
+              <option value="Manzana">Manzana</option>
+            </select>
+            <input type="text" id="co-via-num" placeholder="N.º (ej. 45A)" required />
+            <span class="co-dir-sep">#</span>
+            <input type="text" id="co-via-sec" placeholder="ej. 30" required />
+            <span class="co-dir-sep">–</span>
+            <input type="text" id="co-via-placa" placeholder="ej. 12" required />
+          </div>
+        </div>
+        <div class="co-field">
+          <label>Barrio *</label>
+          <input type="text" id="co-barrio" placeholder="Nombre del barrio" required />
         </div>
         <div class="co-field">
           <label>Indicaciones adicionales</label>
-          <input type="text" id="co-notas" placeholder="Apartamento, torre, referencia..." />
+          <input type="text" id="co-notas" placeholder="Apartamento, torre, bloque, referencia..." />
         </div>
         <button type="submit" class="btn btn-gold co-submit">Continuar al pago →</button>
         <p class="co-secure">🔒 Pago seguro con Wompi · Envío a todo Colombia</p>

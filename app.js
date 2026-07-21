@@ -503,23 +503,63 @@ const ENVIO_LINKS = {
   lejano:   { label: '$22.000', url: 'https://checkout.wompi.co/l/T9t7vH' },
 };
 
-App.updateEnvio = function() {
-  const select = document.getElementById('co-ciudad');
-  const info = document.getElementById('co-envio-info');
-  const precioEl = document.getElementById('co-envio-precio');
-  const otraWrap = document.getElementById('co-otra-ciudad-wrap');
-  const val = select.value;
-  if (!val) {
-    info.style.display = 'none';
-    if (otraWrap) otraWrap.style.display = 'none';
+// Quita tildes y pasa a minúsculas para buscar sin importar acentos
+function _normCiudad(s) {
+  return (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+}
+
+// Buscador de ciudad con autocompletado sobre el listado completo de municipios
+App.filtrarCiudades = function() {
+  const input = document.getElementById('co-ciudad-input');
+  const list  = document.getElementById('co-ciudad-list');
+  const q = _normCiudad(input.value);
+  // Al escribir se anula cualquier selección previa hasta elegir de la lista
+  document.getElementById('co-ciudad').value = '';
+  document.getElementById('co-envio-info').style.display = 'none';
+
+  if (typeof CIUDADES_CO === 'undefined') { list.style.display = 'none'; return; }
+  if (q.length < 2) { list.style.display = 'none'; return; }
+
+  // Prioriza las que empiezan por lo escrito, luego las que lo contienen
+  const empiezan = [], contienen = [];
+  for (const c of CIUDADES_CO) {
+    const n = _normCiudad(c.n);
+    if (n.startsWith(q)) empiezan.push(c);
+    else if (n.includes(q)) contienen.push(c);
+    if (empiezan.length >= 40) break;
+  }
+  const res = empiezan.concat(contienen).slice(0, 40);
+
+  if (!res.length) {
+    list.innerHTML = '<li class="co-ac-empty">No encontramos esa ciudad</li>';
+    list.style.display = 'block';
     return;
   }
+  list.innerHTML = res.map(c =>
+    `<li class="co-ac-item" onmousedown="App.seleccionarCiudad('${
+      encodeURIComponent(c.n)}','${encodeURIComponent(c.d)}','${c.z}')">` +
+    `<span class="co-ac-city">${c.n}</span> <span class="co-ac-dep">${c.d}</span></li>`
+  ).join('');
+  list.style.display = 'block';
+};
+
+App.seleccionarCiudad = function(nEnc, dEnc, zona) {
+  const n = decodeURIComponent(nEnc), d = decodeURIComponent(dEnc);
+  document.getElementById('co-ciudad-input').value = `${n}, ${d}`;
+  document.getElementById('co-ciudad').value = `${n}, ${d}|${zona}`;
+  document.getElementById('co-ciudad-list').style.display = 'none';
+  App.updateEnvio();
+};
+
+App.updateEnvio = function() {
+  const val = document.getElementById('co-ciudad').value;
+  const info = document.getElementById('co-envio-info');
+  const precioEl = document.getElementById('co-envio-precio');
+  if (!val) { info.style.display = 'none'; return; }
   const zona = val.split('|')[1];
   const envio = ENVIO_LINKS[zona];
   precioEl.textContent = `${envio.label} · se paga al recibir`;
   info.style.display = 'flex';
-  // Si la clienta no encontró su ciudad, se le pide escribirla
-  if (otraWrap) otraWrap.style.display = (zona === 'lejano') ? 'block' : 'none';
 };
 
 App.openCheckout = function(product, price, wompiUrl) {
@@ -528,12 +568,21 @@ App.openCheckout = function(product, price, wompiUrl) {
   document.getElementById('co-product-price').textContent = price;
   document.getElementById('co-form').reset();
   document.getElementById('co-envio-info').style.display = 'none';
-  const otraWrap = document.getElementById('co-otra-ciudad-wrap');
-  if (otraWrap) otraWrap.style.display = 'none';
+  document.getElementById('co-ciudad').value = '';
+  document.getElementById('co-ciudad-input').value = '';
+  const list = document.getElementById('co-ciudad-list');
+  if (list) { list.style.display = 'none'; list.innerHTML = ''; }
   const modal = document.getElementById('checkout-modal');
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
 };
+
+// Cierra la lista de sugerencias al tocar fuera del campo
+document.addEventListener('click', function(e) {
+  const field = document.querySelector('.co-ciudad-field');
+  const list = document.getElementById('co-ciudad-list');
+  if (list && field && !field.contains(e.target)) list.style.display = 'none';
+});
 
 App.closeCheckout = function() {
   document.getElementById('checkout-modal').style.display = 'none';
@@ -546,19 +595,23 @@ App.submitCheckout = function(e) {
   const email     = document.getElementById('co-email').value.trim();
   const cel       = document.getElementById('co-cel').value.trim();
   const ciudadVal = document.getElementById('co-ciudad').value;
-  let   ciudad    = ciudadVal.split('|')[0];
-  const zona      = ciudadVal.split('|')[1];
-  // Si eligió "Mi ciudad no está en la lista", se usa el nombre que escribió
-  if (zona === 'lejano') {
-    const otra = document.getElementById('co-otra-ciudad').value.trim();
-    if (!otra) {
-      alert('Por favor escribe el nombre de tu ciudad.');
-      document.getElementById('co-otra-ciudad').focus();
-      return;
-    }
-    ciudad = otra;
+  // La ciudad debe elegirse de la lista (obligatorio)
+  if (!ciudadVal) {
+    alert('Por favor busca y selecciona tu ciudad de la lista.');
+    document.getElementById('co-ciudad-input').focus();
+    App.filtrarCiudades();
+    return;
   }
-  const direccion = document.getElementById('co-direccion').value.trim();
+  const ciudad = ciudadVal.split('|')[0];
+  const zona   = ciudadVal.split('|')[1];
+
+  // Dirección estructurada (nomenclatura colombiana)
+  const viaTipo  = document.getElementById('co-via-tipo').value;
+  const viaNum   = document.getElementById('co-via-num').value.trim();
+  const viaSec   = document.getElementById('co-via-sec').value.trim();
+  const viaPlaca = document.getElementById('co-via-placa').value.trim();
+  const barrio   = document.getElementById('co-barrio').value.trim();
+  const direccion = `${viaTipo} ${viaNum} # ${viaSec}-${viaPlaca}, Barrio ${barrio}`;
   const notas     = document.getElementById('co-notas').value.trim();
   const producto  = document.getElementById('co-product-name').textContent;
   const precio    = document.getElementById('co-product-price').textContent;
