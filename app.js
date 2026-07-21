@@ -547,41 +547,30 @@ App.submitCheckout = function(e) {
 
   const envioTxt = `${envio.label} (se paga contra entrega)`;
 
-  // Guardar el pedido para confirmarlo cuando la clienta regrese del pago
   const pedido = { producto, precio, nombre, email_cliente: email, cel,
     ciudad, direccion, notas, envio: envioTxt };
-  localStorage.setItem('md_pedido_pendiente', JSON.stringify(pedido));
 
-  // 1) Aviso a Camila: CARRITO iniciado (aún NO ha pagado → posible abandono)
+  // Aviso a Camila: PEDIDO INICIADO (lead). El pago real se confirma en Wompi → Transacciones.
   emailjs.send('service_zptlabd', 'template_6fwpfzf', Object.assign({}, pedido, {
-    estado: '🛒 CARRITO INICIADO — la clienta AÚN NO ha pagado. Si no te llega un correo de "PAGO CONFIRMADO" para este pedido, es un abandono de carrito: contáctala para cerrar la venta.'
+    estado: '🛒 PEDIDO INICIADO — la clienta llenó sus datos. Verifica en Wompi → Transacciones si el pago se completó. Si NO aparece allí, es un abandono de carrito: contáctala para cerrar la venta.'
   }));
+  // Confirmación a la clienta (recibimos tu solicitud de pedido)
+  emailjs.send('service_zptlabd', 'template_1ypsbzc', {
+    producto, precio, nombre, email_cliente: email, ciudad,
+    direccion, envio: envioTxt
+  });
 
   App.closeCheckout();
   // Solo se paga el producto en línea; el envío es contra entrega
   if (App._coWompi && App._coWompi !== '#') {
     window.open(App._coWompi, '_blank');
+  } else {
+    window.location.hash = '/gracias';
   }
 };
 
-// Se ejecuta cuando la clienta regresa de Wompi tras pagar (página de gracias)
-App.confirmarPago = function() {
-  const raw = localStorage.getItem('md_pedido_pendiente');
-  if (!raw) return;
-  localStorage.removeItem('md_pedido_pendiente');
-  const p = JSON.parse(raw);
-
-  // Aviso a Camila: PAGO CONFIRMADO
-  emailjs.send('service_zptlabd', 'template_6fwpfzf', Object.assign({}, p, {
-    estado: '✅ PAGO CONFIRMADO — la clienta ya pagó el producto en Wompi. El envío lo paga contra entrega.'
-  }));
-  // Confirmación a la clienta
-  emailjs.send('service_zptlabd', 'template_1ypsbzc', {
-    producto: p.producto, precio: p.precio, nombre: p.nombre,
-    email_cliente: p.email_cliente, ciudad: p.ciudad,
-    direccion: p.direccion, envio: p.envio
-  });
-};
+// Página de gracias tras el pago (informativa; el pago real se ve en Wompi)
+App.confirmarPago = function() {};
 
 function switchImg(mainId, thumb) {
   document.getElementById(mainId).src = thumb.src;
