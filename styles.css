@@ -1878,3 +1878,28 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   pointer-events: none;
   font-style: italic;
 }
+
+/* ── PÁGINA DE GRACIAS (post-pago) ─────────────────── */
+.gracias-wrap {
+  min-height: 80vh; display: flex; align-items: center; justify-content: center;
+  padding: 60px 24px; background: var(--cream);
+}
+.gracias-card {
+  max-width: 520px; text-align: center; background: #fff;
+  border: 1px solid rgba(205,163,73,.25); border-radius: 24px;
+  padding: 48px 40px; box-shadow: 0 20px 60px rgba(58,28,37,.08);
+}
+.gracias-orn { font-size: 2.4rem; color: var(--gold); margin-bottom: 12px; }
+.gracias-title {
+  font-family: var(--f-title); font-size: 2.2rem; color: var(--text);
+  margin-bottom: 18px; font-weight: 400;
+}
+.gracias-text {
+  font-family: var(--f-sans); font-size: 1.05rem; color: var(--text-mid);
+  line-height: 1.6; margin-bottom: 16px;
+}
+.gracias-sub {
+  font-family: var(--f-sans); font-size: .9rem; color: var(--text-lt);
+  line-height: 1.5; margin-bottom: 28px;
+}
+.gracias-btn { display: inline-block; }

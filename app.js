@@ -11,7 +11,7 @@ const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 /* ── RUTAS PÚBLICAS (sin login) ──────────────────── */
 /* Solo /roadmap requiere login — todo lo demás es público */
-const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional', '/archivo'];
+const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional', '/archivo', '/gracias'];
 
 /* ── CORREOS APROBADOS para El Mapa de Ella ──────── */
 const APPROVED_EMAILS = [
@@ -180,6 +180,9 @@ const App = {
     } else if (hash === '/roadmap') {
       this.show('page-roadmap');
       this.initRoadmap();
+    } else if (hash === '/gracias') {
+      this.show('page-gracias');
+      this.confirmarPago();
     } else {
       this.show('page-tienda');
       this.initTienda();
@@ -544,22 +547,40 @@ App.submitCheckout = function(e) {
 
   const envioTxt = `${envio.label} (se paga contra entrega)`;
 
-  // Notificación a Camila
-  emailjs.send('service_zptlabd', 'template_6fwpfzf', {
-    producto, precio, nombre, email_cliente: email, cel, ciudad,
-    direccion, notas, envio: envioTxt
-  });
-  // Confirmación a la clienta
-  emailjs.send('service_zptlabd', 'template_1ypsbzc', {
-    producto, precio, nombre, email_cliente: email, ciudad,
-    direccion, envio: envioTxt
-  });
+  // Guardar el pedido para confirmarlo cuando la clienta regrese del pago
+  const pedido = { producto, precio, nombre, email_cliente: email, cel,
+    ciudad, direccion, notas, envio: envioTxt };
+  localStorage.setItem('md_pedido_pendiente', JSON.stringify(pedido));
+
+  // 1) Aviso a Camila: CARRITO iniciado (aún NO ha pagado → posible abandono)
+  emailjs.send('service_zptlabd', 'template_6fwpfzf', Object.assign({}, pedido, {
+    estado: '🛒 CARRITO INICIADO — la clienta AÚN NO ha pagado. Si no te llega un correo de "PAGO CONFIRMADO" para este pedido, es un abandono de carrito: contáctala para cerrar la venta.'
+  }));
 
   App.closeCheckout();
   // Solo se paga el producto en línea; el envío es contra entrega
   if (App._coWompi && App._coWompi !== '#') {
     window.open(App._coWompi, '_blank');
   }
+};
+
+// Se ejecuta cuando la clienta regresa de Wompi tras pagar (página de gracias)
+App.confirmarPago = function() {
+  const raw = localStorage.getItem('md_pedido_pendiente');
+  if (!raw) return;
+  localStorage.removeItem('md_pedido_pendiente');
+  const p = JSON.parse(raw);
+
+  // Aviso a Camila: PAGO CONFIRMADO
+  emailjs.send('service_zptlabd', 'template_6fwpfzf', Object.assign({}, p, {
+    estado: '✅ PAGO CONFIRMADO — la clienta ya pagó el producto en Wompi. El envío lo paga contra entrega.'
+  }));
+  // Confirmación a la clienta
+  emailjs.send('service_zptlabd', 'template_1ypsbzc', {
+    producto: p.producto, precio: p.precio, nombre: p.nombre,
+    email_cliente: p.email_cliente, ciudad: p.ciudad,
+    direccion: p.direccion, envio: p.envio
+  });
 };
 
 function switchImg(mainId, thumb) {
