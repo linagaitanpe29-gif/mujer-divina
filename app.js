@@ -570,6 +570,7 @@ App.updateEnvio = function() {
 };
 
 App.openCheckout = function(product, price, wompiUrl) {
+  App._carritoMode = false;
   App._coWompi = wompiUrl;
   document.getElementById('co-product-name').textContent = product;
   document.getElementById('co-product-price').textContent = price;
@@ -578,6 +579,30 @@ App.openCheckout = function(product, price, wompiUrl) {
   // La cartica personalizada solo aplica al Kit Mujer Divina
   const cartaWrap = document.getElementById('co-carta-wrap');
   if (cartaWrap) cartaWrap.style.display = /kit/i.test(product) ? 'block' : 'none';
+  document.getElementById('co-ciudad').value = '';
+  document.getElementById('co-ciudad-input').value = '';
+  const list = document.getElementById('co-ciudad-list');
+  if (list) { list.style.display = 'none'; list.innerHTML = ''; }
+  const modal = document.getElementById('checkout-modal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+};
+
+// Checkout de TODO el carrito (varios productos, un solo total)
+App.openCheckoutCarrito = function() {
+  const items = App.cart.get();
+  if (!items.length) return;
+  App._carritoMode = true;
+  App._coWompi = '#'; // el cobro del total por Wompi se activa con las llaves (pendiente)
+  document.getElementById('co-product-name').textContent = 'Tu pedido';
+  document.getElementById('co-product-price').textContent =
+    `${App.formatCOP(App.cart.total())} · ${App.cart.count()} producto(s)`;
+  document.getElementById('co-form').reset();
+  document.getElementById('co-envio-info').style.display = 'none';
+  // La cartica aparece si el Kit está en el carrito
+  const cartaWrap = document.getElementById('co-carta-wrap');
+  const tieneKit = items.some(i => /kit/i.test(i.slug));
+  if (cartaWrap) cartaWrap.style.display = tieneKit ? 'block' : 'none';
   document.getElementById('co-ciudad').value = '';
   document.getElementById('co-ciudad-input').value = '';
   const list = document.getElementById('co-ciudad-list');
@@ -597,10 +622,12 @@ document.addEventListener('click', function(e) {
 App.closeCheckout = function() {
   document.getElementById('checkout-modal').style.display = 'none';
   document.body.style.overflow = '';
+  App._carritoMode = false;
 };
 
 App.submitCheckout = function(e) {
   e.preventDefault();
+  const modoCarrito = App._carritoMode;
   const nombre    = document.getElementById('co-nombre').value.trim();
   const email     = document.getElementById('co-email').value.trim();
   const cel       = document.getElementById('co-cel').value.trim();
@@ -623,14 +650,27 @@ App.submitCheckout = function(e) {
   const barrio   = document.getElementById('co-barrio').value.trim();
   const direccion = `${viaTipo} ${viaNum} # ${viaSec}-${viaPlaca}, Barrio ${barrio}`;
   const notas     = document.getElementById('co-notas').value.trim();
-  const producto  = document.getElementById('co-product-name').textContent;
-  const precio    = document.getElementById('co-product-price').textContent;
   const envio     = ENVIO_LINKS[zona];
 
   const envioTxt = `${envio.label} (se paga contra entrega)`;
 
-  // Cartica personalizada (solo Kit Mujer Divina)
-  const esKit = /kit/i.test(producto);
+  // Producto(s): un solo producto o el carrito completo
+  let producto, precio, esKit;
+  if (modoCarrito) {
+    const items = App.cart.get();
+    producto = items.map(i => {
+      const p = App.productoInfo(i.slug);
+      return `${i.qty}× ${p ? p.nombre : i.slug} (${App.formatCOP(p ? p.precio * i.qty : 0)})`;
+    }).join('  +  ');
+    precio = `${App.formatCOP(App.cart.total())} (${App.cart.count()} productos)`;
+    esKit = items.some(i => /kit/i.test(i.slug));
+  } else {
+    producto = document.getElementById('co-product-name').textContent;
+    precio   = document.getElementById('co-product-price').textContent;
+    esKit    = /kit/i.test(producto);
+  }
+
+  // Cartica personalizada (solo si hay Kit)
   let carta_nombre = '', carta_nota = '', notasFinal = notas;
   if (esKit) {
     carta_nombre = document.getElementById('co-carta-nombre').value.trim();
@@ -664,6 +704,8 @@ App.submitCheckout = function(e) {
   if (App._coWompi && App._coWompi !== '#') {
     window.open(App._coWompi, '_blank');
   }
+  // En modo carrito, el pedido ya quedó registrado → se vacía el carrito
+  if (modoCarrito) App.cart.save([]);
   window.location.hash = '/gracias';
 };
 
@@ -721,11 +763,19 @@ App.decorarTienda = function() {
     const slug = card.getAttribute('data-slug');
     const cta = card.querySelector('.prod-cta, .kit-dark-cta');
     if (!cta) return;
+    // Botón "Agregar al carrito" (onclick inline para que también funcione en el clon)
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'btn prod-addcart';
+    addBtn.textContent = '🛒 Agregar al carrito';
+    addBtn.setAttribute('onclick', `App.cart.add('${slug}')`);
+    cta.insertAdjacentElement('afterend', addBtn);
+
     const row = document.createElement('div');
     row.className = 'prod-share-row';
     row.innerHTML =
       `<a class="prod-verlink" href="#/producto/${slug}">Ver página del producto →</a>`;
-    cta.insertAdjacentElement('afterend', row);
+    addBtn.insertAdjacentElement('afterend', row);
 
     // Al dar clic sobre la foto principal o el nombre, se abre la página del producto
     const abrir = () => { window.location.hash = '/producto/' + slug; };
@@ -751,6 +801,103 @@ App.renderProducto = function(slug) {
   const nombre = src.querySelector('.prod-name, .kit-dark-title');
   document.title = nombre ? `${nombre.textContent} · Mujer Divina` : 'Mujer Divina';
 };
+
+/* ── CARRITO ─────────────────────────────────────────── */
+function parsePrecio(txt) { return parseInt(String(txt).replace(/[^\d]/g, ''), 10) || 0; }
+App.formatCOP = function(n) { return '$' + (n || 0).toLocaleString('es-CO'); };
+
+// Info de un producto leída de su tarjeta en la tienda (no duplica datos)
+App.productoInfo = function(slug) {
+  const card = document.querySelector(`#page-tienda [data-slug="${slug}"]`);
+  if (!card) return null;
+  const esKit = card.classList.contains('s-kit-dark');
+  const nombre = card.querySelector(esKit ? '.kit-dark-title' : '.prod-name')?.textContent.trim() || 'Producto';
+  const precioTxt = card.querySelector(esKit ? '.kit-dark-price' : '.prod-price')?.textContent.trim() || '';
+  const img = card.querySelector(esKit ? '.kit-dark-img img' : '.prod-gallery-main img')?.getAttribute('src') || '';
+  return { slug, nombre, precioTxt, precio: parsePrecio(precioTxt), img };
+};
+
+App.cart = {
+  KEY: 'md_cart',
+  get() { try { return JSON.parse(localStorage.getItem(this.KEY)) || []; } catch { return []; } },
+  save(items) { localStorage.setItem(this.KEY, JSON.stringify(items)); this.render(); },
+  count() { return this.get().reduce((s, i) => s + i.qty, 0); },
+  total() { return this.get().reduce((s, i) => { const p = App.productoInfo(i.slug); return s + (p ? p.precio * i.qty : 0); }, 0); },
+
+  add(slug) {
+    const items = this.get();
+    const f = items.find(i => i.slug === slug);
+    if (f) f.qty += 1; else items.push({ slug, qty: 1 });
+    this.save(items);
+    this.open();
+  },
+  setQty(slug, qty) {
+    let items = this.get();
+    if (qty <= 0) items = items.filter(i => i.slug !== slug);
+    else { const f = items.find(i => i.slug === slug); if (f) f.qty = qty; }
+    this.save(items);
+  },
+  remove(slug) { this.save(this.get().filter(i => i.slug !== slug)); },
+
+  open() {
+    this.render();
+    document.getElementById('cart-drawer')?.classList.add('open');
+    const ov = document.getElementById('cart-overlay'); if (ov) ov.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  },
+  close() {
+    document.getElementById('cart-drawer')?.classList.remove('open');
+    const ov = document.getElementById('cart-overlay'); if (ov) ov.style.display = 'none';
+    document.body.style.overflow = '';
+  },
+
+  render() {
+    const items = this.get();
+    const badge = document.getElementById('cart-count');
+    const n = this.count();
+    if (badge) { badge.textContent = n; badge.hidden = n === 0; }
+
+    const cont = document.getElementById('cart-items');
+    const empty = document.getElementById('cart-empty');
+    const foot = document.getElementById('cart-foot');
+    if (!cont) return;
+    if (!items.length) {
+      cont.innerHTML = '';
+      if (empty) empty.style.display = 'flex';
+      if (foot) foot.style.display = 'none';
+      return;
+    }
+    if (empty) empty.style.display = 'none';
+    if (foot) foot.style.display = 'block';
+    cont.innerHTML = items.map(i => {
+      const p = App.productoInfo(i.slug);
+      if (!p) return '';
+      return `<div class="cart-item">
+        <img src="${p.img}" alt="" class="cart-item-img" />
+        <div class="cart-item-info">
+          <p class="cart-item-name">${p.nombre}</p>
+          <p class="cart-item-price">${App.formatCOP(p.precio)}</p>
+          <div class="cart-qty">
+            <button type="button" onclick="App.cart.setQty('${i.slug}', ${i.qty - 1})" aria-label="Menos">−</button>
+            <span>${i.qty}</span>
+            <button type="button" onclick="App.cart.setQty('${i.slug}', ${i.qty + 1})" aria-label="Más">+</button>
+          </div>
+        </div>
+        <button type="button" class="cart-item-remove" onclick="App.cart.remove('${i.slug}')" aria-label="Quitar">✕</button>
+      </div>`;
+    }).join('');
+    const totalEl = document.getElementById('cart-total');
+    if (totalEl) totalEl.textContent = App.formatCOP(this.total());
+  },
+
+  checkout() {
+    if (!this.get().length) return;
+    this.close();
+    App.openCheckoutCarrito();
+  },
+};
+
+document.addEventListener('DOMContentLoaded', () => App.cart.render());
 
 /* ── ROADMAP (Sistema CREA) ───────────────────────────── */
 App.initRoadmap = function() {

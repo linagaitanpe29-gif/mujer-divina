@@ -40,6 +40,10 @@
           <button id="nav-logout" class="nav-logout">Salir</button>
         </div>
       </div>
+      <button class="cart-btn" id="cart-btn" aria-label="Ver carrito" onclick="App.cart.open()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2.2l2.3 12.4a1.4 1.4 0 0 0 1.4 1.1h8.6a1.4 1.4 0 0 0 1.4-1.1L21 7H5"/></svg>
+        <span class="cart-count" id="cart-count" hidden>0</span>
+      </button>
       <button class="hamburger" id="hamburger" aria-label="Abrir menú">
         <span></span><span></span><span></span>
       </button>
@@ -709,6 +713,29 @@
   <script src="app.js"></script>
 
   <!-- MODAL CHECKOUT -->
+  <!-- ══ CARRITO (drawer lateral) ══════════════════════════ -->
+  <div id="cart-overlay" class="cart-overlay" style="display:none" onclick="App.cart.close()"></div>
+  <aside id="cart-drawer" class="cart-drawer" aria-label="Carrito de compras">
+    <div class="cart-head">
+      <span class="cart-title">Tu carrito</span>
+      <button class="cart-close" onclick="App.cart.close()" aria-label="Cerrar">✕</button>
+    </div>
+    <div id="cart-items" class="cart-items"></div>
+    <div id="cart-empty" class="cart-empty">
+      <p>Tu carrito está vacío.</p>
+      <a href="#/tienda" class="btn btn-gold" onclick="App.cart.close()">Ver productos</a>
+    </div>
+    <div id="cart-foot" class="cart-foot">
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="cart-total" class="cart-total">$0</span>
+      </div>
+      <p class="cart-envio-note">El envío se paga contra entrega al recibir.</p>
+      <button class="btn btn-gold cart-checkout-btn" onclick="App.cart.checkout()">Finalizar compra →</button>
+      <button class="cart-seguir" onclick="App.cart.close()">Seguir comprando</button>
+    </div>
+  </aside>
+
   <div id="checkout-modal" class="co-overlay" style="display:none" onclick="if(event.target===this)App.closeCheckout()">
     <div class="co-modal">
       <button class="co-close" onclick="App.closeCheckout()">✕</button>
