@@ -91,7 +91,7 @@ cada producto los enlaces "Ver página del producto →" y "🔗 Copiar enlace"
 | La Santa Biblia | $130.000 | **$99.000** | `checkout.wompi.co/l/BMLVay` |
 | Cuaderno Devocional | $85.000 | **$60.000** | `checkout.wompi.co/l/sdzyIS` |
 | Índices Bíblicos | $38.000 | **$30.000** | `checkout.wompi.co/l/OQFMxx` |
-| Kit Mujer Divina | $314.000 | **$230.000** | `checkout.wompi.co/l/Liqs7Z` |
+| Kit Mujer Divina | $310.000 | **$230.000** | `checkout.wompi.co/l/Liqs7Z` |
 
 ### Envío (contra entrega, con Interrapidísimo)
 La clienta elige su ciudad en el checkout y se le muestra el costo, pero **el envío se
