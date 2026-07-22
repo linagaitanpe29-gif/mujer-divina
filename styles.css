@@ -1179,20 +1179,9 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   color: var(--gold); text-decoration: none; letter-spacing: .01em;
 }
 .prod-verlink:hover { text-decoration: underline; }
-.prod-sharebtn {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--f-sans); font-size: .85rem; color: var(--text-mid);
-  background: transparent; border: 1.5px solid var(--gold-pale);
-  border-radius: 999px; padding: 7px 14px; cursor: pointer;
-  transition: all .2s;
-}
-.prod-sharebtn:hover { border-color: var(--gold); color: var(--text); }
-.prod-sharebtn.copiado { border-color: var(--gold); color: var(--gold); font-weight: 600; }
 
-/* En la página oscura del Kit, los enlaces se ven en claro */
+/* En la página oscura del Kit, el enlace se ve en claro */
 .s-kit-dark .prod-verlink { color: var(--gold); }
-.s-kit-dark .prod-sharebtn { color: rgba(255,255,255,.8); border-color: rgba(255,255,255,.3); }
-.s-kit-dark .prod-sharebtn:hover { color: #fff; border-color: rgba(255,255,255,.6); }
 
 /* Producto clicable en la tienda (foto y nombre abren su página) */
 .prod-clickable { cursor: pointer; }

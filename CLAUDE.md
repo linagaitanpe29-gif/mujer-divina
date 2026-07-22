@@ -57,8 +57,8 @@ Solo `#/roadmap` es privada. La lista está en `PUBLIC_ROUTES` (arriba de `app.j
 `cuaderno-devocional`, `indices-biblicos`, `kit-mujer-divina`). No se duplica
 contenido: `App.renderProducto` **clona** la tarjeta del producto de la tienda
 (identificada con `data-slug`) y la muestra sola. `App.decorarTienda` inyecta en
-cada producto los enlaces "Ver página del producto →" y "🔗 Copiar enlace"
-(`App.copiarLink`). Para agregar/quitar un producto: basta con ponerle
+cada producto el enlace "Ver página del producto →" y hace clicable la foto y el
+título para abrir su página. Para agregar/quitar un producto: basta con ponerle
 `data-slug` a su tarjeta en `index.html`.
 
 ### Diseño / marca

@@ -714,7 +714,7 @@ function switchImg(mainId, thumb) {
 }
 
 /* ── PRODUCTO INDIVIDUAL (link propio por producto) ───── */
-// Agrega a cada producto de la tienda su link "Ver página" y "Copiar enlace"
+// Agrega a cada producto de la tienda su link "Ver página del producto"
 App.decorarTienda = function() {
   document.querySelectorAll('#page-tienda [data-slug]').forEach(card => {
     if (card.querySelector('.prod-share-row')) return; // ya decorado
@@ -724,8 +724,7 @@ App.decorarTienda = function() {
     const row = document.createElement('div');
     row.className = 'prod-share-row';
     row.innerHTML =
-      `<a class="prod-verlink" href="#/producto/${slug}">Ver página del producto →</a>` +
-      `<button type="button" class="prod-sharebtn" onclick="App.copiarLink('${slug}', this)">🔗 Copiar enlace</button>`;
+      `<a class="prod-verlink" href="#/producto/${slug}">Ver página del producto →</a>`;
     cta.insertAdjacentElement('afterend', row);
 
     // Al dar clic sobre la foto principal o el nombre, se abre la página del producto
@@ -751,24 +750,6 @@ App.renderProducto = function(slug) {
   cont.appendChild(clone);
   const nombre = src.querySelector('.prod-name, .kit-dark-title');
   document.title = nombre ? `${nombre.textContent} · Mujer Divina` : 'Mujer Divina';
-};
-
-// Copia al portapapeles el link propio del producto
-App.copiarLink = function(slug, btn) {
-  const url = `${location.origin}${location.pathname}#/producto/${slug}`;
-  const feedback = () => {
-    const prev = btn.getAttribute('data-label') || btn.textContent;
-    btn.setAttribute('data-label', prev);
-    btn.textContent = '✓ ¡Enlace copiado!';
-    btn.classList.add('copiado');
-    clearTimeout(btn._t);
-    btn._t = setTimeout(() => { btn.textContent = prev; btn.classList.remove('copiado'); }, 2200);
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(url).then(feedback).catch(() => prompt('Copia este enlace:', url));
-  } else {
-    prompt('Copia este enlace:', url);
-  }
 };
 
 /* ── ROADMAP (Sistema CREA) ───────────────────────────── */
