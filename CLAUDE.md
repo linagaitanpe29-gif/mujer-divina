@@ -88,7 +88,7 @@ título para abrir su página. Para agregar/quitar un producto: basta con ponerl
 | Producto | Precio normal (tachado) | Lanzamiento | Link de pago Wompi |
 |----------|-------------------------|-------------|--------------------|
 | Caja de Promesas | $99.000 | **$85.000** | `checkout.wompi.co/l/Ner44D` |
-| La Santa Biblia | $130.000 | **$99.000** | `checkout.wompi.co/l/BMLVay` |
+| La Santa Biblia | $130.000 | **$99.000** | `checkout.wompi.co/l/Tmqw7F` |
 | Cuaderno Devocional | $85.000 | **$60.000** | `checkout.wompi.co/l/sdzyIS` |
 | Índices Bíblicos | $38.000 | **$30.000** | `checkout.wompi.co/l/OQFMxx` |
 | Kit Mujer Divina | $310.000 | **$230.000** | `checkout.wompi.co/l/Liqs7Z` |
