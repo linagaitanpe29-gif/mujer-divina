@@ -766,10 +766,13 @@ App.pagarCarritoWompi = async function(pedido, amountInCents, referencia) {
 App.checkWompiReturn = function() {
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
-  if (!id) return;
-  App._wompiReturnId = id;
-  App._wompiEnv = params.get('env');
-  // Limpia la URL y deja al usuario en /gracias
+  const pago = params.get('pago'); // link de redirección de los pagos de un producto
+  if (!id && !pago) return;
+  if (id) {
+    App._wompiReturnId = id;
+    App._wompiEnv = params.get('env');
+  }
+  // Limpia la URL y deja a la clienta en /gracias (con el aviso de spam / confirmación)
   history.replaceState(null, '', location.origin + location.pathname + '#/gracias');
 };
 
