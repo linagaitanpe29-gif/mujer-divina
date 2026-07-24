@@ -810,8 +810,10 @@ App._enviarVenta = function(p) {
   }));
   emailjs.send('service_zptlabd', 'template_1ypsbzc', {
     producto: p.producto, precio: p.precio, nombre: p.nombre,
-    email_cliente: p.email_cliente, ciudad: p.ciudad,
-    city: p.ciudad, Ciudad: p.ciudad, ciudad_cliente: p.ciudad,
+    // Correo de la clienta bajo varios nombres para que el campo "To Email"
+    // de la plantilla funcione sea {{email}} o {{email_cliente}}.
+    email_cliente: p.email_cliente, email: p.email_cliente, correo: p.email_cliente,
+    ciudad: p.ciudad, city: p.ciudad, Ciudad: p.ciudad, ciudad_cliente: p.ciudad,
     direccion: p.direccion, envio: p.envio
   });
 };
