@@ -638,6 +638,7 @@ App.submitCheckout = function(e) {
   const nombre    = document.getElementById('co-nombre').value.trim();
   const email     = document.getElementById('co-email').value.trim();
   const cel       = document.getElementById('co-cel').value.trim();
+  const cedula    = document.getElementById('co-cedula').value.trim();
   const ciudadVal = document.getElementById('co-ciudad').value;
   // La ciudad debe elegirse de la lista (obligatorio)
   if (!ciudadVal) {
@@ -694,7 +695,7 @@ App.submitCheckout = function(e) {
 
   const totalCents = modoCarrito ? App.cart.total() * 100 : 0;
   const referencia = 'MD-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
-  const pedido = { producto, precio, nombre, email_cliente: email, cel,
+  const pedido = { producto, precio, nombre, email_cliente: email, cel, cedula,
     ciudad, direccion, notas: notasFinal, envio: envioTxt, referencia,
     // Datos de la cartica (por si quieres usarlos como variables aparte en EmailJS)
     carta_nombre, carta_nota,
@@ -744,7 +745,9 @@ App.pagarCarritoWompi = async function(pedido, amountInCents, referencia) {
       'redirect-url': location.origin + location.pathname, // Wompi agrega ?id=...&env=...
       'customer-data:email': pedido.email_cliente || '',
       'customer-data:full-name': pedido.nombre || '',
-      'customer-data:phone-number': (pedido.cel || '').replace(/\D/g, '')
+      'customer-data:phone-number': (pedido.cel || '').replace(/\D/g, ''),
+      'customer-data:legal-id': (pedido.cedula || '').replace(/\D/g, ''),
+      'customer-data:legal-id-type': 'CC'
     });
     window.location.href = 'https://checkout.wompi.co/p/?' + params.toString();
   } catch (e) {
