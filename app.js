@@ -698,6 +698,8 @@ App.submitCheckout = function(e) {
   const pedido = { producto, precio, nombre, email_cliente: email, cel, cedula,
     // Alias de la cédula por si la plantilla de EmailJS usa otro nombre de variable
     Cedula: cedula, cédula: cedula, documento: cedula,
+    // Barrio como variable aparte (además de ir dentro de la dirección)
+    barrio, Barrio: barrio,
     ciudad, direccion, notas: notasFinal, envio: envioTxt, referencia,
     // Datos de la cartica (por si quieres usarlos como variables aparte en EmailJS)
     carta_nombre, carta_nota,
