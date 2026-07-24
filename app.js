@@ -696,6 +696,8 @@ App.submitCheckout = function(e) {
   const totalCents = modoCarrito ? App.cart.total() * 100 : 0;
   const referencia = 'MD-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
   const pedido = { producto, precio, nombre, email_cliente: email, cel, cedula,
+    // Alias de la cédula por si la plantilla de EmailJS usa otro nombre de variable
+    Cedula: cedula, cédula: cedula, documento: cedula,
     ciudad, direccion, notas: notasFinal, envio: envioTxt, referencia,
     // Datos de la cartica (por si quieres usarlos como variables aparte en EmailJS)
     carta_nombre, carta_nota,
