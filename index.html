@@ -345,8 +345,11 @@
       <div class="gracias-wrap">
         <div class="gracias-card">
           <div class="gracias-orn">✦</div>
-          <h1 class="gracias-title">Un último paso</h1>
+          <h1 class="gracias-title" id="gracias-title">Un último paso</h1>
           <p class="gracias-text">Abrimos tu pago en una ventana de Wompi. Una vez completes el pago del producto, confírmanos aquí para registrar tu pedido.</p>
+          <div id="gracias-verificando" style="display:none;">
+            <p class="gracias-text" style="color:var(--gold);font-weight:500;">Verificando tu pago… ✦</p>
+          </div>
           <button id="gracias-confirm-btn" class="btn btn-gold gracias-btn" onclick="App.confirmarPagoManual()">✅ Ya realicé mi pago</button>
           <div id="gracias-done" style="display:none;">
             <p class="gracias-text" style="color:var(--gold);font-weight:500;">¡Gracias por tu compra! ✦</p>

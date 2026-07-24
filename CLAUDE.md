@@ -136,6 +136,24 @@ Wompi → Transacciones es la **fuente de verdad** de los pagos reales.
 > en el panel, por eso NO se puede detectar el pago automáticamente. Por eso existe el
 > botón manual "Ya realicé mi pago" + la verificación en Transacciones.
 
+### Carrito de compras + cobro del total por Wompi (Web Checkout)
+- **Carrito propio** (estilo Shopify, sin perder el diseño): ícono en el nav con contador,
+  botón "Agregar al carrito" por producto, drawer lateral con cantidades y subtotal.
+  Estado en `localStorage` (`md_cart`); la info de cada producto se lee de su tarjeta
+  (`App.productoInfo`). Todo en `App.cart` (`app.js`).
+- **"Finalizar compra"** abre el checkout en **modo carrito** (`App._carritoMode`): mismo
+  formulario (ciudad, dirección, cartica del Kit) pero para todo el pedido junto.
+- **Cobro del TOTAL:** al enviar, `App.pagarCarritoWompi` pide la firma a la función
+  serverless `api/wompi-firma.js` y redirige a **Wompi Web Checkout**
+  (`checkout.wompi.co/p/`). Firma = `SHA256(referencia + montoCentavos + COP + secreto)`.
+- **Confirmación automática:** al volver de Wompi (`?id=...` en la URL), `App.checkWompiReturn`
+  + `App.verificarPagoWompi` consultan `production.wompi.co/v1/transactions/{id}`; si está
+  **APPROVED** se envían solos los correos de VENTA y se vacía el carrito (sin botón manual).
+- **Llaves:** la **pública** (`WOMPI_PUBLIC_KEY` en `app.js`) es segura en el frontend.
+  El **secreto de integridad** va en Vercel como variable de entorno
+  **`WOMPI_INTEGRITY_SECRET`** (Project Settings → Environment Variables) — nunca en el código.
+- El flujo de **un solo producto** ("Comprar ahora") sigue igual, con su link fijo de Wompi.
+
 ---
 
 ## 5. Correos automáticos (EmailJS)

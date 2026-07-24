@@ -9,6 +9,11 @@ const YML = window.jsyaml;
 const SUPABASE_URL  = 'https://jrkauaukgvcdnmaslsvb.supabase.co';
 const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impya2F1YXVrZ3ZjZG5tYXNsc3ZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzNjM0NDIsImV4cCI6MjA5OTkzOTQ0Mn0.Z3EeRrx0w6vVciW7gwcjhkJr41rTE90BYuNNoHFN6S8';
 
+/* ── WOMPI (cobro del total del carrito) ─────────────
+   La llave pública es segura para el frontend. El secreto de integridad va
+   en Vercel (WOMPI_INTEGRITY_SECRET) y solo lo usa /api/wompi-firma. */
+const WOMPI_PUBLIC_KEY = 'pub_prod_QV1Tx9canrUStOWLfqcaAj9gJxi2yiWZ';
+
 /* ── RUTAS PÚBLICAS (sin login) ──────────────────── */
 /* Solo /roadmap requiere login — todo lo demás es público */
 const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional', '/archivo', '/gracias'];
@@ -48,6 +53,7 @@ const App = {
     }
 
     this.bindNav();
+    this.checkWompiReturn();   // ¿volvemos de un pago Wompi? (?id=... en la URL)
     await this.initAuth();
     await this.loadManifest();
     this.route();
@@ -189,6 +195,7 @@ const App = {
     } else if (hash === '/gracias') {
       this.show('page-gracias');
       this.confirmarPago();
+      if (this._wompiReturnId) this.verificarPagoWompi(this._wompiReturnId);
     } else {
       this.show('page-tienda');
       this.initTienda();
@@ -685,8 +692,10 @@ App.submitCheckout = function(e) {
     }
   }
 
+  const totalCents = modoCarrito ? App.cart.total() * 100 : 0;
+  const referencia = 'MD-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
   const pedido = { producto, precio, nombre, email_cliente: email, cel,
-    ciudad, direccion, notas: notasFinal, envio: envioTxt,
+    ciudad, direccion, notas: notasFinal, envio: envioTxt, referencia,
     // Datos de la cartica (por si quieres usarlos como variables aparte en EmailJS)
     carta_nombre, carta_nota,
     // Alias de la ciudad bajo varios nombres para que la plantilla de EmailJS
@@ -700,13 +709,117 @@ App.submitCheckout = function(e) {
   }));
 
   App.closeCheckout();
-  // Se manda a pagar el producto y se lleva a la página de gracias
+
+  if (modoCarrito) {
+    // Cobro del TOTAL en Wompi (Web Checkout). El carrito se vacía al confirmarse el pago.
+    App.pagarCarritoWompi(pedido, totalCents, referencia);
+    return;
+  }
+
+  // Un solo producto: link de pago fijo de Wompi (flujo actual, sin cambios)
   if (App._coWompi && App._coWompi !== '#') {
     window.open(App._coWompi, '_blank');
   }
-  // En modo carrito, el pedido ya quedó registrado → se vacía el carrito
-  if (modoCarrito) App.cart.save([]);
   window.location.hash = '/gracias';
+};
+
+// Redirige a Wompi para cobrar el total del carrito (con firma segura del servidor)
+App.pagarCarritoWompi = async function(pedido, amountInCents, referencia) {
+  try {
+    const resp = await fetch('/api/wompi-firma', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reference: referencia, amountInCents: String(amountInCents), currency: 'COP' })
+    });
+    if (!resp.ok) throw new Error('firma no disponible');
+    const { signature } = await resp.json();
+    if (!signature) throw new Error('sin firma');
+
+    const params = new URLSearchParams({
+      'public-key': WOMPI_PUBLIC_KEY,
+      'currency': 'COP',
+      'amount-in-cents': String(amountInCents),
+      'reference': referencia,
+      'signature:integrity': signature,
+      'redirect-url': location.origin + location.pathname, // Wompi agrega ?id=...&env=...
+      'customer-data:email': pedido.email_cliente || '',
+      'customer-data:full-name': pedido.nombre || '',
+      'customer-data:phone-number': (pedido.cel || '').replace(/\D/g, '')
+    });
+    window.location.href = 'https://checkout.wompi.co/p/?' + params.toString();
+  } catch (e) {
+    // Si aún no está activo el pago en línea (p. ej. falta el secreto en Vercel),
+    // no se pierde el pedido: queda el lead y se usa la confirmación manual.
+    alert('Estamos activando el pago en línea. Tu pedido quedó guardado y te contactaremos para completarlo. 🌸');
+    window.location.hash = '/gracias';
+  }
+};
+
+// Al volver de Wompi (redirect con ?id=...), verifica el pago y confirma automáticamente
+App.checkWompiReturn = function() {
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  if (!id) return;
+  App._wompiReturnId = id;
+  App._wompiEnv = params.get('env');
+  // Limpia la URL y deja al usuario en /gracias
+  history.replaceState(null, '', location.origin + location.pathname + '#/gracias');
+};
+
+App.verificarPagoWompi = async function(id) {
+  App._wompiReturnId = null; // evita re-verificar
+  const btn  = document.getElementById('gracias-confirm-btn');
+  const done = document.getElementById('gracias-done');
+  const ver  = document.getElementById('gracias-verificando');
+  if (btn)  btn.style.display = 'none';
+  if (done) done.style.display = 'none';
+  if (ver)  ver.style.display = 'block';
+  try {
+    const base = App._wompiEnv === 'test'
+      ? 'https://sandbox.wompi.co/v1/transactions/'
+      : 'https://production.wompi.co/v1/transactions/';
+    const r = await fetch(base + id);
+    const j = await r.json();
+    const status = j && j.data && j.data.status;
+    if (ver) ver.style.display = 'none';
+    if (status === 'APPROVED') {
+      App.confirmarPagoAuto();
+    } else {
+      // Pago no aprobado: el carrito se conserva para reintentar
+      if (btn) btn.style.display = 'inline-block';
+      const t = document.getElementById('gracias-title');
+      if (t) t.textContent = 'Tu pago no se completó';
+    }
+  } catch (e) {
+    if (ver) ver.style.display = 'none';
+    if (btn) btn.style.display = 'inline-block'; // cae al flujo manual
+  }
+};
+
+// Envía los correos de VENTA (a Camila y a la clienta) — usado por manual y automático
+App._enviarVenta = function(p) {
+  emailjs.send('service_zptlabd', 'template_6fwpfzf', Object.assign({}, p, {
+    estado: '✅ VENTA PAGADA — la clienta pagó en Wompi. Verifica en Wompi → Transacciones y despacha. El envío lo paga contra entrega.'
+  }));
+  emailjs.send('service_zptlabd', 'template_1ypsbzc', {
+    producto: p.producto, precio: p.precio, nombre: p.nombre,
+    email_cliente: p.email_cliente, ciudad: p.ciudad,
+    city: p.ciudad, Ciudad: p.ciudad, ciudad_cliente: p.ciudad,
+    direccion: p.direccion, envio: p.envio
+  });
+};
+
+App.confirmarPagoAuto = function() {
+  const raw = localStorage.getItem('md_pedido_pendiente');
+  if (raw) {
+    localStorage.removeItem('md_pedido_pendiente');
+    App._enviarVenta(JSON.parse(raw));
+  }
+  if (App.cart) App.cart.save([]); // vacía el carrito ya pagado
+  const done = document.getElementById('gracias-done');
+  const btn  = document.getElementById('gracias-confirm-btn');
+  if (btn)  btn.style.display = 'none';
+  if (done) done.style.display = 'block';
 };
 
 // La clienta confirma que ya pagó → recién ahí se registra la VENTA
@@ -714,19 +827,7 @@ App.confirmarPagoManual = function() {
   const raw = localStorage.getItem('md_pedido_pendiente');
   if (!raw) return;
   localStorage.removeItem('md_pedido_pendiente');
-  const p = JSON.parse(raw);
-
-  // Aviso a Camila: VENTA PAGADA
-  emailjs.send('service_zptlabd', 'template_6fwpfzf', Object.assign({}, p, {
-    estado: '✅ VENTA PAGADA — la clienta confirmó que ya pagó el producto en Wompi. Verifica en Wompi → Transacciones y despacha. El envío lo paga contra entrega.'
-  }));
-  // Confirmación a la clienta
-  emailjs.send('service_zptlabd', 'template_1ypsbzc', {
-    producto: p.producto, precio: p.precio, nombre: p.nombre,
-    email_cliente: p.email_cliente, ciudad: p.ciudad,
-    city: p.ciudad, Ciudad: p.ciudad, ciudad_cliente: p.ciudad,
-    direccion: p.direccion, envio: p.envio
-  });
+  App._enviarVenta(JSON.parse(raw));
 
   // Feedback visual
   const btn = document.getElementById('gracias-confirm-btn');
