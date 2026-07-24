@@ -195,7 +195,14 @@ const App = {
     } else if (hash === '/gracias') {
       this.show('page-gracias');
       this.confirmarPago();
-      if (this._wompiReturnId) this.verificarPagoWompi(this._wompiReturnId);
+      if (this._wompiReturnId) {
+        this.verificarPagoWompi(this._wompiReturnId);
+      } else if (this._wompiPagoReturn) {
+        // Regreso del link de un producto: se muestra "¡Gracias!" + aviso de spam
+        // y se envía la confirmación (Wompi solo redirige al completar el pago).
+        this._wompiPagoReturn = false;
+        this.confirmarPagoAuto();
+      }
     } else {
       this.show('page-tienda');
       this.initTienda();
@@ -771,6 +778,9 @@ App.checkWompiReturn = function() {
   if (id) {
     App._wompiReturnId = id;
     App._wompiEnv = params.get('env');
+  } else if (pago) {
+    // Volvió del link de pago de un producto (Wompi redirige tras completar el pago)
+    App._wompiPagoReturn = true;
   }
   // Limpia la URL y deja a la clienta en /gracias (con el aviso de spam / confirmación)
   history.replaceState(null, '', location.origin + location.pathname + '#/gracias');
