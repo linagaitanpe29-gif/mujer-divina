@@ -40,6 +40,7 @@
         <a href="#/devocional" class="nav-link">Devocional diario</a>
         <a href="#/" class="nav-link">Tienda</a>
         <a href="#/roadmap" class="nav-link">El Mapa de Ella</a>
+        <a href="#/curso" class="nav-link">Programa</a>
         <div id="nav-user-wrap" class="nav-user-wrap hidden">
           <span id="nav-user-name" class="nav-user-name"></span>
           <button id="nav-logout" class="nav-logout">Salir</button>
@@ -57,6 +58,7 @@
       <a href="#/devocional" class="nav-link">Devocional diario</a>
       <a href="#/" class="nav-link">Tienda</a>
       <a href="#/roadmap" class="nav-link">El Mapa de Ella</a>
+        <a href="#/curso" class="nav-link">Programa</a>
       <div id="nav-user-wrap-mob" class="nav-user-wrap-mob hidden">
         <span id="nav-user-name-mob" class="nav-user-name-mob"></span>
         <button id="nav-logout-mob" class="nav-logout nav-logout-mob">Salir</button>
@@ -647,6 +649,80 @@
         <div class="s-inner" style="max-width:860px;margin:0 auto;">
           <a href="#/tienda" class="prod-back">← Volver a la tienda</a>
           <div id="producto-detail"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ PROGRAMA MUJER DIVINA (curso) ═══════════════════════ -->
+    <section id="page-curso" class="page hidden">
+
+      <!-- HERO -->
+      <div class="curso-hero">
+        <div class="curso-hero-blob"></div>
+        <div class="curso-hero-inner">
+          <span class="curso-eyebrow">Un camino de transformación en Dios</span>
+          <h1 class="curso-title">Vuelve a ser quien Dios te diseñó</h1>
+          <p class="curso-sub">Cuando activas tu verdadera identidad, la abundancia, el propósito y la paz llegan por añadidura.</p>
+          <a href="#curso-inscribir" class="btn btn-gold curso-cta" onclick="document.getElementById('curso-inscribir').scrollIntoView({behavior:'smooth'});return false;">Comienza tu transformación →</a>
+        </div>
+        <div class="hero-wave" aria-hidden="true">
+          <svg viewBox="0 0 1440 64" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0,32 C360,64 720,0 1080,32 C1260,48 1380,24 1440,32 L1440,64 L0,64 Z" fill="#FDFDF8"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- QUÉ INCLUYE -->
+      <div class="s-cream">
+        <div class="s-inner" style="max-width:900px;margin:0 auto;">
+          <div class="s-head">
+            <span class="s-label">El programa</span>
+            <h2 class="s-title s-title-dark" style="margin-top:4px;">Qué incluye</h2>
+            <div class="gold-bar" style="margin-top:12px;"></div>
+          </div>
+          <div class="curso-features">
+            <div class="curso-feat">
+              <span class="curso-feat-ico">🎥</span>
+              <h3>+40 horas de clases grabadas</h3>
+              <p>Contenido profundo para reprogramar tu identidad, a tu ritmo y desde donde estés.</p>
+            </div>
+            <div class="curso-feat">
+              <span class="curso-feat-ico">🗺️</span>
+              <h3>Hoja de ruta semanal</h3>
+              <p>Un plan claro, paso a paso, para que avances con propósito cada semana.</p>
+            </div>
+            <div class="curso-feat">
+              <span class="curso-feat-ico">🛠️</span>
+              <h3>Talleres prácticos</h3>
+              <p>Ejercicios para aplicar lo aprendido y ver la transformación en tu vida real.</p>
+            </div>
+            <div class="curso-feat">
+              <span class="curso-feat-ico">🔴</span>
+              <h3>1 clase en vivo por semana</h3>
+              <p>Acompañamiento en directo para resolver dudas y caminar juntas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSCRIPCIÓN + PRECIO -->
+      <div class="s-blush" id="curso-inscribir">
+        <div class="s-inner curso-inscribir-wrap">
+          <div class="curso-precio-box">
+            <span class="curso-precio-label">Inversión</span>
+            <span class="curso-precio">$797.000</span>
+            <span class="prod-price-tag" style="margin-top:8px;">Acceso completo al programa</span>
+            <p class="curso-precio-desc">Vuelve a ser quien Dios te diseñó: identidad, propósito y todo lo bueno por añadidura.</p>
+          </div>
+          <form class="curso-form" onsubmit="App.inscribirCurso(event)">
+            <h3 class="curso-form-tit">Inscríbete ahora</h3>
+            <input id="cu-nombre" placeholder="Nombre completo" required />
+            <input id="cu-email" type="email" placeholder="Correo electrónico" required />
+            <input id="cu-cel" type="tel" placeholder="Celular" required />
+            <input id="cu-cedula" inputmode="numeric" placeholder="Cédula" required />
+            <button type="submit" class="btn btn-gold">Inscribirme y pagar →</button>
+            <p class="curso-form-note">🔒 Pago seguro con Wompi · Recibirás el acceso a tu correo.</p>
+          </form>
         </div>
       </div>
     </section>

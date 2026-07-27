@@ -2158,3 +2158,79 @@ h3.prod-name.prod-clickable:hover, .kit-dark-title.prod-clickable:hover { color:
 .kit-waitlist strong { color: var(--gold); }
 .s-kit-dark .prod-addcart { color: var(--text); border-color: var(--gold); }
 .s-kit-dark .prod-addcart:hover { background: var(--gold-faint); }
+
+/* ══════════════════════════════════════════════════════
+   PROGRAMA MUJER DIVINA (curso)
+   ══════════════════════════════════════════════════════ */
+.curso-hero {
+  position: relative; overflow: hidden;
+  background: radial-gradient(ellipse at 50% 20%, #F5C8D0 0%, #EDAFC0 30%, #D7AAB5 60%, #C38997 100%);
+  padding: 90px 24px 70px; text-align: center;
+}
+.curso-hero-blob {
+  position: absolute; width: 480px; height: 480px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,242,.35), transparent 70%);
+  top: -120px; left: 50%; transform: translateX(-50%); pointer-events: none;
+}
+.curso-hero-inner { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+.curso-eyebrow {
+  font-family: var(--f-sans); font-size: .68rem; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--ivory); font-weight: 600; display: block; margin-bottom: 16px; opacity: .95;
+}
+.curso-title {
+  font-family: var(--f-title); font-size: clamp(2.1rem, 6vw, 3.4rem); line-height: 1.08;
+  color: var(--ivory); margin: 0 0 18px; text-shadow: 0 2px 20px rgba(58,28,37,.25);
+}
+.curso-sub {
+  font-family: var(--f-sans); font-size: 1.02rem; line-height: 1.6;
+  color: rgba(253,253,248,.92); max-width: 560px; margin: 0 auto 30px;
+}
+.curso-cta { font-size: 1rem; letter-spacing: 1px; padding: 15px 34px; }
+
+.curso-features {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 8px;
+}
+.curso-feat {
+  background: #fff; border: 1px solid var(--gold-pale); border-radius: 16px;
+  padding: 26px 22px; text-align: center; box-shadow: 0 6px 22px rgba(195,137,151,.08);
+}
+.curso-feat-ico { font-size: 2rem; display: block; margin-bottom: 10px; }
+.curso-feat h3 {
+  font-family: var(--f-title); font-size: 1.15rem; color: var(--dark); margin: 0 0 8px;
+}
+.curso-feat p {
+  font-family: var(--f-sans); font-size: .85rem; color: var(--text-mid); line-height: 1.5; margin: 0;
+}
+
+.curso-inscribir-wrap {
+  max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr;
+  gap: 28px; align-items: center;
+}
+.curso-precio-box { text-align: center; }
+.curso-precio-label {
+  font-family: var(--f-sans); font-size: .7rem; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text-mid); display: block; margin-bottom: 6px;
+}
+.curso-precio { font-family: var(--f-title); font-size: clamp(2.6rem, 8vw, 3.6rem); color: var(--gold); display: block; line-height: 1; }
+.curso-precio-desc { font-family: var(--f-sans); font-size: .88rem; color: var(--text-mid); line-height: 1.55; margin: 16px auto 0; max-width: 320px; }
+
+.curso-form {
+  background: #fff; border: 1px solid var(--gold-pale); border-radius: 18px;
+  padding: 26px 24px; display: flex; flex-direction: column; gap: 12px;
+  box-shadow: 0 10px 34px rgba(195,137,151,.12);
+}
+.curso-form-tit { font-family: var(--f-title); font-size: 1.4rem; color: var(--dark); margin: 0 0 4px; text-align: center; }
+.curso-form input {
+  border: 1.5px solid rgba(205,163,73,.25); border-radius: 12px; padding: 12px 14px;
+  font-size: .95rem; font-family: var(--f-sans); color: var(--text); background: #fff; outline: none;
+  transition: border-color .2s;
+}
+.curso-form input:focus { border-color: var(--gold); }
+.curso-form input::placeholder { color: rgba(90,60,70,.4); }
+.curso-form button { margin-top: 4px; padding: 14px; font-size: 1rem; letter-spacing: .5px; }
+.curso-form-note { font-family: var(--f-sans); font-size: .72rem; color: rgba(90,60,70,.55); text-align: center; margin: 2px 0 0; }
+
+@media (max-width: 680px) {
+  .curso-features { grid-template-columns: 1fr; }
+  .curso-inscribir-wrap { grid-template-columns: 1fr; }
+}

@@ -16,7 +16,7 @@ const WOMPI_PUBLIC_KEY = 'pub_prod_QV1Tx9canrUStOWLfqcaAj9gJxi2yiWZ';
 
 /* ── RUTAS PÚBLICAS (sin login) ──────────────────── */
 /* Solo /roadmap requiere login — todo lo demás es público */
-const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional', '/archivo', '/gracias'];
+const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional', '/archivo', '/gracias', '/curso'];
 
 /* ── CORREOS APROBADOS para El Mapa de Ella ──────── */
 const APPROVED_EMAILS = [
@@ -192,6 +192,8 @@ const App = {
     } else if (hash === '/roadmap') {
       this.show('page-roadmap');
       this.initRoadmap();
+    } else if (hash === '/curso') {
+      this.show('page-curso');
     } else if (hash === '/gracias') {
       this.show('page-gracias');
       this.confirmarPago();
@@ -767,6 +769,32 @@ App.pagarCarritoWompi = async function(pedido, amountInCents, referencia) {
     alert('Estamos activando el pago en línea. Tu pedido quedó guardado y te contactaremos para completarlo. 🌸');
     window.location.hash = '/gracias';
   }
+};
+
+// Inscripción al Programa Mujer Divina → cobra por Wompi Web Checkout
+App.inscribirCurso = function(e) {
+  e.preventDefault();
+  const nombre = document.getElementById('cu-nombre').value.trim();
+  const email  = document.getElementById('cu-email').value.trim();
+  const cel    = document.getElementById('cu-cel').value.trim();
+  const cedula = document.getElementById('cu-cedula').value.trim();
+
+  const referencia = 'MD-CURSO-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+  const pedido = {
+    producto: 'Programa Mujer Divina — Vuelve a ser quien Dios te diseñó',
+    precio: '$797.000', nombre, email_cliente: email, email, correo: email,
+    cel, cedula, Cedula: cedula, ciudad: '—', direccion: 'Programa online (acceso por correo)',
+    envio: 'No aplica (programa online)', referencia,
+    city: '—', Ciudad: '—', ciudad_cliente: '—'
+  };
+  localStorage.setItem('md_pedido_pendiente', JSON.stringify(pedido));
+
+  // Aviso a Camila (lead): inscripción iniciada, aún no ha pagado
+  emailjs.send('service_zptlabd', 'template_6fwpfzf', Object.assign({}, pedido, {
+    estado: '🎓 INSCRIPCIÓN CURSO — la clienta llenó sus datos para el Programa Mujer Divina pero AÚN NO ha pagado. Si no llega "✅ VENTA PAGADA", es un abandono: contáctala.'
+  }));
+
+  App.pagarCarritoWompi(pedido, 797000 * 100, referencia); // $797.000 → centavos
 };
 
 // Al volver de Wompi (redirect con ?id=...), verifica el pago y confirma automáticamente
