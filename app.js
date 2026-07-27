@@ -518,10 +518,10 @@ document.addEventListener('DOMContentLoaded', () => App.init());
 App._coWompi = '#';
 
 const ENVIO_LINKS = {
-  medellin: { label: '$8.000',  monto: 8000 },
-  metro:    { label: '$10.000', monto: 10000 },
-  nacional: { label: '$15.000', monto: 15000 },
-  lejano:   { label: '$22.000', monto: 22000 },
+  medellin: { label: '$8.000', url: 'https://checkout.wompi.co/l/epJaH2' },
+  metro:    { label: '$10.000', url: 'https://checkout.wompi.co/l/yFKej2' },
+  nacional: { label: '$15.000', url: 'https://checkout.wompi.co/l/QKt9FC' },
+  lejano:   { label: '$22.000', url: 'https://checkout.wompi.co/l/T9t7vH' },
 };
 
 // Quita tildes y pasa a minúsculas para buscar sin importar acentos
@@ -579,12 +579,7 @@ App.updateEnvio = function() {
   if (!val) { info.style.display = 'none'; return; }
   const zona = val.split('|')[1];
   const envio = ENVIO_LINKS[zona];
-  // El envío ahora se cobra junto con el pedido → se muestra el total a pagar
-  const base = App._carritoMode
-    ? App.cart.total()
-    : parsePrecio(document.getElementById('co-product-price').textContent);
-  const total = base + envio.monto;
-  precioEl.textContent = `${envio.label}  ·  Total a pagar: ${App.formatCOP(total)}`;
+  precioEl.textContent = `${envio.label} · se paga al recibir`;
   info.style.display = 'flex';
 };
 
@@ -672,26 +667,23 @@ App.submitCheckout = function(e) {
   const notas     = document.getElementById('co-notas').value.trim();
   const envio     = ENVIO_LINKS[zona];
 
-  // Producto(s) y subtotal: un solo producto o el carrito completo
-  let producto, esKit, baseAmount;
+  const envioTxt = `${envio.label} (se paga contra entrega)`;
+
+  // Producto(s): un solo producto o el carrito completo
+  let producto, precio, esKit;
   if (modoCarrito) {
     const items = App.cart.get();
     producto = items.map(i => {
       const p = App.productoInfo(i.slug);
       return `${i.qty}× ${p ? p.nombre : i.slug} (${App.formatCOP(p ? p.precio * i.qty : 0)})`;
     }).join('  +  ');
+    precio = `${App.formatCOP(App.cart.total())} (${App.cart.count()} productos)`;
     esKit = items.some(i => /kit/i.test(i.slug));
-    baseAmount = App.cart.total();
   } else {
     producto = document.getElementById('co-product-name').textContent;
+    precio   = document.getElementById('co-product-price').textContent;
     esKit    = /kit/i.test(producto);
-    baseAmount = parsePrecio(document.getElementById('co-product-price').textContent);
   }
-
-  // El envío se cobra junto con el pedido
-  const totalConEnvio = baseAmount + envio.monto;
-  const envioTxt = `${envio.label} (incluido en tu pago)`;
-  const precio = `${App.formatCOP(baseAmount)} + envío ${envio.label} = ${App.formatCOP(totalConEnvio)}`;
 
   // Cartica personalizada (solo si hay Kit)
   let carta_nombre = '', carta_nota = '', notasFinal = notas;
@@ -708,7 +700,7 @@ App.submitCheckout = function(e) {
     }
   }
 
-  const totalCents = totalConEnvio * 100;
+  const totalCents = modoCarrito ? App.cart.total() * 100 : 0;
   const referencia = 'MD-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
   const pedido = { producto, precio, nombre, email_cliente: email, cel, cedula,
     // Alias de la cédula por si la plantilla de EmailJS usa otro nombre de variable
@@ -730,9 +722,17 @@ App.submitCheckout = function(e) {
 
   App.closeCheckout();
 
-  // Cobro del TOTAL (producto + envío) en Wompi Web Checkout, tanto para el
-  // carrito como para "Comprar ahora". El carrito se vacía al confirmarse el pago.
-  App.pagarCarritoWompi(pedido, totalCents, referencia);
+  if (modoCarrito) {
+    // Cobro del TOTAL en Wompi (Web Checkout). El carrito se vacía al confirmarse el pago.
+    App.pagarCarritoWompi(pedido, totalCents, referencia);
+    return;
+  }
+
+  // Un solo producto: link de pago fijo de Wompi (flujo actual, sin cambios)
+  if (App._coWompi && App._coWompi !== '#') {
+    window.open(App._coWompi, '_blank');
+  }
+  window.location.hash = '/gracias';
 };
 
 // Redirige a Wompi para cobrar el total del carrito (con firma segura del servidor)
