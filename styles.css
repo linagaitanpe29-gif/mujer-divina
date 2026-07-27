@@ -1176,6 +1176,16 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   text-align: center; font-size: .72rem; color: rgba(90,60,70,.5);
   margin: 4px 0 0; font-family: var(--f-sans);
 }
+.co-seccion {
+  display: flex; flex-direction: column; gap: 2px;
+  padding-bottom: 8px; margin-bottom: 4px; border-bottom: 1.5px solid var(--gold-pale);
+}
+.co-seccion-tit {
+  font-family: var(--f-title); font-size: 1.1rem; color: var(--dark);
+}
+.co-seccion-sub {
+  font-family: var(--f-sans); font-size: .78rem; color: var(--text-mid); line-height: 1.35;
+}
 .co-aviso {
   background: var(--gold-faint); border: 1px solid var(--gold-pale);
   border-radius: 12px; padding: 12px 14px; margin-top: 4px;
