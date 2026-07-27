@@ -93,10 +93,10 @@ título para abrir su página. Para agregar/quitar un producto: basta con ponerl
 | Índices Bíblicos | $38.000 | **$30.000** | `checkout.wompi.co/l/OQFMxx` |
 | Kit Mujer Divina | $310.000 | **$230.000** | `checkout.wompi.co/l/Liqs7Z` |
 
-### Envío (contra entrega, con Interrapidísimo)
-La clienta elige su ciudad en el checkout y se le muestra el costo, pero **el envío se
-paga al recibir** (no se cobra en línea). Zonas (`ENVIO_LINKS` en `app.js`, solo se usa
-la etiqueta de precio; los links de Wompi de envío ya no se abren):
+### Envío (se cobra en línea, con Interrapidísimo)
+La clienta elige su ciudad en el checkout y el **costo del envío se SUMA a su pago**
+(producto + envío se cobran juntos en Wompi). El monto de cada zona está en
+`ENVIO_LINKS` (`app.js`) como `monto`. Zonas:
 - **Medellín** → $8.000
 - **Área Metropolitana** (Bello, Itagüí, Envigado, Sabaneta, La Estrella, Caldas,
   Copacabana, Girardota, Barbosa) → $10.000
@@ -152,7 +152,9 @@ Wompi → Transacciones es la **fuente de verdad** de los pagos reales.
 - **Llaves:** la **pública** (`WOMPI_PUBLIC_KEY` en `app.js`) es segura en el frontend.
   El **secreto de integridad** va en Vercel como variable de entorno
   **`WOMPI_INTEGRITY_SECRET`** (Project Settings → Environment Variables) — nunca en el código.
-- El flujo de **un solo producto** ("Comprar ahora") sigue igual, con su link fijo de Wompi.
+- **Tanto el carrito como "Comprar ahora"** cobran el TOTAL (producto + envío) por
+  Wompi Web Checkout (`App.pagarCarritoWompi`) y confirman solos al volver (`?id=`).
+  Los links fijos de Wompi de cada producto ya no se usan para el pago.
 
 ---
 

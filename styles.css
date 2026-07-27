@@ -65,6 +65,14 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
 /* ═══════════════════════════════════════════════════
    NAV
    ═══════════════════════════════════════════════════ */
+.promo-bar {
+  background: linear-gradient(90deg, var(--gold), #b8912f);
+  color: #fff; text-align: center;
+  font-family: var(--f-sans); font-size: .82rem; font-weight: 500;
+  letter-spacing: .3px; padding: 8px 14px; line-height: 1.35;
+}
+.promo-bar strong { font-weight: 700; }
+
 .nav {
   position: sticky; top: 0; z-index: 300;
   background: rgba(248,225,230,.96);
@@ -1168,6 +1176,15 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   text-align: center; font-size: .72rem; color: rgba(90,60,70,.5);
   margin: 4px 0 0; font-family: var(--f-sans);
 }
+.co-aviso {
+  background: var(--gold-faint); border: 1px solid var(--gold-pale);
+  border-radius: 12px; padding: 12px 14px; margin-top: 4px;
+}
+.co-aviso p {
+  margin: 0; font-family: var(--f-sans); font-size: .82rem;
+  color: var(--text); line-height: 1.45;
+}
+.co-aviso p + p { margin-top: 7px; }
 
 /* ══ PRODUCTO INDIVIDUAL — link propio por producto ══ */
 .prod-share-row {
