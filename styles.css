@@ -2142,3 +2142,19 @@ h3.prod-name.prod-clickable:hover, .kit-dark-title.prod-clickable:hover { color:
   border-radius: 12px; padding: 14px 16px; margin: 0 auto 24px; max-width: 420px;
 }
 .gracias-btn { display: inline-block; }
+
+/* ══ Kit sobre fondo claro (igual que los demás productos) ══ */
+.s-kit-dark { background: var(--blush); }
+.s-kit-dark::before { opacity: .06; }
+.kit-dark-img img { filter: none; }
+.kit-dark-title { color: var(--dark); text-shadow: none; }
+.kit-dark-desc { color: var(--text-mid); }
+.kit-dark-list li { color: var(--text); border-bottom-color: var(--gold-pale); }
+.kit-dark-before { color: rgba(107,58,72,.5); }
+.kit-dark-price { color: var(--dark); text-shadow: none; }
+.kit-dark-saving { background: var(--gold-faint); border-color: var(--gold-pale); color: var(--gold); }
+.kit-dark-note { color: var(--text-mid); }
+.kit-waitlist { color: var(--text); background: var(--gold-faint); border: 1px solid var(--gold-pale); }
+.kit-waitlist strong { color: var(--gold); }
+.s-kit-dark .prod-addcart { color: var(--text); border-color: var(--gold); }
+.s-kit-dark .prod-addcart:hover { background: var(--gold-faint); }
