@@ -2271,3 +2271,9 @@ h3.prod-name.prod-clickable:hover, .kit-dark-title.prod-clickable:hover { color:
 @media (max-width: 560px) {
   .programa-cta-list { grid-template-columns: 1fr; max-width: 260px; gap: 10px; }
 }
+
+/* Nota "no incluye" en el Kit */
+.kit-dark-noincluye {
+  font-family: var(--f-sans); font-size: .8rem; font-style: italic;
+  color: var(--text-mid); margin: 10px 0 0; line-height: 1.4;
+}
