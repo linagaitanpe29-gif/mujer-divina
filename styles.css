@@ -2318,3 +2318,32 @@ h3.prod-name.prod-clickable:hover, .kit-dark-title.prod-clickable:hover { color:
   .co-upsell2 { flex-direction: column; }
   .co-upsell2-img { width: 100%; height: 120px; }
 }
+
+/* ── Burbuja de soporte WhatsApp (fija, todo el sitio) ──────────── */
+.wa-fab {
+  position: fixed; right: 22px; bottom: 22px; z-index: 180;
+  display: flex; align-items: center; gap: 10px; text-decoration: none;
+}
+.wa-fab-label {
+  background: #fff; color: var(--text); font-family: var(--f-sans);
+  font-size: .85rem; font-weight: 600; white-space: nowrap;
+  padding: 9px 15px; border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(58,28,37,.16);
+}
+.wa-fab-ico {
+  width: 58px; height: 58px; border-radius: 50%;
+  background: linear-gradient(145deg, #E3BE63 0%, var(--gold) 55%, #B8892F 100%);
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 24px rgba(205,163,73,.5);
+  transition: transform .2s; animation: waPulse 2.6s infinite;
+}
+.wa-fab-ico svg { width: 31px; height: 31px; }
+.wa-fab:hover .wa-fab-ico { transform: scale(1.06); }
+@keyframes waPulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(205,163,73,.5); }
+  50%      { box-shadow: 0 10px 32px rgba(205,163,73,.85); }
+}
+@media (max-width: 600px) {
+  .wa-fab { right: 16px; bottom: 16px; }
+  .wa-fab-label { display: none; }
+}
