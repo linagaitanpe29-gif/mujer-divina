@@ -855,6 +855,18 @@
         <p class="co-price" id="co-product-price"></p>
       </div>
       <form id="co-form" class="co-form" onsubmit="App.submitCheckout(event)">
+        <div class="co-upsell2" id="co-upsell-wrap" style="display:none;">
+          <input type="checkbox" id="co-upsell" hidden />
+          <img src="fotos/productos/stickers-1.jpeg" alt="Índices Bíblicos" class="co-upsell2-img" />
+          <div class="co-upsell2-body">
+            <span class="co-upsell2-tit">¿Quieres agregar tus Índices Bíblicos? 📑</span>
+            <span class="co-upsell2-desc">Los stickers con el nombre de cada libro para encontrar tus pasajes al instante en tu Biblia. <strong>Por solo $30.000</strong></span>
+            <div class="co-upsell2-btns">
+              <button type="button" class="co-upsell2-yes" id="co-upsell-yes" onclick="App.setUpsell(true)">Sí, agregar (+$30.000)</button>
+              <button type="button" class="co-upsell2-no" id="co-upsell-no" onclick="App.setUpsell(false)">No, gracias</button>
+            </div>
+          </div>
+        </div>
         <div class="co-seccion">
           <span class="co-seccion-tit">📦 Datos de envío</span>
           <span class="co-seccion-sub">Para enviarte tu pedido. Los datos de pago los ingresas después, seguro en Wompi.</span>
@@ -933,15 +945,6 @@
             <textarea id="co-carta-nota" rows="2" placeholder="Si quieres una dedicatoria o mensaje especial en la carta, escríbelo aquí..."></textarea>
           </div>
         </div>
-        <label class="co-upsell" id="co-upsell-wrap" style="display:none;">
-          <input type="checkbox" id="co-upsell" onchange="App.toggleUpsell()" />
-          <img src="fotos/productos/stickers-1.jpeg" alt="Índices Bíblicos" class="co-upsell-img" />
-          <span class="co-upsell-body">
-            <span class="co-upsell-tit">➕ Agrega tus Índices Bíblicos</span>
-            <span class="co-upsell-desc">Stickers con los nombres de cada libro para encontrar tus pasajes al instante.</span>
-            <span class="co-upsell-price">Por solo <strong>$30.000</strong></span>
-          </span>
-        </label>
         <div class="co-aviso">
           <p>⏳ <strong>Alto flujo de pedidos.</strong> Por los precios de lanzamiento, los despachos se están demorando entre <strong>2 y 5 días hábiles</strong>.</p>
           <p>📩 Después de tu compra, el <strong>correo de confirmación</strong> llega a tu carpeta de <strong>SPAM</strong>. Por favor, sácalo de ahí. 🤍</p>

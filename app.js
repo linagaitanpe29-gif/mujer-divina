@@ -641,8 +641,23 @@ App.openCheckoutCarrito = function() {
 App.setUpsellVisible = function(show) {
   const wrap = document.getElementById('co-upsell-wrap');
   const cb   = document.getElementById('co-upsell');
+  const yes  = document.getElementById('co-upsell-yes');
+  const no   = document.getElementById('co-upsell-no');
   if (cb) cb.checked = false;
+  if (yes) yes.classList.remove('active');
+  if (no)  no.classList.remove('active');
   if (wrap) wrap.style.display = show ? 'flex' : 'none';
+};
+
+// Botones "Sí, agregar" / "No, gracias" del cross-sell
+App.setUpsell = function(v) {
+  const cb  = document.getElementById('co-upsell');
+  const yes = document.getElementById('co-upsell-yes');
+  const no  = document.getElementById('co-upsell-no');
+  if (cb) cb.checked = v;
+  if (yes) yes.classList.toggle('active', v);
+  if (no)  no.classList.toggle('active', !v);
+  App.toggleUpsell();
 };
 
 // Al marcar/desmarcar los Índices, actualiza el total mostrado

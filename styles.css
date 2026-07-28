@@ -2278,22 +2278,35 @@ h3.prod-name.prod-clickable:hover, .kit-dark-title.prod-clickable:hover { color:
   color: var(--text-mid); margin: 10px 0 0; line-height: 1.4;
 }
 
-/* ── Cross-sell de Índices Bíblicos en el checkout ───────────── */
-.co-upsell {
-  display: flex; align-items: center; gap: 14px; cursor: pointer;
-  border: 1.5px dashed var(--gold); border-radius: 14px;
-  background: var(--gold-faint); padding: 14px; margin: 4px 0 2px;
-  transition: background .2s, border-color .2s;
+/* ── Cross-sell de Índices Bíblicos (tarjeta destacada al abrir) ─── */
+.co-upsell2 {
+  display: flex; gap: 14px; align-items: flex-start;
+  border: 1.5px solid var(--gold); border-radius: 16px;
+  background: linear-gradient(135deg, var(--gold-faint) 0%, #FBEECB 100%);
+  padding: 16px; margin: 2px 0 6px;
+  box-shadow: 0 6px 20px rgba(205,163,73,.14);
 }
-.co-upsell:hover { background: #fbf1d9; }
-.co-upsell:has(#co-upsell:checked) {
-  border-style: solid; background: #fbeecb;
-  box-shadow: 0 4px 16px rgba(205,163,73,.18);
+.co-upsell2:has(#co-upsell:checked) {
+  border-width: 2px; background: linear-gradient(135deg, #FBEECB 0%, #F7E4B8 100%);
 }
-.co-upsell input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--gold); flex-shrink: 0; cursor: pointer; }
-.co-upsell-img { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
-.co-upsell-body { display: flex; flex-direction: column; gap: 2px; }
-.co-upsell-tit { font-family: var(--f-title); font-size: 1rem; color: var(--dark); }
-.co-upsell-desc { font-family: var(--f-sans); font-size: .78rem; color: var(--text-mid); line-height: 1.4; }
-.co-upsell-price { font-family: var(--f-sans); font-size: .85rem; color: var(--gold); }
-.co-upsell-price strong { color: var(--gold); }
+.co-upsell2-img { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; flex-shrink: 0; }
+.co-upsell2-body { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+.co-upsell2-tit { font-family: var(--f-title); font-size: 1.12rem; color: var(--dark); line-height: 1.2; }
+.co-upsell2-desc { font-family: var(--f-sans); font-size: .82rem; color: var(--text-mid); line-height: 1.45; }
+.co-upsell2-desc strong { color: var(--gold); }
+.co-upsell2-btns { display: flex; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
+.co-upsell2-yes, .co-upsell2-no {
+  font-family: var(--f-sans); font-size: .85rem; font-weight: 600; cursor: pointer;
+  border-radius: 999px; padding: 9px 16px; border: 1.5px solid var(--gold);
+  transition: all .18s; white-space: nowrap;
+}
+.co-upsell2-yes { background: var(--gold); color: #fff; }
+.co-upsell2-yes:hover { filter: brightness(1.05); }
+.co-upsell2-yes.active { box-shadow: 0 0 0 3px rgba(205,163,73,.3); transform: translateY(-1px); }
+.co-upsell2-no { background: #fff; color: var(--text-mid); border-color: rgba(155,109,122,.4); }
+.co-upsell2-no:hover { background: #faf6f7; }
+.co-upsell2-no.active { background: var(--text-mid); color: #fff; border-color: var(--text-mid); }
+@media (max-width: 440px) {
+  .co-upsell2 { flex-direction: column; }
+  .co-upsell2-img { width: 100%; height: 120px; }
+}
