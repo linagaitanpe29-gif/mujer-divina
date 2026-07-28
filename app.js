@@ -687,6 +687,8 @@ App.setUpsellOffer = function(offer) {
   if (cb) cb.checked = false;
   if (yes) yes.classList.remove('active');
   if (no)  no.classList.remove('active');
+  const added = document.getElementById('co-upsell-added');
+  if (added) added.style.display = 'none';
   if (!offer) { if (wrap) wrap.style.display = 'none'; return; }
   const img = document.getElementById('co-upsell-img');
   const tit = document.getElementById('co-upsell-tit');
@@ -704,9 +706,22 @@ App.setUpsell = function(v) {
   const cb  = document.getElementById('co-upsell');
   const yes = document.getElementById('co-upsell-yes');
   const no  = document.getElementById('co-upsell-no');
+  const added = document.getElementById('co-upsell-added');
+  const off = App._coUpsell;
   if (cb) cb.checked = v;
   if (yes) yes.classList.toggle('active', v);
   if (no)  no.classList.toggle('active', !v);
+  // Confirmación visible junto al botón (para que se note que sí se agregó)
+  if (v && off) {
+    if (yes) yes.textContent = '✓ Agregado';
+    if (added) {
+      added.innerHTML = `✓ ¡Listo! Sumamos tu <strong>${off.nombre}</strong> a tu pedido (+${App.formatCOP(off.precio)}).`;
+      added.style.display = 'block';
+    }
+  } else {
+    if (yes && off) yes.textContent = `Sí, agregar (+${App.formatCOP(off.precio)})`;
+    if (added) added.style.display = 'none';
+  }
   App.toggleUpsell();
 };
 
