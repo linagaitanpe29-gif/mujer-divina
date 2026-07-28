@@ -158,31 +158,29 @@ Wompi → Transacciones es la **fuente de verdad** de los pagos reales.
 
 ---
 
-## 5. Correos automáticos (EmailJS)
+## 5. Correos automáticos (Resend — propio, ya NO EmailJS)
 
-Cuenta EmailJS de **Camila** (camilagutierrezmentora@gmail.com). Se carga por CDN en
-`index.html` y se inicializa con la **Public Key** (segura para frontend).
+Los correos se envían desde **nuestra propia función serverless** `api/enviar-correo.js`
+(Vercel), usando **Resend**. Ya NO se usa EmailJS (se quitó porque el plan gratis de 200
+correos/mes se agotaba). Los correos salen desde el dominio propio → menos spam.
 
-| Dato | Valor |
-|------|-------|
-| Public Key | `vFOQaTaipCJHPeW79` |
-| Service ID (Gmail) | `service_zptlabd` |
-| Template — aviso a Camila | `template_6fwpfzf` (usa variable `{{estado}}`) |
-| Template — confirmación a la clienta | `template_1ypsbzc` |
+- **Remitente:** `Mujer Divina <hola@mujerdivina.app>` (constante `FROM` en la función).
+- **Aviso a Camila:** `camilagutierrezmentora@gmail.com` (constante `CAMILA_EMAIL`).
+- **Llave secreta:** `RESEND_API_KEY` como variable de entorno en Vercel (nunca en el código).
+- **Dominio verificado en Resend:** `mujerdivina.app` (registros DNS agregados en Vercel).
 
-### Variables que reciben las plantillas
-`producto`, `precio`, `nombre`, `email_cliente`, `cel`, `ciudad`, `direccion`,
-`notas`, `envio`, y **`estado`** (solo la de Camila: dice "🛒 CARRITO" o "✅ VENTA PAGADA").
+### Cómo se llama (frontend → backend)
+`App.enviarCorreo(tipo, pedido, estado)` en `app.js` hace `POST /api/enviar-correo` con:
+- `tipo: 'camila'` → aviso interno con todos los datos + `estado` ("🛒 CARRITO", "✅ VENTA
+  PAGADA", "🎓 INSCRIPCIÓN CURSO"). El `estado` es también el asunto del correo.
+- `tipo: 'clienta'` → confirmación de compra al correo de la clienta (`pedido.email_cliente`).
 
-### ✅ Pendiente de configurar en EmailJS (hazlo en dashboard.emailjs.com)
-En la plantilla **`template_6fwpfzf`** (la de Camila):
-- **Tema (asunto):** ponerlo como `{{estado}}` para ver de un vistazo si es carrito o venta.
-- **Cuerpo:** agregar `{{estado}}` en la primera línea.
-El destino ("Para enviar un correo") debe ser `camilagutierrezmentora@gmail.com`.
+Las plantillas HTML (marca rosa/dorado) están dentro de `api/enviar-correo.js`
+(`plantillaCamila` y `plantillaClienta`). Para cambiar textos/diseño, se editan ahí.
 
-En la plantilla **`template_1ypsbzc`** (la de la clienta):
-- "Para enviar un correo" debe ser `{{email_cliente}}`.
-- Tiempo de envío: dice "entre 2 y 5 días hábiles".
+### Plan Resend
+Gratis: **3.000 correos/mes** (100/día). Suficiente para el volumen actual. Si algún mes se
+acerca al tope, subir al plan de pago de Resend.
 
 ---
 

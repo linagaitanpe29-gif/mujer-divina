@@ -840,9 +840,8 @@ App.submitCheckout = function(e) {
   localStorage.setItem('md_pedido_pendiente', JSON.stringify(pedido));
 
   // SOLO aviso de CARRITO (lead). Aún NO es una venta: la clienta todavía no ha pagado.
-  emailjs.send('service_zptlabd', 'template_6fwpfzf', Object.assign({}, pedido, {
-    estado: '🛒 CARRITO — la clienta llenó sus datos pero AÚN NO ha pagado. Si no te llega un correo de "✅ VENTA PAGADA" para este pedido, es un abandono de carrito: contáctala para cerrar la venta.'
-  }));
+  App.enviarCorreo('camila', pedido,
+    '🛒 CARRITO — la clienta llenó sus datos pero AÚN NO ha pagado. Si no te llega un correo de "✅ VENTA PAGADA" para este pedido, es un abandono de carrito: contáctala para cerrar la venta.');
 
   App.closeCheckout();
 
@@ -913,9 +912,8 @@ App.inscribirCurso = function(e) {
   localStorage.setItem('md_pedido_pendiente', JSON.stringify(pedido));
 
   // Aviso a Camila (lead): inscripción iniciada, aún no ha pagado
-  emailjs.send('service_zptlabd', 'template_6fwpfzf', Object.assign({}, pedido, {
-    estado: '🎓 INSCRIPCIÓN CURSO — la clienta llenó sus datos para el Programa Mujer Divina pero AÚN NO ha pagado. Si no llega "✅ VENTA PAGADA", es un abandono: contáctala.'
-  }));
+  App.enviarCorreo('camila', pedido,
+    '🎓 INSCRIPCIÓN CURSO — la clienta llenó sus datos para el Programa Mujer Divina pero AÚN NO ha pagado. Si no llega "✅ VENTA PAGADA", es un abandono: contáctala.');
 
   App.pagarCarritoWompi(pedido, 797000 * 100, referencia); // $797.000 → centavos
 };
@@ -967,19 +965,23 @@ App.verificarPagoWompi = async function(id) {
   }
 };
 
+// Envía un correo por nuestra función serverless (Resend). Reemplaza a EmailJS.
+// tipo: 'camila' (aviso interno con {estado}) o 'clienta' (confirmación de compra).
+App.enviarCorreo = function(tipo, pedido, estado) {
+  try {
+    fetch('/api/enviar-correo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tipo: tipo, pedido: pedido, estado: estado || '' })
+    }).catch(function () {});
+  } catch (e) {}
+};
+
 // Envía los correos de VENTA (a Camila y a la clienta) — usado por manual y automático
 App._enviarVenta = function(p) {
-  emailjs.send('service_zptlabd', 'template_6fwpfzf', Object.assign({}, p, {
-    estado: '✅ VENTA PAGADA — la clienta pagó en Wompi. Verifica en Wompi → Transacciones y despacha. El envío lo paga contra entrega.'
-  }));
-  emailjs.send('service_zptlabd', 'template_1ypsbzc', {
-    producto: p.producto, precio: p.precio, nombre: p.nombre,
-    // Correo de la clienta bajo varios nombres para que el campo "To Email"
-    // de la plantilla funcione sea {{email}} o {{email_cliente}}.
-    email_cliente: p.email_cliente, email: p.email_cliente, correo: p.email_cliente,
-    ciudad: p.ciudad, city: p.ciudad, Ciudad: p.ciudad, ciudad_cliente: p.ciudad,
-    direccion: p.direccion, envio: p.envio
-  });
+  App.enviarCorreo('camila', p,
+    '✅ VENTA PAGADA — la clienta pagó en Wompi. Verifica en Wompi → Transacciones y despacha. El envío lo paga contra entrega.');
+  App.enviarCorreo('clienta', p);
 };
 
 App.confirmarPagoAuto = function() {
