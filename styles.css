@@ -2277,3 +2277,23 @@ h3.prod-name.prod-clickable:hover, .kit-dark-title.prod-clickable:hover { color:
   font-family: var(--f-sans); font-size: .8rem; font-style: italic;
   color: var(--text-mid); margin: 10px 0 0; line-height: 1.4;
 }
+
+/* ── Cross-sell de Índices Bíblicos en el checkout ───────────── */
+.co-upsell {
+  display: flex; align-items: center; gap: 14px; cursor: pointer;
+  border: 1.5px dashed var(--gold); border-radius: 14px;
+  background: var(--gold-faint); padding: 14px; margin: 4px 0 2px;
+  transition: background .2s, border-color .2s;
+}
+.co-upsell:hover { background: #fbf1d9; }
+.co-upsell:has(#co-upsell:checked) {
+  border-style: solid; background: #fbeecb;
+  box-shadow: 0 4px 16px rgba(205,163,73,.18);
+}
+.co-upsell input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--gold); flex-shrink: 0; cursor: pointer; }
+.co-upsell-img { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
+.co-upsell-body { display: flex; flex-direction: column; gap: 2px; }
+.co-upsell-tit { font-family: var(--f-title); font-size: 1rem; color: var(--dark); }
+.co-upsell-desc { font-family: var(--f-sans); font-size: .78rem; color: var(--text-mid); line-height: 1.4; }
+.co-upsell-price { font-family: var(--f-sans); font-size: .85rem; color: var(--gold); }
+.co-upsell-price strong { color: var(--gold); }

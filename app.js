@@ -599,6 +599,10 @@ App.openCheckout = function(product, price, wompiUrl) {
   document.getElementById('co-ciudad-input').value = '';
   const list = document.getElementById('co-ciudad-list');
   if (list) { list.style.display = 'none'; list.innerHTML = ''; }
+  // Cross-sell de Índices Bíblicos: se ofrece salvo que el producto SEAN los índices
+  App._coBaseLabel = price;
+  App._coBaseCents = parsePrecio(price) * 100;
+  App.setUpsellVisible(!/[íi]ndices/i.test(product));
   const modal = document.getElementById('checkout-modal');
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -623,9 +627,35 @@ App.openCheckoutCarrito = function() {
   document.getElementById('co-ciudad-input').value = '';
   const list = document.getElementById('co-ciudad-list');
   if (list) { list.style.display = 'none'; list.innerHTML = ''; }
+  // Cross-sell: se ofrece salvo que los Índices ya estén en el carrito
+  const tieneIndices = items.some(i => /indices/i.test(i.slug));
+  App._coBaseLabel = document.getElementById('co-product-price').textContent;
+  App._coBaseCents = App.cart.total() * 100;
+  App.setUpsellVisible(!tieneIndices);
   const modal = document.getElementById('checkout-modal');
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
+};
+
+// Muestra/oculta y resetea el cross-sell de Índices Bíblicos
+App.setUpsellVisible = function(show) {
+  const wrap = document.getElementById('co-upsell-wrap');
+  const cb   = document.getElementById('co-upsell');
+  if (cb) cb.checked = false;
+  if (wrap) wrap.style.display = show ? 'flex' : 'none';
+};
+
+// Al marcar/desmarcar los Índices, actualiza el total mostrado
+App.toggleUpsell = function() {
+  const cb = document.getElementById('co-upsell');
+  const priceEl = document.getElementById('co-product-price');
+  if (!cb || !priceEl) return;
+  if (cb.checked) {
+    const total = (App._coBaseCents || 0) + 30000 * 100;
+    priceEl.innerHTML = `${App._coBaseLabel} &nbsp;+&nbsp; Índices $30.000 &nbsp;=&nbsp; <strong>${App.formatCOP(total / 100)}</strong>`;
+  } else {
+    priceEl.textContent = App._coBaseLabel || '';
+  }
 };
 
 // Cierra la lista de sugerencias al tocar fuera del campo
@@ -683,7 +713,7 @@ App.submitCheckout = function(e) {
     esKit = items.some(i => /kit/i.test(i.slug));
   } else {
     producto = document.getElementById('co-product-name').textContent;
-    precio   = document.getElementById('co-product-price').textContent;
+    precio   = App._coBaseLabel || document.getElementById('co-product-price').textContent;
     esKit    = /kit/i.test(producto);
   }
 
@@ -702,7 +732,18 @@ App.submitCheckout = function(e) {
     }
   }
 
-  const totalCents = modoCarrito ? App.cart.total() * 100 : 0;
+  // Cross-sell: si marcó los Índices Bíblicos, se suman $30.000 al total
+  const upWrap = document.getElementById('co-upsell-wrap');
+  const upCb   = document.getElementById('co-upsell');
+  const addStickers = !!(upWrap && upWrap.style.display !== 'none' && upCb && upCb.checked);
+
+  let payCents = modoCarrito ? App.cart.total() * 100 : (App._coBaseCents || parsePrecio(precio) * 100);
+  if (addStickers) {
+    payCents += 30000 * 100;
+    producto = `${producto}  +  Índices Bíblicos (stickers)`;
+    precio   = `${App.formatCOP(payCents / 100)} — incluye Índices Bíblicos ($30.000)`;
+  }
+
   const referencia = 'MD-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
   const pedido = { producto, precio, nombre, email_cliente: email, cel, cedula,
     // Alias de la cédula por si la plantilla de EmailJS usa otro nombre de variable
@@ -724,13 +765,14 @@ App.submitCheckout = function(e) {
 
   App.closeCheckout();
 
-  if (modoCarrito) {
-    // Cobro del TOTAL en Wompi (Web Checkout). El carrito se vacía al confirmarse el pago.
-    App.pagarCarritoWompi(pedido, totalCents, referencia);
+  // Si es carrito, o si agregó los Índices, se cobra el TOTAL dinámico por Wompi Web Checkout
+  // (el link fijo del producto no puede cobrar el monto extra de los stickers).
+  if (modoCarrito || addStickers) {
+    App.pagarCarritoWompi(pedido, payCents, referencia);
     return;
   }
 
-  // Un solo producto: link de pago fijo de Wompi (flujo actual, sin cambios)
+  // Un solo producto sin agregados: link de pago fijo de Wompi (flujo actual, sin cambios)
   if (App._coWompi && App._coWompi !== '#') {
     window.open(App._coWompi, '_blank');
   }
