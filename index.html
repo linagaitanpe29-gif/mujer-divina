@@ -418,7 +418,10 @@
             <span class="orn-center">◆</span>
             <div class="orn-dia"></div><div class="orn-line"></div>
           </div>
-          <p class="tienda-sep-text">Descubre los productos para tu <strong>cita diaria con Él</strong>, o para la <strong>cita más importante de tu día</strong>… con Jesús.</p>
+          <p class="tienda-sep-text tienda-sep-link" role="button" tabindex="0"
+             onclick="document.getElementById('tienda-productos').scrollIntoView({behavior:'smooth'});"
+             onkeypress="if(event.key==='Enter')document.getElementById('tienda-productos').scrollIntoView({behavior:'smooth'});">Descubre los productos para tu <strong>cita diaria con Él</strong>, o para la <strong>cita más importante de tu día</strong>… con Jesús.</p>
+          <span class="tienda-sep-cta" onclick="document.getElementById('tienda-productos').scrollIntoView({behavior:'smooth'});">Ver productos ↓</span>
           <div class="gold-bar" style="margin:14px auto 0;"></div>
         </div>
       </div>

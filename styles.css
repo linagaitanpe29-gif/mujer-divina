@@ -2375,3 +2375,12 @@ h3.prod-name.prod-clickable:hover, .kit-dark-title.prod-clickable:hover { color:
   color: var(--text); line-height: 1.45; margin: 16px 0 0;
 }
 .tienda-sep-text strong { color: var(--gold); font-weight: 400; }
+.tienda-sep-link { cursor: pointer; transition: opacity .2s; }
+.tienda-sep-link:hover { opacity: .82; }
+.tienda-sep-cta {
+  display: inline-block; margin-top: 12px; cursor: pointer;
+  font-family: var(--f-sans); font-size: .82rem; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--gold);
+  border-bottom: 1.5px solid var(--gold); padding-bottom: 2px; transition: opacity .2s;
+}
+.tienda-sep-cta:hover { opacity: .7; }
