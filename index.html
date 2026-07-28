@@ -857,12 +857,12 @@
       <form id="co-form" class="co-form" onsubmit="App.submitCheckout(event)">
         <div class="co-upsell2" id="co-upsell-wrap" style="display:none;">
           <input type="checkbox" id="co-upsell" hidden />
-          <img src="fotos/productos/stickers-1.jpeg" alt="Índices Bíblicos" class="co-upsell2-img" />
+          <img src="fotos/productos/stickers-1.jpeg" alt="" class="co-upsell2-img" id="co-upsell-img" />
           <div class="co-upsell2-body">
-            <span class="co-upsell2-tit">¿Quieres agregar tus Índices Bíblicos? 📑</span>
-            <span class="co-upsell2-desc">Los stickers con el nombre de cada libro para encontrar tus pasajes al instante en tu Biblia. <strong>Por solo $30.000</strong></span>
+            <span class="co-upsell2-tit" id="co-upsell-tit">¿Quieres agregar un complemento?</span>
+            <span class="co-upsell2-desc" id="co-upsell-desc"></span>
             <div class="co-upsell2-btns">
-              <button type="button" class="co-upsell2-yes" id="co-upsell-yes" onclick="App.setUpsell(true)">Sí, agregar (+$30.000)</button>
+              <button type="button" class="co-upsell2-yes" id="co-upsell-yes" onclick="App.setUpsell(true)">Sí, agregar</button>
               <button type="button" class="co-upsell2-no" id="co-upsell-no" onclick="App.setUpsell(false)">No, gracias</button>
             </div>
           </div>

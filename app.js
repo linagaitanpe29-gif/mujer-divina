@@ -599,10 +599,10 @@ App.openCheckout = function(product, price, wompiUrl) {
   document.getElementById('co-ciudad-input').value = '';
   const list = document.getElementById('co-ciudad-list');
   if (list) { list.style.display = 'none'; list.innerHTML = ''; }
-  // Cross-sell de Índices Bíblicos: se ofrece salvo que el producto SEAN los índices
+  // Cross-sell contextual: el complemento depende del producto que se compra
   App._coBaseLabel = price;
   App._coBaseCents = parsePrecio(price) * 100;
-  App.setUpsellVisible(!/[íi]ndices/i.test(product));
+  App.setUpsellOffer(App.upsellFor(product));
   const modal = document.getElementById('checkout-modal');
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -627,18 +627,59 @@ App.openCheckoutCarrito = function() {
   document.getElementById('co-ciudad-input').value = '';
   const list = document.getElementById('co-ciudad-list');
   if (list) { list.style.display = 'none'; list.innerHTML = ''; }
-  // Cross-sell: se ofrece salvo que los Índices ya estén en el carrito
-  const tieneIndices = items.some(i => /indices/i.test(i.slug));
+  // Cross-sell contextual del carrito: ofrece un complemento que aún no esté en el pedido
   App._coBaseLabel = document.getElementById('co-product-price').textContent;
   App._coBaseCents = App.cart.total() * 100;
-  App.setUpsellVisible(!tieneIndices);
+  App.setUpsellOffer(App.upsellForCart(items));
   const modal = document.getElementById('checkout-modal');
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
 };
 
-// Muestra/oculta y resetea el cross-sell de Índices Bíblicos
-App.setUpsellVisible = function(show) {
+// Catálogo de complementos (cross-sell). precio en pesos.
+App.UPSELLS = {
+  indices: {
+    slug: 'indices-biblicos', nombre: 'Índices Bíblicos', precio: 30000,
+    img: 'fotos/productos/stickers-1.jpeg',
+    tit: '¿Quieres agregar tus Índices Bíblicos? 📑',
+    desc: 'Los stickers con el nombre de cada libro para encontrar tus pasajes al instante en tu Biblia.'
+  },
+  cuaderno: {
+    slug: 'cuaderno-devocional', nombre: 'Cuaderno Devocional', precio: 60000,
+    img: 'fotos/productos/cuaderno-portada.jpg',
+    tit: '¿Quieres complementarlo con tu Cuaderno Devocional? 📖',
+    desc: 'Para que con cada promesa que recibas hagas tu devocional y vivas tu día con la Palabra de Dios.'
+  },
+  promesas: {
+    slug: 'caja-de-promesas', nombre: 'Caja de Promesas', precio: 85000,
+    img: 'fotos/productos/promesas-caja.jpg',
+    tit: '¿Quieres acompañarlo con tu Caja de Promesas? 🎁',
+    desc: 'Para acompañar tus devocionales en la mañana y recibir la Palabra de Dios que Él tiene para ti ese día.'
+  }
+};
+
+// Devuelve el complemento a ofrecer según el producto (o null)
+App.upsellFor = function(name) {
+  const n = (name || '').toLowerCase();
+  if (/[íi]ndices/.test(n)) return null;          // no se ofrece a sí mismo
+  if (/promesas/.test(n))   return App.UPSELLS.cuaderno;
+  if (/cuaderno/.test(n))   return App.UPSELLS.promesas;
+  if (/biblia|kit/.test(n)) return App.UPSELLS.indices;
+  return null;
+};
+
+// Para el carrito: ofrece el primer complemento que NO esté ya en el pedido
+App.upsellForCart = function(items) {
+  const has = s => items.some(i => new RegExp(s, 'i').test(i.slug));
+  if (has('promesas') && !has('cuaderno')) return App.UPSELLS.cuaderno;
+  if (has('cuaderno') && !has('promesas')) return App.UPSELLS.promesas;
+  if ((has('biblia') || has('kit')) && !has('indices')) return App.UPSELLS.indices;
+  return null;
+};
+
+// Configura la tarjeta del complemento (imagen, textos, precio) y la muestra u oculta
+App.setUpsellOffer = function(offer) {
+  App._coUpsell = offer || null;
   const wrap = document.getElementById('co-upsell-wrap');
   const cb   = document.getElementById('co-upsell');
   const yes  = document.getElementById('co-upsell-yes');
@@ -646,7 +687,16 @@ App.setUpsellVisible = function(show) {
   if (cb) cb.checked = false;
   if (yes) yes.classList.remove('active');
   if (no)  no.classList.remove('active');
-  if (wrap) wrap.style.display = show ? 'flex' : 'none';
+  if (!offer) { if (wrap) wrap.style.display = 'none'; return; }
+  const img = document.getElementById('co-upsell-img');
+  const tit = document.getElementById('co-upsell-tit');
+  const desc = document.getElementById('co-upsell-desc');
+  if (img)  { img.src = offer.img; img.alt = offer.nombre; }
+  if (tit)  tit.textContent = offer.tit;
+  if (desc) desc.innerHTML = `${offer.desc} <strong>Por solo ${App.formatCOP(offer.precio)}</strong>`;
+  if (yes)  yes.textContent = `Sí, agregar (+${App.formatCOP(offer.precio)})`;
+  if (no)   no.textContent = 'No, gracias';
+  if (wrap) wrap.style.display = 'flex';
 };
 
 // Botones "Sí, agregar" / "No, gracias" del cross-sell
@@ -660,14 +710,15 @@ App.setUpsell = function(v) {
   App.toggleUpsell();
 };
 
-// Al marcar/desmarcar los Índices, actualiza el total mostrado
+// Al elegir Sí/No, actualiza el total mostrado
 App.toggleUpsell = function() {
   const cb = document.getElementById('co-upsell');
   const priceEl = document.getElementById('co-product-price');
   if (!cb || !priceEl) return;
-  if (cb.checked) {
-    const total = (App._coBaseCents || 0) + 30000 * 100;
-    priceEl.innerHTML = `${App._coBaseLabel} &nbsp;+&nbsp; Índices $30.000 &nbsp;=&nbsp; <strong>${App.formatCOP(total / 100)}</strong>`;
+  const off = App._coUpsell;
+  if (cb.checked && off) {
+    const total = (App._coBaseCents || 0) + off.precio * 100;
+    priceEl.innerHTML = `${App._coBaseLabel} &nbsp;+&nbsp; ${off.nombre} ${App.formatCOP(off.precio)} &nbsp;=&nbsp; <strong>${App.formatCOP(total / 100)}</strong>`;
   } else {
     priceEl.textContent = App._coBaseLabel || '';
   }
@@ -747,16 +798,16 @@ App.submitCheckout = function(e) {
     }
   }
 
-  // Cross-sell: si marcó los Índices Bíblicos, se suman $30.000 al total
+  // Cross-sell: si eligió agregar el complemento, se suma su precio al total
   const upWrap = document.getElementById('co-upsell-wrap');
   const upCb   = document.getElementById('co-upsell');
-  const addStickers = !!(upWrap && upWrap.style.display !== 'none' && upCb && upCb.checked);
+  const addUpsell = !!(upWrap && upWrap.style.display !== 'none' && upCb && upCb.checked && App._coUpsell);
 
   let payCents = modoCarrito ? App.cart.total() * 100 : (App._coBaseCents || parsePrecio(precio) * 100);
-  if (addStickers) {
-    payCents += 30000 * 100;
-    producto = `${producto}  +  Índices Bíblicos (stickers)`;
-    precio   = `${App.formatCOP(payCents / 100)} — incluye Índices Bíblicos ($30.000)`;
+  if (addUpsell) {
+    payCents += App._coUpsell.precio * 100;
+    producto = `${producto}  +  ${App._coUpsell.nombre}`;
+    precio   = `${App.formatCOP(payCents / 100)} — incluye ${App._coUpsell.nombre} (${App.formatCOP(App._coUpsell.precio)})`;
   }
 
   const referencia = 'MD-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
@@ -780,9 +831,9 @@ App.submitCheckout = function(e) {
 
   App.closeCheckout();
 
-  // Si es carrito, o si agregó los Índices, se cobra el TOTAL dinámico por Wompi Web Checkout
-  // (el link fijo del producto no puede cobrar el monto extra de los stickers).
-  if (modoCarrito || addStickers) {
+  // Si es carrito, o si agregó un complemento, se cobra el TOTAL dinámico por Wompi Web Checkout
+  // (el link fijo del producto no puede cobrar el monto extra del complemento).
+  if (modoCarrito || addUpsell) {
     App.pagarCarritoWompi(pedido, payCents, referencia);
     return;
   }
