@@ -839,9 +839,8 @@ App.submitCheckout = function(e) {
     city: ciudad, Ciudad: ciudad, ciudad_cliente: ciudad };
   localStorage.setItem('md_pedido_pendiente', JSON.stringify(pedido));
 
-  // SOLO aviso de CARRITO (lead). Aún NO es una venta: la clienta todavía no ha pagado.
-  App.enviarCorreo('camila', pedido,
-    '🛒 CARRITO — la clienta llenó sus datos pero AÚN NO ha pagado. Si no te llega un correo de "✅ VENTA PAGADA" para este pedido, es un abandono de carrito: contáctala para cerrar la venta.');
+  // Ya NO se manda aviso de "carrito" (lead). El correo a Camila sale SOLO cuando el
+  // pago se confirma (VENTA PAGADA), automático al volver de Wompi o con "Ya realicé mi pago".
 
   App.closeCheckout();
 
@@ -911,9 +910,8 @@ App.inscribirCurso = function(e) {
   };
   localStorage.setItem('md_pedido_pendiente', JSON.stringify(pedido));
 
-  // Aviso a Camila (lead): inscripción iniciada, aún no ha pagado
-  App.enviarCorreo('camila', pedido,
-    '🎓 INSCRIPCIÓN CURSO — la clienta llenó sus datos para el Programa Mujer Divina pero AÚN NO ha pagado. Si no llega "✅ VENTA PAGADA", es un abandono: contáctala.');
+  // Ya NO se manda aviso de inscripción (lead). El correo sale SOLO cuando el pago
+  // del Programa se confirma en Wompi (VENTA PAGADA).
 
   App.pagarCarritoWompi(pedido, 797000 * 100, referencia); // $797.000 → centavos
 };

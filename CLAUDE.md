@@ -119,18 +119,18 @@ La clienta elige su ciudad en el checkout y el **costo del envío se SUMA a su p
 ### El flujo de checkout paso a paso (`App.submitCheckout` en `app.js`)
 1. La clienta llena el formulario (nombre, correo, celular, **ciudad**, dirección, notas)
    y da "Continuar al pago".
-2. Se abre el **link de Wompi del producto** en una pestaña nueva (solo el producto).
-3. La app la lleva a `#/gracias` → página "Un último paso".
-4. **En ese momento** se manda a Camila un correo **"🛒 CARRITO"** (aún NO es venta —
-   la clienta todavía no ha pagado). Sirve como *lead* para seguimiento de abandono.
-5. Si la clienta paga y hace clic en **"✅ Ya realicé mi pago"** (`App.confirmarPagoManual`):
-   - Se manda a Camila **"✅ VENTA PAGADA"**.
-   - Se manda a la clienta su **correo de confirmación**.
-6. Si abandona sin pagar → nunca hace clic → **solo queda el "🛒 CARRITO"** con sus datos.
+2. Se abre el pago en Wompi (Web Checkout para el total, o el link del producto).
+3. La app la lleva a `#/gracias`. El pedido queda guardado en `md_pedido_pendiente`.
+4. **NO se manda ningún correo todavía** (ya no existe el aviso de "🛒 CARRITO").
+5. El correo a Camila **"✅ VENTA PAGADA"** + la **confirmación a la clienta** se envían
+   **SOLO cuando el pago se confirma**:
+   - **Automático:** al volver de Wompi Web Checkout con el pago `APPROVED`
+     (`App.confirmarPagoAuto`) — carrito, "Comprar ahora" con complemento, y Programa.
+   - **Manual:** si la clienta hace clic en **"✅ Ya realicé mi pago"**
+     (`App.confirmarPagoManual`) — flujo del link fijo de un solo producto.
 
-**Regla para Lina:** llegó "🛒 CARRITO" pero **no** llegó "✅ VENTA PAGADA" y **no**
-aparece en **Wompi → Transacciones** = **abandono de carrito** → contactarla.
-Wompi → Transacciones es la **fuente de verdad** de los pagos reales.
+**Regla para Lina:** solo llegan correos de **ventas efectivamente pagadas**.
+**Wompi → Transacciones** sigue siendo la **fuente de verdad** de los pagos reales.
 
 > Nota técnica: los links de pago genéricos de Wompi **no** ofrecen URL de redirección
 > en el panel, por eso NO se puede detectar el pago automáticamente. Por eso existe el
