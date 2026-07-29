@@ -7,6 +7,9 @@
    - tipo 'clienta' → confirmación a la clienta (a su propio correo). */
 
 const CAMILA_EMAIL = 'camilagutierrezmentora@gmail.com';
+const LINA_EMAIL = 'linagaitanpe29@gmail.com';
+// Correos que reciben el aviso interno de cada pedido (Camila + Lina).
+const AVISO_EMAILS = [CAMILA_EMAIL, LINA_EMAIL];
 const FROM = 'Mujer Divina <hola@mujerdivina.app>';
 
 function leerBody(req) {
@@ -119,12 +122,13 @@ module.exports = async (req, res) => {
       subject = '🌷 ¡Gracias por tu compra en Mujer Divina!';
       html = plantillaClienta(pedido);
     } else {
-      to = CAMILA_EMAIL;
+      to = AVISO_EMAILS; // aviso interno → Camila + Lina
       subject = estado || 'Nuevo pedido — Mujer Divina';
       html = plantillaCamila(pedido, estado);
     }
 
-    if (!to) {
+    const destinatarios = Array.isArray(to) ? to.filter(Boolean) : (to ? [to] : []);
+    if (!destinatarios.length) {
       res.status(400).json({ error: 'Falta el destinatario' });
       return;
     }
@@ -132,7 +136,7 @@ module.exports = async (req, res) => {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: FROM, to: [to], subject, html, reply_to: CAMILA_EMAIL })
+      body: JSON.stringify({ from: FROM, to: destinatarios, subject, html, reply_to: CAMILA_EMAIL })
     });
     const data = await r.json().catch(() => ({}));
     if (!r.ok) {
