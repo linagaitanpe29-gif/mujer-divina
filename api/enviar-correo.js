@@ -88,7 +88,7 @@ function plantillaClienta(p) {
         ${p.direccion ? `<p style="margin:0;color:#3A1C25;font-size:15px;"><strong>Dirección:</strong> ${esc(p.direccion)}</p>` : ''}
       </div>
       <p style="color:#9C6D7A;font-size:14px;line-height:1.6;margin:0;">
-        Tu pedido se despacha entre <strong>2 y 5 días hábiles</strong>.
+        Tu pedido se despacha entre <strong>3 y 7 días hábiles</strong>.
         Si tienes cualquier duda, respóndenos a este correo. 💛
       </p>
     </div>
