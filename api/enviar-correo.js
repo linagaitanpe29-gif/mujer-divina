@@ -7,9 +7,9 @@
    - tipo 'clienta' → confirmación a la clienta (a su propio correo). */
 
 const CAMILA_EMAIL = 'camilagutierrezmentora@gmail.com';
-const LINA_EMAIL = 'linagaitanpe29@gmail.com';
-// Correos que reciben el aviso interno de cada pedido (Camila + Lina).
-const AVISO_EMAILS = [CAMILA_EMAIL, LINA_EMAIL];
+// Correos que reciben el aviso interno de cada pedido. Para agregar a alguien más
+// (ej. Lina), basta con añadir su correo a este arreglo.
+const AVISO_EMAILS = [CAMILA_EMAIL];
 const FROM = 'Mujer Divina <hola@mujerdivina.app>';
 
 function leerBody(req) {
