@@ -69,9 +69,9 @@ título para abrir su página. Para agregar/quitar un producto: basta con ponerl
 
 ---
 
-## 3. Autenticación (Supabase)
+## 3. Supabase (Auth + tabla `pedidos`)
 
-- Solo se usa **Auth** (no hay tablas de base de datos). Las usuarias se registran solas.
+### Auth
 - Solo `#/roadmap` requiere login. Todo lo demás es abierto.
 - **Lista blanca de correos** en `app.js` (`APPROVED_EMAILS`): solo esos correos pueden
   registrarse. Para dar acceso a alguien nueva, se agrega su correo a ese array.
@@ -79,6 +79,35 @@ título para abrir su página. Para agregar/quitar un producto: basta con ponerl
   (las usuarias entran de una con correo + contraseña + cómo quieren ser llamadas).
 - **Credenciales en el código** (`app.js`): solo la `anon key` (pública, segura para el
   frontend). ⚠️ **NUNCA** poner la `service_role key` en el código del frontend.
+
+### Tabla `pedidos` (persistencia de pedidos para el webhook de Wompi)
+Guarda cada pedido ANTES de ir a pagar, para que el webhook de Wompi (servidor a
+servidor) pueda encontrarlo y mandar los correos sin depender del navegador de la
+clienta. Ver §4 "Confirmación de pago" para el flujo completo.
+
+```sql
+create table if not exists pedidos (
+  referencia text primary key,
+  estado text not null default 'pendiente',   -- 'pendiente' | 'pagado'
+  monto_centavos integer,
+  email_cliente text,
+  datos jsonb not null,                        -- el objeto `pedido` completo
+  created_at timestamptz not null default now(),
+  pagado_at timestamptz
+);
+
+alter table pedidos enable row level security;
+
+create policy "insert publico" on pedidos
+  for insert to anon
+  with check (true);
+```
+- El **frontend** (`App.guardarPedido` en `app.js`) inserta con la `anon key` — la
+  política de RLS de arriba permite **solo insertar**, nunca leer ni modificar. Así
+  una clienta no puede ver los datos de otra aunque tuviera la anon key.
+- El **backend** (`lib/pedidos.js`) lee y actualiza con la `service_role key`
+  (variable de entorno `SUPABASE_SERVICE_KEY` en Vercel — bypasea RLS). ⚠️ Esa llave
+  **nunca** va en el frontend ni en el repositorio.
 
 ---
 
@@ -121,26 +150,53 @@ La clienta elige su ciudad en el checkout y el **costo del envío se SUMA a su p
    y da "Continuar al pago".
 2. **TODA compra** (un solo producto, carrito, con complemento, o el Programa) se cobra
    por **Wompi Web Checkout** (`App.pagarCarritoWompi`) — nunca por los links fijos de
-   cada producto. El pedido queda guardado en `md_pedido_pendiente`.
-3. **NO se manda ningún correo todavía** (ya no existe el aviso de "🛒 CARRITO").
-4. Al completar el pago, Wompi **redirige sola** de vuelta a `#/gracias` con `?id=...`.
-   `App.checkWompiReturn` + `App.verificarPagoWompi` consultan la transacción; si está
-   **APPROVED**, se envían solos el correo **"✅ VENTA PAGADA"** a Camila y la
-   **confirmación** a la clienta (`App.confirmarPagoAuto`).
-5. **Respaldo manual:** si por lo que sea la redirección automática no vuelve a disparar
-   (bloqueador de anuncios, cierre de pestaña antes de completar), en `/gracias` sigue
-   apareciendo el botón **"✅ Ya realicé mi pago"** (`App.confirmarPagoManual`) mientras
-   el pedido siga en `md_pedido_pendiente` de ese navegador.
+   cada producto.
+3. **Antes de redirigir a Wompi**, `App.guardarPedido` inserta el pedido completo en la
+   tabla `pedidos` de Supabase (referencia + estado `pendiente` + todos los datos). El
+   pedido también queda en `localStorage` (`md_pedido_pendiente`) como respaldo local.
+4. **NO se manda ningún correo todavía** (ya no existe el aviso de "🛒 CARRITO").
+5. Cuando el pago queda **APPROVED**, hay DOS vías que confirman la venta — ambas pasan
+   por `api/confirmar-venta.js` o su lógica gemela en el webhook, que son **idempotentes**
+   (si una ya mandó los correos, la otra no los duplica):
 
-**Regla para Lina:** solo llegan correos de **ventas efectivamente pagadas**.
-**Wompi → Transacciones** sigue siendo la **fuente de verdad** de los pagos reales —
-revísalo si sospechas que una venta no llegó a generar sus correos.
+   - **🔒 Vía principal — Webhook de Wompi (`api/wompi-webhook.js`):** Wompi llama
+     **directamente a nuestro servidor** apenas el pago se aprueba, **sin pasar por el
+     navegador de la clienta para nada**. Verifica la firma del evento con
+     `WOMPI_EVENTS_SECRET`, busca el pedido en Supabase por `referencia` y manda los
+     correos. Esta es la vía que garantiza la confirmación **aunque la clienta cierre
+     la pestaña, pierda señal o pague desde un navegador raro** (webview de Instagram,
+     etc.) justo después de pagar.
+   - **Vía de respaldo — retorno del navegador:** si el navegador SÍ vuelve (redirect
+     automático de Wompi Web Checkout con `?id=...`, verificado por
+     `App.verificarPagoWompi`) o la clienta toca **"✅ Ya realicé mi pago"**
+     (`App.confirmarPagoManual`), también se llama a `api/confirmar-venta.js`. Gracias
+     a la marca atómica `pendiente → pagado` en Supabase, si el webhook ya procesó la
+     venta, esta vía no vuelve a mandar los correos (y viceversa).
+
+**Regla para Lina:** solo llegan correos de **ventas efectivamente pagadas**, y llegan
+**solos**, sin depender de que la clienta haga nada después de pagar.
+**Wompi → Transacciones** sigue siendo la **fuente de verdad** de los pagos reales.
 
 > ⚠️ **Historial:** hasta el 31 jul 2026, comprar un solo producto (sin carrito ni
 > complemento) usaba el link fijo de Wompi, que no tiene redirect configurado — si la
 > clienta cerraba esa pestaña sin volver a tocar el botón manual, la venta no dejaba
-> ningún rastro (causó al menos una venta perdida). Se corrigió haciendo que TODO pase
-> por el Web Checkout dinámico, que confirma sola sin depender de ninguna acción manual.
+> ningún rastro (causó al menos una venta perdida). Primero se corrigió que TODO
+> pasara por el Web Checkout dinámico (confirma sola al volver el navegador); luego,
+> como eso seguía dependiendo del navegador, se agregó el **webhook** (servidor a
+> servidor) como vía principal — ya no depende de que la clienta haga nada.
+
+### ⚙️ Configuración pendiente del webhook (hazlo tú, una sola vez)
+1. **Supabase:** crea la tabla `pedidos` corriendo el SQL de la sección 3 en el
+   **SQL Editor** de tu proyecto (dashboard.supabase.com → tu proyecto → SQL Editor).
+2. **Vercel → Environment Variables**, agrega dos variables nuevas:
+   - `SUPABASE_SERVICE_KEY` = la **service_role key** de Supabase (Project Settings →
+     API → "service_role" — NO la anon key, esa ya está en el código).
+   - `WOMPI_EVENTS_SECRET` = el **secreto de eventos** de Wompi (dashboard de Wompi →
+     Desarrolladores/Secretos → "Eventos" — distinto del secreto de integridad).
+3. **Wompi → Desarrolladores → Eventos (webhooks)**: pon la URL
+   `https://mujerdivina.app/api/wompi-webhook` y guarda. Wompi suele ofrecer un botón
+   para **mandar un evento de prueba** — úsalo para confirmar que todo quedó bien
+   (revisando los logs de la función en Vercel → Deployments → el último → Logs).
 
 ### Carrito de compras + cobro del total por Wompi (Web Checkout)
 - **Carrito propio** (estilo Shopify, sin perder el diseño): ícono en el nav con contador,
