@@ -844,18 +844,12 @@ App.submitCheckout = function(e) {
 
   App.closeCheckout();
 
-  // Si es carrito, o si agregó un complemento, se cobra el TOTAL dinámico por Wompi Web Checkout
-  // (el link fijo del producto no puede cobrar el monto extra del complemento).
-  if (modoCarrito || addUpsell) {
-    App.pagarCarritoWompi(pedido, payCents, referencia);
-    return;
-  }
-
-  // Un solo producto sin agregados: link de pago fijo de Wompi (flujo actual, sin cambios)
-  if (App._coWompi && App._coWompi !== '#') {
-    window.open(App._coWompi, '_blank');
-  }
-  window.location.hash = '/gracias';
+  // TODA compra (un producto, carrito o con complemento) se cobra por Wompi Web
+  // Checkout: es el único flujo que CONFIRMA SOLO al volver (?id=...). Los links fijos
+  // de cada producto ya no se usan para pagar: dependían de que la clienta volviera a
+  // tocar "Ya realicé mi pago", y si cerraba la pestaña de Wompi, la venta se perdía
+  // sin dejar rastro (ni correo, ni registro).
+  App.pagarCarritoWompi(pedido, payCents, referencia);
 };
 
 // Redirige a Wompi para cobrar el total del carrito (con firma segura del servidor)
