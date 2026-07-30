@@ -852,8 +852,35 @@ App.submitCheckout = function(e) {
   App.pagarCarritoWompi(pedido, payCents, referencia);
 };
 
+// Guarda el pedido en Supabase ANTES de ir a pagar (referencia + datos completos).
+// Con la llave anon el frontend SOLO puede insertar (RLS), nunca leer pedidos ajenos.
+// Esto es lo que permite que el webhook de Wompi (servidor a servidor) encuentre el
+// pedido y mande los correos SOLO, sin depender de que la clienta vuelva al navegador.
+App.guardarPedido = async function(pedido, amountInCents, referencia) {
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/pedidos`, {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({
+        referencia, estado: 'pendiente',
+        monto_centavos: amountInCents,
+        email_cliente: pedido.email_cliente || null,
+        datos: pedido
+      })
+    });
+  } catch (e) {
+    // Si falla, queda el respaldo de localStorage + confirmación al volver del navegador.
+  }
+};
+
 // Redirige a Wompi para cobrar el total del carrito (con firma segura del servidor)
 App.pagarCarritoWompi = async function(pedido, amountInCents, referencia) {
+  await App.guardarPedido(pedido, amountInCents, referencia);
   try {
     const resp = await fetch('/api/wompi-firma', {
       method: 'POST',
@@ -957,23 +984,17 @@ App.verificarPagoWompi = async function(id) {
   }
 };
 
-// Envía un correo por nuestra función serverless (Resend). Reemplaza a EmailJS.
-// tipo: 'camila' (aviso interno con {estado}) o 'clienta' (confirmación de compra).
-App.enviarCorreo = function(tipo, pedido, estado) {
+// Confirma la venta (usado por el retorno automático y por el botón manual).
+// Llama a /api/confirmar-venta, que es IDEMPOTENTE: si el webhook de Wompi ya marcó
+// el pedido como pagado y mandó los correos, esta llamada no los duplica.
+App._enviarVenta = function(p) {
   try {
-    fetch('/api/enviar-correo', {
+    fetch('/api/confirmar-venta', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tipo: tipo, pedido: pedido, estado: estado || '' })
+      body: JSON.stringify({ referencia: p.referencia, pedido: p })
     }).catch(function () {});
   } catch (e) {}
-};
-
-// Envía los correos de VENTA (a Camila y a la clienta) — usado por manual y automático
-App._enviarVenta = function(p) {
-  App.enviarCorreo('camila', p,
-    '✅ VENTA PAGADA — la clienta pagó en Wompi. Verifica en Wompi → Transacciones y despacha. El envío lo paga contra entrega.');
-  App.enviarCorreo('clienta', p);
 };
 
 App.confirmarPagoAuto = function() {
