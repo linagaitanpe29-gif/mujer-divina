@@ -119,22 +119,28 @@ La clienta elige su ciudad en el checkout y el **costo del envío se SUMA a su p
 ### El flujo de checkout paso a paso (`App.submitCheckout` en `app.js`)
 1. La clienta llena el formulario (nombre, correo, celular, **ciudad**, dirección, notas)
    y da "Continuar al pago".
-2. Se abre el pago en Wompi (Web Checkout para el total, o el link del producto).
-3. La app la lleva a `#/gracias`. El pedido queda guardado en `md_pedido_pendiente`.
-4. **NO se manda ningún correo todavía** (ya no existe el aviso de "🛒 CARRITO").
-5. El correo a Camila **"✅ VENTA PAGADA"** + la **confirmación a la clienta** se envían
-   **SOLO cuando el pago se confirma**:
-   - **Automático:** al volver de Wompi Web Checkout con el pago `APPROVED`
-     (`App.confirmarPagoAuto`) — carrito, "Comprar ahora" con complemento, y Programa.
-   - **Manual:** si la clienta hace clic en **"✅ Ya realicé mi pago"**
-     (`App.confirmarPagoManual`) — flujo del link fijo de un solo producto.
+2. **TODA compra** (un solo producto, carrito, con complemento, o el Programa) se cobra
+   por **Wompi Web Checkout** (`App.pagarCarritoWompi`) — nunca por los links fijos de
+   cada producto. El pedido queda guardado en `md_pedido_pendiente`.
+3. **NO se manda ningún correo todavía** (ya no existe el aviso de "🛒 CARRITO").
+4. Al completar el pago, Wompi **redirige sola** de vuelta a `#/gracias` con `?id=...`.
+   `App.checkWompiReturn` + `App.verificarPagoWompi` consultan la transacción; si está
+   **APPROVED**, se envían solos el correo **"✅ VENTA PAGADA"** a Camila y la
+   **confirmación** a la clienta (`App.confirmarPagoAuto`).
+5. **Respaldo manual:** si por lo que sea la redirección automática no vuelve a disparar
+   (bloqueador de anuncios, cierre de pestaña antes de completar), en `/gracias` sigue
+   apareciendo el botón **"✅ Ya realicé mi pago"** (`App.confirmarPagoManual`) mientras
+   el pedido siga en `md_pedido_pendiente` de ese navegador.
 
 **Regla para Lina:** solo llegan correos de **ventas efectivamente pagadas**.
-**Wompi → Transacciones** sigue siendo la **fuente de verdad** de los pagos reales.
+**Wompi → Transacciones** sigue siendo la **fuente de verdad** de los pagos reales —
+revísalo si sospechas que una venta no llegó a generar sus correos.
 
-> Nota técnica: los links de pago genéricos de Wompi **no** ofrecen URL de redirección
-> en el panel, por eso NO se puede detectar el pago automáticamente. Por eso existe el
-> botón manual "Ya realicé mi pago" + la verificación en Transacciones.
+> ⚠️ **Historial:** hasta el 31 jul 2026, comprar un solo producto (sin carrito ni
+> complemento) usaba el link fijo de Wompi, que no tiene redirect configurado — si la
+> clienta cerraba esa pestaña sin volver a tocar el botón manual, la venta no dejaba
+> ningún rastro (causó al menos una venta perdida). Se corrigió haciendo que TODO pase
+> por el Web Checkout dinámico, que confirma sola sin depender de ninguna acción manual.
 
 ### Carrito de compras + cobro del total por Wompi (Web Checkout)
 - **Carrito propio** (estilo Shopify, sin perder el diseño): ícono en el nav con contador,
