@@ -1138,6 +1138,9 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
 }
 .co-envio-label { font-family: var(--f-sans); font-size: .85rem; color: var(--text-mid); }
 .co-envio-precio { font-family: var(--f-title); font-size: 1.2rem; color: var(--gold); }
+.co-total-row { background: var(--gold); border-color: var(--gold); }
+.co-total-row .co-envio-label { color: #fff; font-size: .9rem; }
+.co-total-row .co-envio-precio { color: #fff; font-size: 1.35rem; }
 
 /* Cartica personalizada (solo Kit) */
 .co-carta {

@@ -122,23 +122,43 @@ create policy "insert publico" on pedidos
 | Índices Bíblicos | $38.000 | **$30.000** | `checkout.wompi.co/l/OQFMxx` |
 | Kit Mujer Divina | $310.000 | **$230.000** | `checkout.wompi.co/l/Liqs7Z` |
 
-### Envío (se cobra en línea, con Interrapidísimo)
-La clienta elige su ciudad en el checkout y el **costo del envío se SUMA a su pago**
-(producto + envío se cobran juntos en Wompi). El monto de cada zona está en
-`ENVIO_LINKS` (`app.js`) como `monto`. Zonas:
-- **Medellín** → $8.000
-- **Área Metropolitana** (Bello, Itagüí, Envigado, Sabaneta, La Estrella, Caldas,
-  Copacabana, Girardota, Barbosa) → $10.000
-- **Nacional principales** (Bogotá, Cali, Barranquilla, Cartagena, Bucaramanga, Pereira,
-  Manizales, Armenia, Santa Marta, Cúcuta, Ibagué, Villavicencio, Pasto, Montería,
-  Valledupar) → $15.000
-- **Resto de Colombia** → $22.000
+### Envío (se cobra en línea, sumado al pago — según ciudad × contenido del carrito)
+La clienta elige su ciudad; el envío se calcula según **categoría del destino × tamaño
+del paquete** (`App.calcularEnvio` en `app.js`) y **se suma al total** que se cobra por
+Wompi junto con el/los producto(s) — ya NO es contra entrega.
+
+- **Tamaño:** el pedido lleva **Kit** (en el carrito o como producto único) → `2kg`;
+  si son solo Biblia/Caja/Índices/Cuaderno → `1kg`. (`App.pedidoTieneKit`).
+- **Categorías** (campo `z` de cada municipio en `ciudades.js`) y tarifa (`ENVIO_TARIFAS`
+  en `app.js`), 1kg / 2kg:
+  | Categoría (`z`) | Cubre | 1kg | 2kg |
+  |-----------|-------|------|------|
+  | `metro` | Área Metro Medellín — domiciliario propio (plana) | $15.000 | $15.000 |
+  | `regional` | Antioquia (resto) + Eje Cafetero (Quindío, Risaralda, Caldas) | $12.500 | $16.900 |
+  | `metropolitano` | Capitales / ciudades principales (Bogotá, Cali, Popayán…) | $18.500 | $23.400 |
+  | `municipal` | Resto de municipios (no capital) | $20.900 | $25.800 |
+- Tarifas base tomadas de guías reales de Interrapidísimo (jul 2026). Referencia completa
+  (matriz + clasificador de ciudades) en `~/Downloads/Tarifas_Envio_Mujer_Divina.xlsx`.
+- El checkout muestra "Envío" y "Total a pagar" (`co-envio-info` / `co-total-row` en
+  `index.html`, actualizados por `App.updateEnvio` / `App.actualizarTotalPagar`) apenas
+  se elige la ciudad, y se recalculan si la clienta agrega el complemento (cross-sell).
+- En `App.submitCheckout`, el envío se suma a `payCents` (después del producto y el
+  complemento) y su detalle queda en `pedido.envio` / dentro de `pedido.precio`.
+- El área metro "lejano" (barrios muy alejados de Envigado, ~$22.000) **no** se detecta
+  solo con la ciudad — por ahora toda el área metro cobra $15.000 plano; ajustar a mano
+  si aplica.
+
+> ⚠️ **Historial:** el 27 jul 2026 se implementó esto mismo y se revirtió el mismo día
+> (commit `a8cab47`) sin razón documentada. Se reimplementó el 29 jul 2026 sobre la
+> arquitectura de pago/webhook vigente en ese momento, esta vez con las **categorías
+> reales** de Interrapidísimo (antes eran 4 zonas aproximadas sin base real). Si se
+> vuelve a revertir, dejar registrado el motivo en el commit para no repetir el ciclo.
 
 > **Buscador de ciudad:** el checkout tiene un campo con autocompletado sobre los
 > **1.104 municipios de Colombia** (archivo `ciudades.js`, fuente DANE). Cada municipio
-> trae su zona (`z`) y se muestra como "Municipio, Departamento" para desambiguar nombres
-> repetidos (ej. Armenia/Antioquia vs Armenia/Quindío). Es obligatorio elegir de la lista.
-> Para regenerar `ciudades.js`, ver el script en el commit que lo creó (asigna las zonas).
+> trae su categoría (`z`) y se muestra como "Municipio, Departamento" para desambiguar
+> nombres repetidos (ej. Armenia/Antioquia vs Armenia/Quindío). Es obligatorio elegir de
+> la lista.
 
 > **Dirección estructurada:** la clienta arma la dirección con campos separados
 > (tipo de vía · número · # · placa · barrio) y `submitCheckout` los une en un solo texto
@@ -261,8 +281,8 @@ Hay un **skill `devocional`** que genera y publica devocionales con el formato c
 - Dominio `mujerdivina.app` apuntando a Vercel.
 - Auth con lista blanca; solo `/roadmap` privada.
 - Precios de lanzamiento con precio normal tachado.
-- Envío contra entrega con selector de ciudad.
-- Correos automáticos con EmailJS (Camila + clienta).
+- Envío calculado por categoría de ciudad × tamaño del pedido, sumado al pago en línea.
+- Correos automáticos con Resend (Camila + clienta).
 - Separación carrito (lead) vs. venta pagada (botón "Ya realicé mi pago").
 
 **Pendiente / por verificar:**
