@@ -2319,53 +2319,6 @@ h3.prod-name.prod-clickable:hover, .kit-dark-title.prod-clickable:hover { color:
   .co-upsell2-img { width: 100%; height: 120px; }
 }
 
-/* ── Burbuja de soporte WhatsApp (fija, todo el sitio) ──────────── */
-.wa-fab {
-  position: fixed; right: 24px; bottom: 24px; z-index: 180;
-  display: flex; align-items: center; gap: 12px; text-decoration: none;
-}
-.wa-fab-label {
-  /* Dorado brillante con el mismo shimmer del banner */
-  background: linear-gradient(120deg, #B8892A 0%, #E8C96A 35%, #CDA349 55%, #F0D97A 72%, #B8892A 100%);
-  background-size: 200% auto; animation: shimmer 3s linear infinite;
-  color: #fff; font-family: var(--f-sans); font-size: .92rem; font-weight: 700;
-  letter-spacing: .2px; white-space: nowrap;
-  padding: 12px 18px; border-radius: 999px;
-  text-shadow: 0 1px 2px rgba(120,80,10,.35);
-  box-shadow: 0 6px 20px rgba(205,163,73,.45);
-}
-.wa-fab-ico {
-  position: relative;
-  width: 74px; height: 74px; border-radius: 50%;
-  background: linear-gradient(145deg, #F0D97A 0%, #E3BE63 40%, var(--gold) 65%, #B8892F 100%);
-  background-size: 180% 180%;
-  color: #fff; display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 8px 26px rgba(205,163,73,.55);
-  transition: transform .2s; animation: waGlow 2.4s ease-in-out infinite;
-}
-/* Halo tornasolado que late alrededor del botón */
-.wa-fab-ico::before {
-  content: ''; position: absolute; inset: -10px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(240,217,122,.75) 0%, rgba(205,163,73,.35) 45%, rgba(205,163,73,0) 72%);
-  z-index: -1; animation: waHalo 2.4s ease-in-out infinite;
-}
-.wa-fab-ico svg { width: 40px; height: 40px; filter: drop-shadow(0 1px 2px rgba(120,80,10,.3)); }
-.wa-fab:hover .wa-fab-ico { transform: scale(1.07); }
-@keyframes waGlow {
-  0%, 100% { box-shadow: 0 8px 26px rgba(205,163,73,.5); }
-  50%      { box-shadow: 0 10px 38px rgba(240,217,122,.9); }
-}
-@keyframes waHalo {
-  0%, 100% { transform: scale(1);    opacity: .7; }
-  50%      { transform: scale(1.18); opacity: 1;  }
-}
-@media (max-width: 600px) {
-  .wa-fab { right: 16px; bottom: 16px; gap: 10px; }
-  .wa-fab-ico { width: 66px; height: 66px; }
-  .wa-fab-ico svg { width: 36px; height: 36px; }
-  .wa-fab-label { font-size: .82rem; padding: 10px 14px; }
-}
-
 /* ── Separador entre el banner y el Kit (tienda) ───────────────── */
 .tienda-sep {
   text-align: center; max-width: 640px; margin: 0 auto; padding: 34px 22px 8px;
