@@ -359,7 +359,7 @@
           <button id="gracias-confirm-btn" class="btn btn-gold gracias-btn" onclick="App.confirmarPagoManual()">✅ Ya realicé mi pago</button>
           <div id="gracias-done" style="display:none;">
             <p class="gracias-text" style="color:var(--gold);font-weight:500;">¡Gracias por tu compra! ✦</p>
-            <p class="gracias-sub">Recibimos tu pedido con amor. Te enviamos la confirmación a tu correo. El envío se paga contra entrega con Interrapidísimo (entre 3 y 7 días hábiles).</p>
+            <p class="gracias-sub">Recibimos tu pedido con amor. Te enviamos la confirmación a tu correo. Tu envío ya quedó pagado y llega entre 3 y 7 días hábiles.</p>
             <div class="gracias-spam">
               📩 <strong>Importante:</strong> tu correo de confirmación puede llegar a la carpeta de <strong>SPAM o Correo no deseado</strong>. Si no lo ves en tu bandeja de entrada, revísala ahí. 🤍
             </div>
@@ -852,7 +852,7 @@
         <span>Total</span>
         <span id="cart-total" class="cart-total">$0</span>
       </div>
-      <p class="cart-envio-note">El envío se paga contra entrega al recibir.</p>
+      <p class="cart-envio-note">El envío se calcula según tu ciudad y se suma en el pago.</p>
       <button class="btn btn-gold cart-checkout-btn" onclick="App.cart.checkout()">Finalizar compra →</button>
       <button class="cart-seguir" onclick="App.cart.close()">Seguir comprando</button>
     </div>
@@ -909,8 +909,12 @@
           <ul id="co-ciudad-list" class="co-ac-list" style="display:none;"></ul>
         </div>
         <div class="co-envio-info" id="co-envio-info" style="display:none;">
-          <span class="co-envio-label">Envío (Interrapidísimo):</span>
+          <span class="co-envio-label">Envío:</span>
           <span class="co-envio-precio" id="co-envio-precio"></span>
+        </div>
+        <div class="co-envio-info co-total-row" id="co-total-row" style="display:none;">
+          <span class="co-envio-label"><strong>Total a pagar:</strong></span>
+          <span class="co-envio-precio" id="co-total"></span>
         </div>
         <div class="co-field">
           <label>Dirección *</label>

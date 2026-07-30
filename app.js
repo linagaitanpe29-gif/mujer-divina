@@ -519,11 +519,29 @@ document.addEventListener('DOMContentLoaded', () => App.init());
 /* ── CHECKOUT MODAL ───────────────────────────────── */
 App._coWompi = '#';
 
-const ENVIO_LINKS = {
-  medellin: { label: '$8.000', url: 'https://checkout.wompi.co/l/epJaH2' },
-  metro:    { label: '$10.000', url: 'https://checkout.wompi.co/l/yFKej2' },
-  nacional: { label: '$15.000', url: 'https://checkout.wompi.co/l/QKt9FC' },
-  lejano:   { label: '$22.000', url: 'https://checkout.wompi.co/l/T9t7vH' },
+/* Tarifas de envío (COP) por CATEGORÍA de destino (campo `z` en ciudades.js) × TAMAÑO
+   del paquete. tamaño = '2kg' si el pedido lleva Kit; si no, '1kg' (Biblia/Caja/Índices).
+   Tarifas reales tomadas de guías de Interrapidísimo (jul 2026). El envío se SUMA
+   al total y se cobra en línea junto con el producto. */
+const ENVIO_TARIFAS = {
+  metro:         { '1kg': 15000, '2kg': 15000, op: 'Domiciliario propio' },
+  regional:      { '1kg': 12500, '2kg': 16900, op: 'Interrapidísimo' },
+  metropolitano: { '1kg': 18500, '2kg': 23400, op: 'Interrapidísimo' },
+  municipal:     { '1kg': 20900, '2kg': 25800, op: 'Interrapidísimo' },
+};
+
+// ¿El pedido actual (producto único o carrito) lleva Kit? → define el tamaño (2kg)
+App.pedidoTieneKit = function() {
+  if (App._carritoMode) return App.cart.get().some(i => /kit/i.test(i.slug));
+  const nameEl = document.getElementById('co-product-name');
+  return /kit/i.test(nameEl ? nameEl.textContent : '');
+};
+
+// Calcula el envío según la categoría de la ciudad y si el pedido lleva Kit
+App.calcularEnvio = function(zona, tieneKit) {
+  const t = ENVIO_TARIFAS[zona] || ENVIO_TARIFAS.municipal;
+  if (typeof tieneKit === 'undefined') tieneKit = App.pedidoTieneKit();
+  return { valor: t[tieneKit ? '2kg' : '1kg'], op: t.op };
 };
 
 // Quita tildes y pasa a minúsculas para buscar sin importar acentos
@@ -578,11 +596,33 @@ App.updateEnvio = function() {
   const val = document.getElementById('co-ciudad').value;
   const info = document.getElementById('co-envio-info');
   const precioEl = document.getElementById('co-envio-precio');
-  if (!val) { info.style.display = 'none'; return; }
+  const labelEl = document.querySelector('#co-envio-info .co-envio-label');
+  if (!val) {
+    info.style.display = 'none';
+    App._coEnvioValor = undefined;
+    App.actualizarTotalPagar();
+    return;
+  }
   const zona = val.split('|')[1];
-  const envio = ENVIO_LINKS[zona];
-  precioEl.textContent = `${envio.label} · se paga al recibir`;
+  const e = App.calcularEnvio(zona);
+  App._coEnvioValor = e.valor;
+  if (labelEl) labelEl.textContent = `Envío (${e.op}):`;
+  precioEl.textContent = `${App.formatCOP(e.valor)} · incluido en tu pago`;
   info.style.display = 'flex';
+  App.actualizarTotalPagar();
+};
+
+// Total real a pagar: producto(s) + complemento (si lo agregó) + envío (si ya eligió ciudad)
+App.actualizarTotalPagar = function() {
+  const totalRow = document.getElementById('co-total-row');
+  const totalEl = document.getElementById('co-total');
+  if (!totalRow || !totalEl) return;
+  if (typeof App._coEnvioValor === 'undefined') { totalRow.style.display = 'none'; return; }
+  let base = App._coBaseCents || 0;
+  const upCb = document.getElementById('co-upsell');
+  if (upCb && upCb.checked && App._coUpsell) base += App._coUpsell.precio * 100;
+  totalEl.textContent = App.formatCOP(base / 100 + App._coEnvioValor);
+  totalRow.style.display = 'flex';
 };
 
 App.openCheckout = function(product, price, wompiUrl) {
@@ -592,6 +632,8 @@ App.openCheckout = function(product, price, wompiUrl) {
   document.getElementById('co-product-price').textContent = price;
   document.getElementById('co-form').reset();
   document.getElementById('co-envio-info').style.display = 'none';
+  App._coEnvioValor = undefined;
+  const _tr = document.getElementById('co-total-row'); if (_tr) _tr.style.display = 'none';
   // La cartica personalizada solo aplica al Kit Mujer Divina
   const cartaWrap = document.getElementById('co-carta-wrap');
   if (cartaWrap) cartaWrap.style.display = /kit/i.test(product) ? 'block' : 'none';
@@ -619,6 +661,8 @@ App.openCheckoutCarrito = function() {
     `${App.formatCOP(App.cart.total())} · ${App.cart.count()} producto(s)`;
   document.getElementById('co-form').reset();
   document.getElementById('co-envio-info').style.display = 'none';
+  App._coEnvioValor = undefined;
+  const _tr2 = document.getElementById('co-total-row'); if (_tr2) _tr2.style.display = 'none';
   // La cartica aparece si el Kit está en el carrito
   const cartaWrap = document.getElementById('co-carta-wrap');
   const tieneKit = items.some(i => /kit/i.test(i.slug));
@@ -737,6 +781,7 @@ App.toggleUpsell = function() {
   } else {
     priceEl.textContent = App._coBaseLabel || '';
   }
+  App.actualizarTotalPagar();
 };
 
 // Cierra la lista de sugerencias al tocar fuera del campo
@@ -778,9 +823,6 @@ App.submitCheckout = function(e) {
   const barrio   = document.getElementById('co-barrio').value.trim();
   const direccion = `${viaTipo} ${viaNum} # ${viaSec}-${viaPlaca}, Barrio ${barrio}`;
   const notas     = document.getElementById('co-notas').value.trim();
-  const envio     = ENVIO_LINKS[zona];
-
-  const envioTxt = `${envio.label} (se paga contra entrega)`;
 
   // Producto(s): un solo producto o el carrito completo
   let producto, precio, esKit;
@@ -824,6 +866,13 @@ App.submitCheckout = function(e) {
     producto = `${producto}  +  ${App._coUpsell.nombre}`;
     precio   = `${App.formatCOP(payCents / 100)} — incluye ${App._coUpsell.nombre} (${App.formatCOP(App._coUpsell.precio)})`;
   }
+
+  // Envío: categoría de la ciudad × tamaño (Kit = 2kg) — se SUMA al pago en línea
+  const envInfo    = App.calcularEnvio(zona, esKit);
+  const envioValor = envInfo.valor;
+  payCents += envioValor * 100;
+  const envioTxt = `${App.formatCOP(envioValor)} — ${envInfo.op} (incluido en tu pago)`;
+  precio = `${precio} + envío ${App.formatCOP(envioValor)} = ${App.formatCOP(payCents / 100)}`;
 
   const referencia = 'MD-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
   const pedido = { producto, precio, nombre, email_cliente: email, cel, cedula,
