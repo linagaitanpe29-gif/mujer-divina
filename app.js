@@ -683,13 +683,13 @@ App.openCheckoutCarrito = function() {
 // Catálogo de complementos (cross-sell). precio en pesos.
 App.UPSELLS = {
   indices: {
-    slug: 'indices-biblicos', nombre: 'Índices Bíblicos', precio: 30000,
+    slug: 'indices-biblicos', nombre: 'Índices Bíblicos', precio: 29000,
     img: 'fotos/productos/stickers-1.jpeg',
     tit: '¿Quieres agregar tus Índices Bíblicos? 📑',
     desc: 'Los stickers con el nombre de cada libro para encontrar tus pasajes al instante en tu Biblia.'
   },
   cuaderno: {
-    slug: 'cuaderno-devocional', nombre: 'Cuaderno Devocional', precio: 60000,
+    slug: 'cuaderno-devocional', nombre: 'Cuaderno Devocional', precio: 59000,
     img: 'fotos/productos/cuaderno-portada.jpg',
     tit: '¿Quieres complementarlo con tu Cuaderno Devocional? 📖',
     desc: 'Para que con cada promesa que recibas hagas tu devocional y vivas tu día con la Palabra de Dios.'

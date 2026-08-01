@@ -124,10 +124,10 @@ create policy "insert publico" on pedidos
 | Producto | Precio | Link de pago Wompi (referencia) |
 |----------|--------|--------------------|
 | Caja de Promesas | $85.000 | `checkout.wompi.co/l/Ner44D` |
-| La Santa Biblia | $130.000 | `checkout.wompi.co/l/dCxbkY` |
-| Cuaderno Devocional | $60.000 | `checkout.wompi.co/l/sdzyIS` |
-| Índices Bíblicos | $30.000 | `checkout.wompi.co/l/OQFMxx` |
-| Kit Mujer Divina | $270.000 | `checkout.wompi.co/l/dRw8pT` |
+| La Santa Biblia | $129.000 | `checkout.wompi.co/l/dCxbkY` |
+| Cuaderno Devocional | $59.000 | `checkout.wompi.co/l/sdzyIS` |
+| Índices Bíblicos | $29.000 | `checkout.wompi.co/l/OQFMxx` |
+| Kit Mujer Divina | $269.000 | `checkout.wompi.co/l/dRw8pT` |
 
 ### Envío (se cobra en línea, sumado al pago — según ciudad × contenido del carrito)
 La clienta elige su ciudad; el envío se calcula según **categoría del destino × tamaño
