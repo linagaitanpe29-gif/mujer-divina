@@ -113,14 +113,21 @@ create policy "insert publico" on pedidos
 
 ## 4. Tienda y flujo de compra (IMPORTANTE)
 
-### Productos y precios (precio de lanzamiento vs. normal tachado)
-| Producto | Precio normal (tachado) | Lanzamiento | Link de pago Wompi |
-|----------|-------------------------|-------------|--------------------|
-| Caja de Promesas | $99.000 | **$85.000** | `checkout.wompi.co/l/Ner44D` |
-| La Santa Biblia | $130.000 | **$99.000** | `checkout.wompi.co/l/Tmqw7F` |
-| Cuaderno Devocional | $85.000 | **$60.000** | `checkout.wompi.co/l/sdzyIS` |
-| Índices Bíblicos | $38.000 | **$30.000** | `checkout.wompi.co/l/OQFMxx` |
-| Kit Mujer Divina | $310.000 | **$230.000** | `checkout.wompi.co/l/Liqs7Z` |
+### Productos y precios
+> ⚠️ **1 ago 2026:** terminó la promoción de "precios de lanzamiento" (corría hasta el
+> 31 jul). Se quitó el precio tachado, el badge "Precio de lanzamiento" y el banner
+> superior del sitio. Kit y Biblia subieron a precio nuevo; los otros tres quedaron
+> fijos en su antiguo precio de lanzamiento (ya no es un descuento, es el precio normal).
+> Los "Link de pago Wompi" de la tabla son solo de referencia — el cobro real **nunca**
+> pasa por esos links fijos, siempre por Wompi Web Checkout dinámico (ver más abajo).
+
+| Producto | Precio | Link de pago Wompi (referencia) |
+|----------|--------|--------------------|
+| Caja de Promesas | $85.000 | `checkout.wompi.co/l/Ner44D` |
+| La Santa Biblia | $130.000 | `checkout.wompi.co/l/dCxbkY` |
+| Cuaderno Devocional | $60.000 | `checkout.wompi.co/l/sdzyIS` |
+| Índices Bíblicos | $30.000 | `checkout.wompi.co/l/OQFMxx` |
+| Kit Mujer Divina | $270.000 | `checkout.wompi.co/l/dRw8pT` |
 
 ### Envío (se cobra en línea, sumado al pago — según ciudad × contenido del carrito)
 La clienta elige su ciudad; el envío se calcula según **categoría del destino × tamaño
