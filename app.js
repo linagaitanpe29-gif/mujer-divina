@@ -841,16 +841,12 @@ App.submitCheckout = function(e) {
   }
 
   // Cartica personalizada (solo si hay Kit)
-  let carta_nombre = '', carta_nota = '', notasFinal = notas;
+  let carta_nombre = '', notasFinal = notas;
   if (esKit) {
     carta_nombre = document.getElementById('co-carta-nombre').value.trim();
-    carta_nota   = document.getElementById('co-carta-nota').value.trim();
-    const partes = [];
-    if (carta_nombre) partes.push(`carta dirigida a: ${carta_nombre}`);
-    if (carta_nota)   partes.push(`dedicatoria: ${carta_nota}`);
-    if (partes.length) {
+    if (carta_nombre) {
       // Se incrusta también en "notas" para que Camila lo vea sí o sí en el correo
-      const cartaTxt = `🎁 CARTICA PERSONALIZADA — ${partes.join(' · ')}`;
+      const cartaTxt = `🎁 CARTICA PERSONALIZADA — carta dirigida a: ${carta_nombre}`;
       notasFinal = [cartaTxt, notas].filter(Boolean).join('  |  ');
     }
   }
@@ -881,8 +877,8 @@ App.submitCheckout = function(e) {
     // Barrio como variable aparte (además de ir dentro de la dirección)
     barrio, Barrio: barrio,
     ciudad, direccion, notas: notasFinal, envio: envioTxt, referencia,
-    // Datos de la cartica (por si quieres usarlos como variables aparte en EmailJS)
-    carta_nombre, carta_nota,
+    // Dato de la cartica (por si quieres usarlo como variable aparte en EmailJS)
+    carta_nombre,
     // Alias de la ciudad bajo varios nombres para que la plantilla de EmailJS
     // muestre el nombre de la ciudad sin importar cómo esté escrita la variable.
     city: ciudad, Ciudad: ciudad, ciudad_cliente: ciudad };
