@@ -634,9 +634,6 @@ App.openCheckout = function(product, price, wompiUrl) {
   document.getElementById('co-envio-info').style.display = 'none';
   App._coEnvioValor = undefined;
   const _tr = document.getElementById('co-total-row'); if (_tr) _tr.style.display = 'none';
-  // La cartica personalizada solo aplica al Kit Mujer Divina
-  const cartaWrap = document.getElementById('co-carta-wrap');
-  if (cartaWrap) cartaWrap.style.display = /kit/i.test(product) ? 'block' : 'none';
   document.getElementById('co-ciudad').value = '';
   document.getElementById('co-ciudad-input').value = '';
   const list = document.getElementById('co-ciudad-list');
@@ -663,10 +660,6 @@ App.openCheckoutCarrito = function() {
   document.getElementById('co-envio-info').style.display = 'none';
   App._coEnvioValor = undefined;
   const _tr2 = document.getElementById('co-total-row'); if (_tr2) _tr2.style.display = 'none';
-  // La cartica aparece si el Kit está en el carrito
-  const cartaWrap = document.getElementById('co-carta-wrap');
-  const tieneKit = items.some(i => /kit/i.test(i.slug));
-  if (cartaWrap) cartaWrap.style.display = tieneKit ? 'block' : 'none';
   document.getElementById('co-ciudad').value = '';
   document.getElementById('co-ciudad-input').value = '';
   const list = document.getElementById('co-ciudad-list');
@@ -840,16 +833,7 @@ App.submitCheckout = function(e) {
     esKit    = /kit/i.test(producto);
   }
 
-  // Cartica personalizada (solo si hay Kit)
-  let carta_nombre = '', notasFinal = notas;
-  if (esKit) {
-    carta_nombre = document.getElementById('co-carta-nombre').value.trim();
-    if (carta_nombre) {
-      // Se incrusta también en "notas" para que Camila lo vea sí o sí en el correo
-      const cartaTxt = `🎁 CARTICA PERSONALIZADA — carta dirigida a: ${carta_nombre}`;
-      notasFinal = [cartaTxt, notas].filter(Boolean).join('  |  ');
-    }
-  }
+  const notasFinal = notas;
 
   // Cross-sell: si eligió agregar el complemento, se suma su precio al total
   const upWrap = document.getElementById('co-upsell-wrap');
@@ -877,8 +861,6 @@ App.submitCheckout = function(e) {
     // Barrio como variable aparte (además de ir dentro de la dirección)
     barrio, Barrio: barrio,
     ciudad, direccion, notas: notasFinal, envio: envioTxt, referencia,
-    // Dato de la cartica (por si quieres usarlo como variable aparte en EmailJS)
-    carta_nombre,
     // Alias de la ciudad bajo varios nombres para que la plantilla de EmailJS
     // muestre el nombre de la ciudad sin importar cómo esté escrita la variable.
     city: ciudad, Ciudad: ciudad, ciudad_cliente: ciudad };
