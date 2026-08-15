@@ -829,33 +829,6 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
 }
 .prod-cta { width: 100%; text-align: center; }
 
-/* Producto agotado / lista de espera */
-.prod-soldout {
-  display: inline-block; align-self: flex-start; margin: 2px 0 4px;
-  background: var(--dark); color: var(--ivory); font-family: var(--f-sans);
-  font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  padding: 4px 12px; border-radius: 20px;
-}
-.prod-waitlist {
-  font-family: var(--f-sans); font-size: .82rem; color: var(--text); line-height: 1.4;
-  background: var(--gold-faint); border: 1px solid var(--gold-pale);
-  border-radius: 10px; padding: 8px 12px; margin: 0 0 10px;
-}
-
-/* Kit agotado / lista de espera (sobre fondo oscuro) */
-.kit-soldout {
-  display: inline-block; align-self: flex-start; margin: 8px 0 0;
-  background: var(--gold); color: var(--dark); font-family: var(--f-sans);
-  font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  padding: 4px 12px; border-radius: 20px;
-}
-.kit-waitlist {
-  font-family: var(--f-sans); font-size: .85rem; color: #fff; line-height: 1.45;
-  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.25);
-  border-radius: 10px; padding: 9px 13px; margin: 0 0 14px;
-}
-.kit-waitlist strong { color: var(--gold); }
-
 .prod-divider {
   height: 1px; background: linear-gradient(90deg, transparent, rgba(205,163,73,.3), transparent);
   margin: 8px 0;
@@ -2143,8 +2116,6 @@ h3.prod-name.prod-clickable:hover, .kit-dark-title.prod-clickable:hover { color:
 .kit-dark-price { color: var(--dark); text-shadow: none; }
 .kit-dark-saving { background: var(--gold-faint); border-color: var(--gold-pale); color: var(--gold); }
 .kit-dark-note { color: var(--text-mid); }
-.kit-waitlist { color: var(--text); background: var(--gold-faint); border: 1px solid var(--gold-pale); }
-.kit-waitlist strong { color: var(--gold); }
 .s-kit-dark .prod-addcart { color: var(--text); border-color: var(--gold); }
 .s-kit-dark .prod-addcart:hover { background: var(--gold-faint); }
 
