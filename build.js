@@ -18,6 +18,21 @@ function parseFrontmatter(content) {
   }
 }
 
+// Normaliza la fecha a 'YYYY-MM-DD' (sin corrimiento de zona horaria).
+// js-yaml parsea 'date: 2026-08-16' como un Date en UTC medianoche; si se
+// convierte con String() se corre un día atrás en Colombia (GMT-5). Tomamos
+// siempre la fecha en UTC para que app.js (que le añade 'T12:00:00') la muestre bien.
+function toISODate(d) {
+  if (d instanceof Date && !isNaN(d)) return d.toISOString().slice(0, 10);
+  if (typeof d === 'string') {
+    const m = d.match(/^\d{4}-\d{2}-\d{2}/);
+    if (m) return m[0];
+    const parsed = new Date(d);
+    if (!isNaN(parsed)) return parsed.toISOString().slice(0, 10);
+  }
+  return '';
+}
+
 if (!fs.existsSync(DEVO_DIR)) {
   fs.mkdirSync(DEVO_DIR, { recursive: true });
   fs.writeFileSync(MANIFEST, '[]');
@@ -41,7 +56,7 @@ const manifest = files.map(filename => {
   return {
     slug,
     title:      data.title      || slug,
-    date:       String(data.date || ''),
+    date:       toISODate(data.date),
     versiculo:  data.versiculo  || '',
     referencia: data.referencia || '',
     categoria:  data.categoria  || '',
