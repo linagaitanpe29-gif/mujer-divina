@@ -883,9 +883,13 @@ App.submitCheckout = function(e) {
 // Con la llave anon el frontend SOLO puede insertar (RLS), nunca leer pedidos ajenos.
 // Esto es lo que permite que el webhook de Wompi (servidor a servidor) encuentre el
 // pedido y mande los correos SOLO, sin depender de que la clienta vuelva al navegador.
+//
+// IMPORTANTE: si esto falla, el webhook de Wompi jamás va a encontrar el pedido (aunque
+// el pago se apruebe), así que se manda una alerta por correo con todos los datos como
+// último respaldo — para que la venta no se pierda en silencio.
 App.guardarPedido = async function(pedido, amountInCents, referencia) {
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/pedidos`, {
+    const resp = await fetch(`${SUPABASE_URL}/rest/v1/pedidos`, {
       method: 'POST',
       headers: {
         apikey: SUPABASE_KEY,
@@ -900,9 +904,31 @@ App.guardarPedido = async function(pedido, amountInCents, referencia) {
         datos: pedido
       })
     });
+    if (!resp.ok) {
+      const detalle = await resp.text().catch(() => '');
+      console.error('guardarPedido: Supabase respondió error', resp.status, detalle);
+      App._alertarFalloGuardado(pedido, referencia, `HTTP ${resp.status}: ${detalle}`);
+    }
   } catch (e) {
-    // Si falla, queda el respaldo de localStorage + confirmación al volver del navegador.
+    console.error('guardarPedido: fetch falló', e);
+    App._alertarFalloGuardado(pedido, referencia, e.message || 'fetch falló');
   }
+};
+
+// Alerta de respaldo: si el pedido no se pudo guardar en Supabase, el webhook nunca lo
+// va a encontrar. Se manda este correo con todos los datos para no perder la venta.
+App._alertarFalloGuardado = function(pedido, referencia, detalleError) {
+  try {
+    fetch('/api/enviar-correo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tipo: 'camila',
+        pedido: Object.assign({}, pedido, { referencia }),
+        estado: `⚠️ ALERTA — no se pudo guardar el pedido en Supabase (${detalleError}). Si esta venta se paga, el webhook NO la va a confirmar sola: hay que revisarla manualmente en Wompi → Transacciones con la referencia ${referencia}.`
+      })
+    }).catch(function () {});
+  } catch (e) {}
 };
 
 // Redirige a Wompi para cobrar el total del carrito (con firma segura del servidor)
