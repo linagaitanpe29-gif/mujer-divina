@@ -59,7 +59,9 @@ module.exports = async (req, res) => {
         pedidoDatos = actualizado.datos;
       }
     } catch (e) {
-      // Si Supabase falla, seguimos con el respaldo de localStorage (si vino).
+      // Si Supabase falla, seguimos con el respaldo de localStorage (si vino) —
+      // pero se registra el error para que quede visible en los logs de Vercel.
+      console.error('confirmar-venta: fallo consultando Supabase:', e.message);
     }
 
     if (!pedidoDatos && body.pedido) {
