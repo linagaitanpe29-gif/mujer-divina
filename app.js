@@ -641,7 +641,8 @@ App.openCheckout = function(product, price, wompiUrl) {
   // Cross-sell contextual: el complemento depende del producto que se compra
   App._coBaseLabel = price;
   App._coBaseCents = parsePrecio(price) * 100;
-  App.setUpsellOffer(App.upsellFor(product));
+  App.setUpsellOffer(App.upsellFor(product), 'a');
+  App.setUpsellOffer(App.upsellForB(product), 'b');
   const modal = document.getElementById('checkout-modal');
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -667,7 +668,8 @@ App.openCheckoutCarrito = function() {
   // Cross-sell contextual del carrito: ofrece un complemento que aún no esté en el pedido
   App._coBaseLabel = document.getElementById('co-product-price').textContent;
   App._coBaseCents = App.cart.total() * 100;
-  App.setUpsellOffer(App.upsellForCart(items));
+  App.setUpsellOffer(App.upsellForCart(items), 'a');
+  App.setUpsellOffer(App.upsellForCartB(items), 'b');
   const modal = document.getElementById('checkout-modal');
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -692,10 +694,16 @@ App.UPSELLS = {
     img: 'fotos/productos/promesas-caja.jpg',
     tit: '¿Quieres acompañarlo con tu Caja de Promesas? 🎁',
     desc: 'Para acompañar tus devocionales en la mañana y recibir la Palabra de Dios que Él tiene para ti ese día.'
+  },
+  lapicero: {
+    slug: 'lapicero-md', nombre: 'Lapicero MD', precio: 12000,
+    img: 'fotos/productos/lapicero-md.jpg',
+    tit: '¿Quieres agregar tu Lapicero MD? ✒️',
+    desc: 'El lapicero dorado con grabado "Mujer Divina", perfecto para escribir en tu Cuaderno Devocional.'
   }
 };
 
-// Devuelve el complemento a ofrecer según el producto (o null)
+// Devuelve el complemento principal a ofrecer según el producto (o null) — ranura A
 App.upsellFor = function(name) {
   const n = (name || '').toLowerCase();
   if (/[íi]ndices/.test(n)) return null;          // no se ofrece a sí mismo
@@ -705,7 +713,14 @@ App.upsellFor = function(name) {
   return null;
 };
 
-// Para el carrito: ofrece el primer complemento que NO esté ya en el pedido
+// Segundo complemento (ranura B) — por ahora, solo el Lapicero al comprar el Cuaderno
+App.upsellForB = function(name) {
+  const n = (name || '').toLowerCase();
+  if (/cuaderno/.test(n) && !/lapicero/.test(n)) return App.UPSELLS.lapicero;
+  return null;
+};
+
+// Para el carrito: ofrece el primer complemento que NO esté ya en el pedido (ranura A)
 App.upsellForCart = function(items) {
   const has = s => items.some(i => new RegExp(s, 'i').test(i.slug));
   if (has('promesas') && !has('cuaderno')) return App.UPSELLS.cuaderno;
@@ -714,22 +729,31 @@ App.upsellForCart = function(items) {
   return null;
 };
 
-// Configura la tarjeta del complemento (imagen, textos, precio) y la muestra u oculta
-App.setUpsellOffer = function(offer) {
-  App._coUpsell = offer || null;
-  const wrap = document.getElementById('co-upsell-wrap');
-  const cb   = document.getElementById('co-upsell');
-  const yes  = document.getElementById('co-upsell-yes');
-  const no   = document.getElementById('co-upsell-no');
+// Segundo complemento del carrito (ranura B) — Lapicero si hay Cuaderno y no lo lleva
+App.upsellForCartB = function(items) {
+  const has = s => items.some(i => new RegExp(s, 'i').test(i.slug));
+  if (has('cuaderno') && !has('lapicero')) return App.UPSELLS.lapicero;
+  return null;
+};
+
+// Configura la tarjeta del complemento (imagen, textos, precio) y la muestra u oculta.
+// slot: 'a' (ranura principal) o 'b' (segunda ranura, ej. Lapicero con el Cuaderno).
+App.setUpsellOffer = function(offer, slot) {
+  const suf = slot === 'b' ? '-b' : '';
+  if (slot === 'b') App._coUpsellB = offer || null; else App._coUpsell = offer || null;
+  const wrap = document.getElementById('co-upsell-wrap' + suf);
+  const cb   = document.getElementById('co-upsell' + suf);
+  const yes  = document.getElementById('co-upsell-yes' + suf);
+  const no   = document.getElementById('co-upsell-no' + suf);
   if (cb) cb.checked = false;
   if (yes) yes.classList.remove('active');
   if (no)  no.classList.remove('active');
-  const added = document.getElementById('co-upsell-added');
+  const added = document.getElementById('co-upsell-added' + suf);
   if (added) added.style.display = 'none';
   if (!offer) { if (wrap) wrap.style.display = 'none'; return; }
-  const img = document.getElementById('co-upsell-img');
-  const tit = document.getElementById('co-upsell-tit');
-  const desc = document.getElementById('co-upsell-desc');
+  const img = document.getElementById('co-upsell-img' + suf);
+  const tit = document.getElementById('co-upsell-tit' + suf);
+  const desc = document.getElementById('co-upsell-desc' + suf);
   if (img)  { img.src = offer.img; img.alt = offer.nombre; }
   if (tit)  tit.textContent = offer.tit;
   if (desc) desc.innerHTML = `${offer.desc} <strong>Por solo ${App.formatCOP(offer.precio)}</strong>`;
@@ -738,13 +762,14 @@ App.setUpsellOffer = function(offer) {
   if (wrap) wrap.style.display = 'flex';
 };
 
-// Botones "Sí, agregar" / "No, gracias" del cross-sell
-App.setUpsell = function(v) {
-  const cb  = document.getElementById('co-upsell');
-  const yes = document.getElementById('co-upsell-yes');
-  const no  = document.getElementById('co-upsell-no');
-  const added = document.getElementById('co-upsell-added');
-  const off = App._coUpsell;
+// Botones "Sí, agregar" / "No, gracias" del cross-sell (slot: 'a' o 'b')
+App.setUpsell = function(v, slot) {
+  const suf = slot === 'b' ? '-b' : '';
+  const cb  = document.getElementById('co-upsell' + suf);
+  const yes = document.getElementById('co-upsell-yes' + suf);
+  const no  = document.getElementById('co-upsell-no' + suf);
+  const added = document.getElementById('co-upsell-added' + suf);
+  const off = slot === 'b' ? App._coUpsellB : App._coUpsell;
   if (cb) cb.checked = v;
   if (yes) yes.classList.toggle('active', v);
   if (no)  no.classList.toggle('active', !v);
@@ -762,15 +787,25 @@ App.setUpsell = function(v) {
   App.toggleUpsell();
 };
 
-// Al elegir Sí/No, actualiza el total mostrado
+// Al elegir Sí/No en cualquiera de las dos ranuras, recalcula el total mostrado
 App.toggleUpsell = function() {
-  const cb = document.getElementById('co-upsell');
   const priceEl = document.getElementById('co-product-price');
-  if (!cb || !priceEl) return;
-  const off = App._coUpsell;
-  if (cb.checked && off) {
-    const total = (App._coBaseCents || 0) + off.precio * 100;
-    priceEl.innerHTML = `${App._coBaseLabel} &nbsp;+&nbsp; ${off.nombre} ${App.formatCOP(off.precio)} &nbsp;=&nbsp; <strong>${App.formatCOP(total / 100)}</strong>`;
+  if (!priceEl) return;
+  const cbA = document.getElementById('co-upsell');
+  const cbB = document.getElementById('co-upsell-b');
+  const extras = [];
+  let extraCents = 0;
+  if (cbA && cbA.checked && App._coUpsell) {
+    extras.push(`${App._coUpsell.nombre} ${App.formatCOP(App._coUpsell.precio)}`);
+    extraCents += App._coUpsell.precio * 100;
+  }
+  if (cbB && cbB.checked && App._coUpsellB) {
+    extras.push(`${App._coUpsellB.nombre} ${App.formatCOP(App._coUpsellB.precio)}`);
+    extraCents += App._coUpsellB.precio * 100;
+  }
+  if (extras.length) {
+    const total = (App._coBaseCents || 0) + extraCents;
+    priceEl.innerHTML = `${App._coBaseLabel} &nbsp;+&nbsp; ${extras.join(' &nbsp;+&nbsp; ')} &nbsp;=&nbsp; <strong>${App.formatCOP(total / 100)}</strong>`;
   } else {
     priceEl.textContent = App._coBaseLabel || '';
   }
@@ -835,16 +870,22 @@ App.submitCheckout = function(e) {
 
   const notasFinal = notas;
 
-  // Cross-sell: si eligió agregar el complemento, se suma su precio al total
-  const upWrap = document.getElementById('co-upsell-wrap');
-  const upCb   = document.getElementById('co-upsell');
-  const addUpsell = !!(upWrap && upWrap.style.display !== 'none' && upCb && upCb.checked && App._coUpsell);
+  // Cross-sell: si eligió agregar algún complemento (ranura A y/o B), se suma al total
+  const upWrapA = document.getElementById('co-upsell-wrap');
+  const upCbA   = document.getElementById('co-upsell');
+  const addUpsellA = !!(upWrapA && upWrapA.style.display !== 'none' && upCbA && upCbA.checked && App._coUpsell);
+  const upWrapB = document.getElementById('co-upsell-wrap-b');
+  const upCbB   = document.getElementById('co-upsell-b');
+  const addUpsellB = !!(upWrapB && upWrapB.style.display !== 'none' && upCbB && upCbB.checked && App._coUpsellB);
+  const addUpsell = addUpsellA || addUpsellB;
 
   let payCents = modoCarrito ? App.cart.total() * 100 : (App._coBaseCents || parsePrecio(precio) * 100);
-  if (addUpsell) {
-    payCents += App._coUpsell.precio * 100;
-    producto = `${producto}  +  ${App._coUpsell.nombre}`;
-    precio   = `${App.formatCOP(payCents / 100)} — incluye ${App._coUpsell.nombre} (${App.formatCOP(App._coUpsell.precio)})`;
+  const extrasNombres = [];
+  if (addUpsellA) { payCents += App._coUpsell.precio * 100; extrasNombres.push(`${App._coUpsell.nombre} (${App.formatCOP(App._coUpsell.precio)})`); }
+  if (addUpsellB) { payCents += App._coUpsellB.precio * 100; extrasNombres.push(`${App._coUpsellB.nombre} (${App.formatCOP(App._coUpsellB.precio)})`); }
+  if (extrasNombres.length) {
+    producto = `${producto}  +  ${extrasNombres.map(x => x.replace(/\s*\(.*\)$/, '')).join('  +  ')}`;
+    precio   = `${App.formatCOP(payCents / 100)} — incluye ${extrasNombres.join(', ')}`;
   }
 
   // Envío: categoría de la ciudad × tamaño (Kit = 2kg) — se SUMA al pago en línea

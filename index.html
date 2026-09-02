@@ -614,6 +614,40 @@
             </div>
           </div>
 
+          <div class="prod-divider" aria-hidden="true"></div>
+
+          <!-- 5: LAPICERO MD -->
+          <div class="prod-card" data-slug="lapicero-md">
+            <div class="prod-gallery">
+              <div class="prod-gallery-main">
+                <img src="fotos/productos/lapicero-md.jpg" alt="Lapicero MD" id="gallery-lapicero-main" class="prod-main-img" />
+              </div>
+              <div class="prod-gallery-thumbs">
+                <img src="fotos/productos/lapicero-md.jpg" alt="" class="prod-thumb active" onclick="switchImg('gallery-lapicero-main',this)" />
+              </div>
+            </div>
+            <div class="prod-info">
+              <span class="prod-label">Tu firma, con estilo</span>
+              <h3 class="prod-name">Lapicero MD</h3>
+              <div class="prod-orn">
+                <div class="orn-line" style="max-width:30px;"></div>
+                <div class="orn-dia"></div>
+                <div class="orn-line" style="max-width:30px;"></div>
+              </div>
+              <p class="prod-desc">Un lapicero dorado con grabado "Mujer Divina" y un detalle de cristal, para tu cuaderno devocional o para regalar.</p>
+              <ul class="prod-features">
+                <li>Acabado dorado con detalle de cristal</li>
+                <li>Grabado "Mujer Divina"</li>
+                <li>Ideal para acompañar tu Cuaderno Devocional</li>
+                <li>Perfecto como detalle de regalo</li>
+              </ul>
+              <div class="prod-price-wrap">
+                <span class="prod-price">$12.000</span>
+              </div>
+              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('Lapicero MD','$12.000','x')">Comprar ahora →</button>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -856,10 +890,23 @@
             <span class="co-upsell2-tit" id="co-upsell-tit">¿Quieres agregar un complemento?</span>
             <span class="co-upsell2-desc" id="co-upsell-desc"></span>
             <div class="co-upsell2-btns">
-              <button type="button" class="co-upsell2-yes" id="co-upsell-yes" onclick="App.setUpsell(true)">Sí, agregar</button>
-              <button type="button" class="co-upsell2-no" id="co-upsell-no" onclick="App.setUpsell(false)">No, gracias</button>
+              <button type="button" class="co-upsell2-yes" id="co-upsell-yes" onclick="App.setUpsell(true,'a')">Sí, agregar</button>
+              <button type="button" class="co-upsell2-no" id="co-upsell-no" onclick="App.setUpsell(false,'a')">No, gracias</button>
             </div>
             <span class="co-upsell2-added" id="co-upsell-added" style="display:none;"></span>
+          </div>
+        </div>
+        <div class="co-upsell2" id="co-upsell-wrap-b" style="display:none;">
+          <input type="checkbox" id="co-upsell-b" hidden />
+          <img src="fotos/productos/lapicero-md.jpg" alt="" class="co-upsell2-img" id="co-upsell-img-b" />
+          <div class="co-upsell2-body">
+            <span class="co-upsell2-tit" id="co-upsell-tit-b">¿Quieres agregar un complemento?</span>
+            <span class="co-upsell2-desc" id="co-upsell-desc-b"></span>
+            <div class="co-upsell2-btns">
+              <button type="button" class="co-upsell2-yes" id="co-upsell-yes-b" onclick="App.setUpsell(true,'b')">Sí, agregar</button>
+              <button type="button" class="co-upsell2-no" id="co-upsell-no-b" onclick="App.setUpsell(false,'b')">No, gracias</button>
+            </div>
+            <span class="co-upsell2-added" id="co-upsell-added-b" style="display:none;"></span>
           </div>
         </div>
         <div class="co-seccion">
