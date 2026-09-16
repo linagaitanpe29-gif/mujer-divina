@@ -18,6 +18,19 @@ const WOMPI_PUBLIC_KEY = 'pub_prod_QV1Tx9canrUStOWLfqcaAj9gJxi2yiWZ';
 /* Solo /roadmap requiere login — todo lo demás es público */
 const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional', '/archivo', '/gracias', '/curso'];
 
+/* ── SERIE DEVOCIONAL: "Volver al Centro" (15–20 sep 2026) ──
+   Fechas y temas fijos de la serie. Cada día, el .md de esa fecha se agrega
+   normalmente a devocionales/; esta lista solo dibuja el recorrido de 6 días
+   y enlaza al slug que ya exista en el manifest para esa fecha. */
+const SERIE_VOLVER_AL_CENTRO = [
+  { date: '2026-09-15', tema: 'Dios primero' },
+  { date: '2026-09-16', tema: 'Permanece en Él' },
+  { date: '2026-09-17', tema: 'Conoce al Dios al que sigues' },
+  { date: '2026-09-18', tema: 'Confía aunque no entiendas' },
+  { date: '2026-09-19', tema: 'No solamente escuches: obedece' },
+  { date: '2026-09-20', tema: 'Pon tus ojos en lo eterno' }
+];
+
 /* ── CORREOS APROBADOS para El Mapa de Ella ──────── */
 const APPROVED_EMAILS = [
   'valentinalzate1@gmail.com',
@@ -374,6 +387,36 @@ const App = {
     return [...this.manifest].sort((a, b) => new Date(b.date) - new Date(a.date));
   },
 
+  /* ── FRANJA DE SERIE (6 fechas, solo el día actual desarrollado) ── */
+  serieStripHTML() {
+    const hoy = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' });
+    const dias = SERIE_VOLVER_AL_CENTRO.map(item => {
+      const found = this.manifest.find(d => d.date === item.date);
+      const isToday = item.date === hoy;
+      const isPast  = item.date < hoy;
+      const dayNum  = item.date.slice(-2);
+      let cls = 'serie-day';
+      if (isToday) cls += ' is-today';
+      else if (isPast) cls += ' is-done';
+      else cls += ' is-future';
+
+      const numHTML = `<span class="serie-day-num">${dayNum}</span>`;
+      const label   = `<span class="serie-day-tema">${item.tema}</span>`;
+      const badge   = isToday ? '<span class="serie-day-badge">Hoy</span>' : '';
+
+      if (found) {
+        return `<a href="#/devocional/${found.slug}" class="${cls}">${numHTML}${label}${badge}</a>`;
+      }
+      return `<div class="${cls}">${numHTML}${label}${badge}</div>`;
+    }).join('');
+
+    return `
+      <div class="serie-strip">
+        <p class="serie-strip-label">Volver al Centro · recorrido de 6 días</p>
+        <div class="serie-strip-days">${dias}</div>
+      </div>`;
+  },
+
   /* ── HOME ─────────────────────────────────────────── */
   renderHome() {
     this.renderToday();
@@ -402,7 +445,8 @@ const App = {
           </div>
           <a href="#/devocional/${d.slug}" class="btn btn-gold">Leer hoy →</a>
         </div>
-      </div>`;
+      </div>
+      ${this.serieStripHTML()}`;
   },
 
   renderRecent() {
@@ -448,11 +492,11 @@ const App = {
       const text = await res.text();
       const { fm, body } = this.parseMD(text);
 
-      const promesa = fm.promesa || meta.promesa || '';
       const oracion = fm.oracion || '';
       const intro   = fm.intro   || meta.intro || '';
 
       let html = `
+        ${this.serieStripHTML()}
         <div class="devo-meta">
           ${meta.categoria ? `<span class="devo-category-chip">${meta.categoria}</span>` : ''}
           <span class="devo-date">${this.dateLong(meta.date)}</span>
@@ -464,12 +508,6 @@ const App = {
         </div>
         ${intro ? `<p class="devo-intro">${intro}</p>` : ''}
         <div class="devo-body">${MD.parse(body)}</div>`;
-
-      if (promesa) html += `
-        <div class="promesa-wrap">
-          <p class="promesa-label">Promesa para tu vida</p>
-          <p class="promesa-text">${promesa}</p>
-        </div>`;
 
       if (oracion) html += `
         <div class="prayer-wrap">
