@@ -829,6 +829,19 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
 }
 .prod-cta { width: 100%; text-align: center; }
 
+/* Producto agotado / lista de espera */
+.prod-soldout {
+  display: inline-block; align-self: flex-start; margin: 2px 0 4px;
+  background: var(--dark); color: var(--ivory); font-family: var(--f-sans);
+  font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 20px;
+}
+.prod-waitlist {
+  font-family: var(--f-sans); font-size: .82rem; color: var(--text); line-height: 1.4;
+  background: var(--gold-faint); border: 1px solid var(--gold-pale);
+  border-radius: 10px; padding: 8px 12px; margin: 0 0 10px;
+}
+
 .prod-divider {
   height: 1px; background: linear-gradient(90deg, transparent, rgba(205,163,73,.3), transparent);
   margin: 8px 0;
