@@ -23,12 +23,12 @@ const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional
    normalmente a devocionales/; esta lista solo dibuja el recorrido de 6 días
    y enlaza al slug que ya exista en el manifest para esa fecha. */
 const SERIE_VOLVER_AL_CENTRO = [
-  { date: '2026-09-15', tema: 'Dios primero' },
-  { date: '2026-09-16', tema: 'Permanece en Él' },
-  { date: '2026-09-17', tema: 'Conoce al Dios al que sigues' },
-  { date: '2026-09-18', tema: 'Confía aunque no entiendas' },
-  { date: '2026-09-19', tema: 'No solamente escuches: obedece' },
-  { date: '2026-09-20', tema: 'Pon tus ojos en lo eterno' }
+  { date: '2026-09-28', tema: 'Dios primero' },
+  { date: '2026-09-29', tema: 'Permanece en Él' },
+  { date: '2026-09-30', tema: 'Conoce al Dios al que sigues' },
+  { date: '2026-10-01', tema: 'Confía aunque no entiendas' },
+  { date: '2026-10-02', tema: 'No solamente escuches: obedece' },
+  { date: '2026-10-03', tema: 'Pon tus ojos en lo eterno' }
 ];
 
 /* ── CORREOS APROBADOS para El Mapa de Ella ──────── */
