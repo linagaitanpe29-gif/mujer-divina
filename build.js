@@ -60,8 +60,7 @@ const manifest = files.map(filename => {
     versiculo:  data.versiculo  || '',
     referencia: data.referencia || '',
     categoria:  data.categoria  || '',
-    intro:      data.intro      || '',
-    promesa:    data.promesa    || ''
+    intro:      data.intro      || ''
   };
 }).sort((a, b) => new Date(b.date) - new Date(a.date));
 
