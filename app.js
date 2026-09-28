@@ -387,9 +387,21 @@ const App = {
     return [...this.manifest].sort((a, b) => new Date(b.date) - new Date(a.date));
   },
 
+  /* Fecha real de hoy (Bogotá) — evita que un devocional con fecha futura
+     (publicado con anticipación) se muestre antes de tiempo. */
+  hoyISO() {
+    return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' });
+  },
+
+  /* Solo devocionales cuya fecha ya llegó (<= hoy), más recientes primero. */
+  publicados() {
+    const hoy = this.hoyISO();
+    return this.sorted().filter(d => d.date <= hoy);
+  },
+
   /* ── FRANJA DE SERIE (6 fechas, solo el día actual desarrollado) ── */
   serieStripHTML() {
-    const hoy = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' });
+    const hoy = this.hoyISO();
     const dias = SERIE_VOLVER_AL_CENTRO.map(item => {
       const found = this.manifest.find(d => d.date === item.date);
       const isToday = item.date === hoy;
@@ -426,7 +438,7 @@ const App = {
   renderToday() {
     const el = document.getElementById('today-card');
     if (!el) return;
-    const list = this.sorted();
+    const list = this.publicados();
     if (!list.length) { el.innerHTML = '<p class="loading">Próximamente...</p>'; return; }
     const d = list[0];
     const heroCta = document.getElementById('hero-cta');
@@ -452,7 +464,7 @@ const App = {
   renderRecent() {
     const el = document.getElementById('recent-grid');
     if (!el) return;
-    const list = this.sorted().slice(1, 5);
+    const list = this.publicados().slice(1, 5);
     el.innerHTML = list.length
       ? list.map(d => this.cardHTML(d)).join('')
       : '<p class="loading">Más devocionales próximamente.</p>';
@@ -461,7 +473,7 @@ const App = {
   renderArchive() {
     const el = document.getElementById('all-grid');
     if (!el) return;
-    const list = this.sorted();
+    const list = this.publicados();
     el.innerHTML = list.length
       ? list.map(d => this.cardHTML(d)).join('')
       : '<p class="loading">Próximamente...</p>';
