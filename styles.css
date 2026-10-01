@@ -828,6 +828,11 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   padding: 3px 9px; border-radius: 20px;
 }
 .prod-cta { width: 100%; text-align: center; }
+.prod-cta-disabled {
+  background: #E8DCDF; color: var(--text-mid); cursor: not-allowed;
+  box-shadow: none;
+}
+.prod-cta-disabled:hover { background: #E8DCDF; }
 
 /* Producto agotado / lista de espera */
 .prod-soldout {
