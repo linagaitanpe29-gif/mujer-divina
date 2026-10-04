@@ -407,19 +407,24 @@ const App = {
       const isToday = item.date === hoy;
       const isPast  = item.date < hoy;
       const dayNum  = item.date.slice(-2);
+      // new Date('YYYY-MM-DD') se interpreta en UTC; se fuerza mediodía para
+      // que no se corra de día al convertir a zona horaria de Bogotá.
+      const weekday = new Date(`${item.date}T12:00:00`)
+        .toLocaleDateString('es-CO', { weekday: 'short' })
+        .replace('.', '');
       let cls = 'serie-day';
       if (isToday) cls += ' is-today';
       else if (isPast) cls += ' is-done';
       else cls += ' is-future';
 
-      const numHTML = `<span class="serie-day-num">${dayNum}</span>`;
+      const dayHTML = `<span class="serie-day-weekday">${weekday}</span><span class="serie-day-num">${dayNum}</span>`;
       const label   = `<span class="serie-day-tema">${item.tema}</span>`;
       const badge   = isToday ? '<span class="serie-day-badge">Hoy</span>' : '';
 
       if (found) {
-        return `<a href="#/devocional/${found.slug}" class="${cls}">${numHTML}${label}${badge}</a>`;
+        return `<a href="#/devocional/${found.slug}" class="${cls}">${dayHTML}${label}${badge}</a>`;
       }
-      return `<div class="${cls}">${numHTML}${label}${badge}</div>`;
+      return `<div class="${cls}">${dayHTML}${label}${badge}</div>`;
     }).join('');
 
     return `
