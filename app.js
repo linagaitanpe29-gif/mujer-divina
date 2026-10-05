@@ -18,18 +18,23 @@ const WOMPI_PUBLIC_KEY = 'pub_prod_QV1Tx9canrUStOWLfqcaAj9gJxi2yiWZ';
 /* Solo /roadmap requiere login — todo lo demás es público */
 const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional', '/archivo', '/gracias', '/curso'];
 
-/* ── SERIE DEVOCIONAL: "Volver al Centro" (15–20 sep 2026) ──
-   Fechas y temas fijos de la serie. Cada día, el .md de esa fecha se agrega
-   normalmente a devocionales/; esta lista solo dibuja el recorrido de 6 días
-   y enlaza al slug que ya exista en el manifest para esa fecha. */
-const SERIE_VOLVER_AL_CENTRO = [
-  { date: '2026-09-28', tema: 'Dios primero' },
-  { date: '2026-09-29', tema: 'Permanece en Él' },
-  { date: '2026-09-30', tema: 'Conoce al Dios al que sigues' },
-  { date: '2026-10-01', tema: 'Confía aunque no entiendas' },
-  { date: '2026-10-02', tema: 'No solamente escuches: obedece' },
-  { date: '2026-10-03', tema: 'Pon tus ojos en lo eterno' }
-];
+/* ── SERIE DEVOCIONAL ACTUAL ──
+   Nombre y fechas/temas fijos de la serie en curso. Cada día, el .md de esa
+   fecha se agrega normalmente a devocionales/; esta lista solo dibuja el
+   recorrido de la semana y enlaza al slug que ya exista en el manifest para
+   esa fecha. Al iniciar una nueva serie, basta con reemplazar este objeto. */
+const SERIE_ACTUAL = {
+  nombre: 'Dios en Medio de Todo',
+  dias: [
+    { date: '2026-10-04', tema: 'Dios cuida de ti' },
+    { date: '2026-10-05', tema: 'No cargues sola lo que puedes entregarle a Dios' },
+    { date: '2026-10-06', tema: '¿Dónde está Dios cuando algo me duele?' },
+    { date: '2026-10-07', tema: 'Aprende a esperar en Dios' },
+    { date: '2026-10-08', tema: 'Cuando tus fuerzas no alcanzan, las de Dios sí' },
+    { date: '2026-10-09', tema: 'Pídele sabiduría a Dios' },
+    { date: '2026-10-10', tema: 'Una paz que no depende de que todo esté bien' }
+  ]
+};
 
 /* ── CORREOS APROBADOS para El Mapa de Ella ──────── */
 const APPROVED_EMAILS = [
@@ -399,10 +404,10 @@ const App = {
     return this.sorted().filter(d => d.date <= hoy);
   },
 
-  /* ── FRANJA DE SERIE (6 fechas, solo el día actual desarrollado) ── */
+  /* ── FRANJA DE SERIE (fechas de la semana, solo el día actual desarrollado) ── */
   serieStripHTML() {
     const hoy = this.hoyISO();
-    const dias = SERIE_VOLVER_AL_CENTRO.map(item => {
+    const dias = SERIE_ACTUAL.dias.map(item => {
       const found = this.manifest.find(d => d.date === item.date);
       const isToday = item.date === hoy;
       const isPast  = item.date < hoy;
@@ -429,7 +434,7 @@ const App = {
 
     return `
       <div class="serie-strip">
-        <p class="serie-strip-label">Volver al Centro · recorrido de 6 días</p>
+        <p class="serie-strip-label">${SERIE_ACTUAL.nombre} · recorrido de ${SERIE_ACTUAL.dias.length} días</p>
         <div class="serie-strip-days">${dias}</div>
       </div>`;
   },
