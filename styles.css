@@ -319,14 +319,19 @@ h1,h2,h3 { font-family: var(--f-title); font-weight: 400; line-height: 1.2; colo
   color: var(--dark); margin-bottom: 22px; line-height: 1.12; font-weight: 400;
 }
 .today-ed-verse {
-  font-family: var(--f-script); font-size: 1.06rem;
-  color: var(--rose-deep); line-height: 1.75;
-  border-left: 2px solid var(--gold-lt); padding-left: 18px; margin-bottom: 28px;
+  position: relative; font-family: var(--f-title); font-style: italic;
+  font-size: 1.18rem; color: var(--text); line-height: 1.68;
+  padding: 2px 4px 2px 34px; margin-bottom: 28px;
+}
+.today-ed-verse::before {
+  content: '\201C'; position: absolute; left: -4px; top: -22px;
+  font-family: Georgia, 'Times New Roman', serif; font-style: normal;
+  font-size: 3.8rem; color: var(--gold); opacity: .38; line-height: 1;
 }
 .today-ed-verse cite {
-  font-style: normal; font-size: .66rem; color: var(--gold);
+  font-style: normal; font-size: .68rem; color: var(--gold);
   font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
-  display: block; margin-top: 8px;
+  display: block; margin-top: 10px;
 }
 
 /* ═══════════════════════════════════════════════════

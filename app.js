@@ -457,7 +457,7 @@ const App = {
           </div>
           <h2 class="today-ed-title">${d.title}</h2>
           <div class="today-ed-verse">
-            "${d.versiculo}"
+            ${d.versiculo}
             <cite>${d.referencia}</cite>
           </div>
           <a href="#/devocional/${d.slug}" class="btn btn-gold">Leer hoy →</a>
