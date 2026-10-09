@@ -769,7 +769,7 @@ App.upsellFor = function(name) {
   if (/[íi]ndices/.test(n)) return null;          // no se ofrece a sí mismo
   if (/promesas/.test(n))   return App.UPSELLS.cuaderno;
   if (/cuaderno/.test(n))   return App.UPSELLS.promesas;
-  // Índices Bíblicos agotados: no se ofrecen como complemento de Biblia/Kit por ahora.
+  if (/biblia|kit/.test(n)) return App.UPSELLS.indices;
   return null;
 };
 
@@ -785,7 +785,7 @@ App.upsellForCart = function(items) {
   const has = s => items.some(i => new RegExp(s, 'i').test(i.slug));
   if (has('promesas') && !has('cuaderno')) return App.UPSELLS.cuaderno;
   if (has('cuaderno') && !has('promesas')) return App.UPSELLS.promesas;
-  // Índices Bíblicos agotados: no se ofrecen como complemento de Biblia/Kit por ahora.
+  if ((has('biblia') || has('kit')) && !has('indices')) return App.UPSELLS.indices;
   return null;
 };
 
