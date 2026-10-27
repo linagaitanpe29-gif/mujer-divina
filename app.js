@@ -24,15 +24,15 @@ const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional
    recorrido de la semana y enlaza al slug que ya exista en el manifest para
    esa fecha. Al iniciar una nueva serie, basta con reemplazar este objeto. */
 const SERIE_ACTUAL = {
-  nombre: 'Un Corazón Sensible a la Voz de Dios',
+  nombre: 'Dios está formando a la mujer que estás llegando a ser',
   dias: [
-    { date: '2026-10-19', tema: '¿Realmente estás escuchando a Dios?' },
-    { date: '2026-10-20', tema: 'Dios ya tiene mucho que decirte en Su Palabra' },
-    { date: '2026-10-21', tema: 'No confundas tus deseos con la voz de Dios' },
-    { date: '2026-10-22', tema: 'Aprende a reconocer Su dirección' },
-    { date: '2026-10-23', tema: '¿Y si Dios ya te dijo qué hacer?' },
-    { date: '2026-10-24', tema: 'Obedecer incluso cuando cuesta' },
-    { date: '2026-10-25', tema: 'Una vida que aprende a caminar con Dios' }
+    { date: '2026-10-26', tema: 'En las manos del alfarero' },
+    { date: '2026-10-27', tema: 'El propósito es parecernos a Cristo' },
+    { date: '2026-10-28', tema: 'Dios todavía está obrando en mí' },
+    { date: '2026-10-29', tema: 'Cuando la Palabra de Dios nos corrige' },
+    { date: '2026-10-30', tema: 'Separadas de Él nada podemos hacer' },
+    { date: '2026-10-31', tema: 'Una transformación que se puede ver' },
+    { date: '2026-11-01', tema: 'La mujer que Dios está formando' }
   ]
 };
 
