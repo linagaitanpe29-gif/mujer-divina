@@ -24,15 +24,15 @@ const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional
    recorrido de la semana y enlaza al slug que ya exista en el manifest para
    esa fecha. Al iniciar una nueva serie, basta con reemplazar este objeto. */
 const SERIE_ACTUAL = {
-  nombre: 'Dios está formando a la mujer que estás llegando a ser',
+  nombre: 'Un Corazón que Aprende a Obedecer a Dios',
   dias: [
-    { date: '2026-10-26', tema: 'En las manos del alfarero' },
-    { date: '2026-10-27', tema: 'El propósito es parecernos a Cristo' },
-    { date: '2026-10-28', tema: 'Dios todavía está obrando en mí' },
-    { date: '2026-10-29', tema: 'Cuando la Palabra de Dios nos corrige' },
-    { date: '2026-10-30', tema: 'Separadas de Él nada podemos hacer' },
-    { date: '2026-10-31', tema: 'Una transformación que se puede ver' },
-    { date: '2026-11-01', tema: 'La mujer que Dios está formando' }
+    { date: '2026-11-02', tema: 'No basta con escuchar, hay que obedecer' },
+    { date: '2026-11-03', tema: '¿Busco la voluntad de Dios o Su aprobación para mis planes?' },
+    { date: '2026-11-04', tema: '¿Qué está ocupando el primer lugar en mi corazón?' },
+    { date: '2026-11-05', tema: 'Mis palabras también revelan mi corazón' },
+    { date: '2026-11-06', tema: 'Esperar en Dios también requiere confianza' },
+    { date: '2026-11-07', tema: 'Obedecer también significa amar' },
+    { date: '2026-11-08', tema: 'Una vida edificada sobre la roca' }
   ]
 };
 
