@@ -596,18 +596,48 @@ const ENVIO_TARIFAS = {
   remoto:        { '1kg': 54000, '2kg': 54000, op: 'Envío aéreo' },
 };
 
-// ¿El pedido actual (producto único o carrito) lleva Kit? → define el tamaño (2kg)
-App.pedidoTieneKit = function() {
-  if (App._carritoMode) return App.cart.get().some(i => /kit/i.test(i.slug));
-  const nameEl = document.getElementById('co-product-name');
-  return /kit/i.test(nameEl ? nameEl.textContent : '');
+// Paquetes a cobrar del pedido actual (producto único o carrito): cada Kit es
+// su propio paquete "full" (2kg) — 2 Kits = se cobra el doble. El resto de
+// productos (Biblia, Cuaderno, Índices, Lapicero, Caja de Promesas) van juntos
+// en un solo paquete, que pasa de 1kg a "full" si son más de 2 unidades (un
+// pedido de 3+ productos pequeños ya no cabe en la tarifa de 1kg).
+App.paquetesEnvio = function() {
+  let kitQty = 0, otherQty = 0;
+  if (App._carritoMode) {
+    App.cart.get().forEach(i => {
+      if (/kit/i.test(i.slug)) kitQty += i.qty; else otherQty += i.qty;
+    });
+  } else {
+    const nameEl = document.getElementById('co-product-name');
+    const esKit = /kit/i.test(nameEl ? nameEl.textContent : '');
+    if (esKit) kitQty += 1; else otherQty += 1;
+    // Complementos (cross-sell) agregados en el checkout de producto único
+    const upWrapA = document.getElementById('co-upsell-wrap');
+    const upCbA   = document.getElementById('co-upsell');
+    if (upWrapA && upWrapA.style.display !== 'none' && upCbA && upCbA.checked && App._coUpsell) otherQty += 1;
+    const upWrapB = document.getElementById('co-upsell-wrap-b');
+    const upCbB   = document.getElementById('co-upsell-b');
+    if (upWrapB && upWrapB.style.display !== 'none' && upCbB && upCbB.checked && App._coUpsellB) otherQty += 1;
+  }
+  // Si hay Kit(s), cada uno es un paquete "full" aparte y el resto del pedido
+  // va absorbido dentro de esos paquetes (igual que antes: Kit + lo que sea =
+  // tarifa full, sin cobro aparte por los extras).
+  if (kitQty > 0) {
+    const paquetes = [];
+    for (let i = 0; i < kitQty; i++) paquetes.push('2kg');
+    return paquetes;
+  }
+  // Sin Kit: todo va en un solo paquete, que pasa de 1kg a "full" si son más
+  // de 2 unidades (ya no cabe en la tarifa de 1kg).
+  return [otherQty > 2 ? '2kg' : '1kg'];
 };
 
-// Calcula el envío según la categoría de la ciudad y si el pedido lleva Kit
-App.calcularEnvio = function(zona, tieneKit) {
+// Calcula el envío según la categoría de la ciudad y los paquetes del pedido
+App.calcularEnvio = function(zona, paquetes) {
   const t = ENVIO_TARIFAS[zona] || ENVIO_TARIFAS.municipal;
-  if (typeof tieneKit === 'undefined') tieneKit = App.pedidoTieneKit();
-  return { valor: t[tieneKit ? '2kg' : '1kg'], op: t.op };
+  if (typeof paquetes === 'undefined') paquetes = App.paquetesEnvio();
+  const valor = paquetes.reduce((s, size) => s + t[size], 0);
+  return { valor, op: t.op };
 };
 
 // Quita tildes y pasa a minúsculas para buscar sin importar acentos
@@ -875,7 +905,8 @@ App.toggleUpsell = function() {
   } else {
     priceEl.textContent = App._coBaseLabel || '';
   }
-  App.actualizarTotalPagar();
+  // Un complemento agregado puede sumar un producto más al paquete (1kg → full)
+  App.updateEnvio();
 };
 
 // Cierra la lista de sugerencias al tocar fuera del campo
@@ -919,7 +950,7 @@ App.submitCheckout = function(e) {
   const notas     = document.getElementById('co-notas').value.trim();
 
   // Producto(s): un solo producto o el carrito completo
-  let producto, precio, esKit;
+  let producto, precio;
   if (modoCarrito) {
     const items = App.cart.get();
     producto = items.map(i => {
@@ -927,11 +958,9 @@ App.submitCheckout = function(e) {
       return `${i.qty}× ${p ? p.nombre : i.slug} (${App.formatCOP(p ? p.precio * i.qty : 0)})`;
     }).join('  +  ');
     precio = `${App.formatCOP(App.cart.total())} (${App.cart.count()} productos)`;
-    esKit = items.some(i => /kit/i.test(i.slug));
   } else {
     producto = document.getElementById('co-product-name').textContent;
     precio   = App._coBaseLabel || document.getElementById('co-product-price').textContent;
-    esKit    = /kit/i.test(producto);
   }
 
   const notasFinal = notas;
@@ -954,8 +983,8 @@ App.submitCheckout = function(e) {
     precio   = `${App.formatCOP(payCents / 100)} — incluye ${extrasNombres.join(', ')}`;
   }
 
-  // Envío: categoría de la ciudad × tamaño (Kit = 2kg) — se SUMA al pago en línea
-  const envInfo    = App.calcularEnvio(zona, esKit);
+  // Envío: categoría de la ciudad × paquetes del pedido — se SUMA al pago en línea
+  const envInfo    = App.calcularEnvio(zona);
   const envioValor = envInfo.valor;
   payCents += envioValor * 100;
   const envioTxt = `${App.formatCOP(envioValor)} — ${envInfo.op} (incluido en tu pago)`;
