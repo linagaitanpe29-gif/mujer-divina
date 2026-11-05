@@ -937,6 +937,12 @@
           <input type="hidden" id="co-ciudad" />
           <ul id="co-ciudad-list" class="co-ac-list" style="display:none;"></ul>
         </div>
+        <div class="co-field" id="co-barrio-metro-wrap" style="display:none;">
+          <label>Zona de tu barrio (Valle de Aburrá) *</label>
+          <select id="co-barrio-metro" onchange="App.updateEnvio()">
+            <option value="">Selecciona tu barrio o sector…</option>
+          </select>
+        </div>
         <div class="co-envio-info" id="co-envio-info" style="display:none;">
           <span class="co-envio-label">Envío:</span>
           <span class="co-envio-precio" id="co-envio-precio"></span>

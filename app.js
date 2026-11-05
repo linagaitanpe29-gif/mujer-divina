@@ -596,6 +596,50 @@ const ENVIO_TARIFAS = {
   remoto:        { '1kg': 54000, '2kg': 54000, op: 'Envío aéreo' },
 };
 
+/* ── BARRIOS DEL VALLE DE ABURRÁ (domicilio propio, tarifa plana por barrio) ──
+   Reemplaza la tarifa plana de la zona "metro" cuando la clienta elige su
+   ciudad (Medellín/Envigado/Itagüí/Sabaneta/La Estrella/Bello/Caldas/
+   Copacabana): mucha gente dice "Medellín" aunque viva en otro municipio del
+   área metro, así que el precio final se decide por el barrio exacto, no por
+   la ciudad que escribió. "Valen" se dejó tal como lo dictó Lina — si el
+   nombre correcto es otro, avisar para corregirlo. */
+const BARRIOS_METRO = [
+  { grupo: 'Medellín', n: 'Aranjuez', valor: 14000 },
+  { grupo: 'Medellín', n: 'Popular 1 y 2', valor: 14000 },
+  { grupo: 'Medellín', n: 'Santo Domingo', valor: 17000 },
+  { grupo: 'Medellín', n: 'La Esperanza', valor: 17000 },
+  { grupo: 'Medellín', n: 'Manrique (La Honda)', valor: 18000 },
+  { grupo: 'Medellín', n: 'Manrique (parte baja)', valor: 14000 },
+  { grupo: 'Medellín', n: 'Villa Hermosa', valor: 14000 },
+  { grupo: 'Medellín', n: 'Boston', valor: 14000 },
+  { grupo: 'Medellín', n: 'Buenos Aires', valor: 14000 },
+  { grupo: 'Medellín', n: 'Enciso (parte baja)', valor: 14000 },
+  { grupo: 'Medellín', n: 'Poblado', valor: 14000 },
+  { grupo: 'Medellín', n: 'San Antonio de Prado', valor: 18000 },
+  { grupo: 'Medellín', n: 'San Javier', valor: 14000 },
+  { grupo: 'Medellín', n: 'San Cristóbal', valor: 20000 },
+  { grupo: 'Medellín', n: 'Robledo (La Aurora)', valor: 17000 },
+  { grupo: 'Medellín', n: 'Robledo (Aures)', valor: 14000 },
+  { grupo: 'Medellín', n: 'Kennedy', valor: 14000 },
+  { grupo: 'Medellín', n: 'Pedregal', valor: 14000 },
+  { grupo: 'Medellín', n: '12 de Octubre', valor: 14000 },
+  { grupo: 'Medellín', n: 'Picacho', valor: 14000 },
+  { grupo: 'Medellín', n: 'Castilla', valor: 14000 },
+  { grupo: 'Medellín', n: 'Florencia', valor: 17000 },
+  { grupo: 'Medellín', n: 'Laureles', valor: 14000 },
+  { grupo: 'Medellín', n: 'Floresta', valor: 14000 },
+  { grupo: 'Medellín', n: 'Estadio', valor: 14000 },
+  { grupo: 'Medellín', n: 'Valen', valor: 14000 },
+  { grupo: 'Envigado', n: 'Envigado (zona central)', valor: 14000 },
+  { grupo: 'Envigado', n: 'Envigado (Mall / Indiana / El Retiro)', valor: 18000 },
+  { grupo: 'Itagüí', n: 'Itagüí', valor: 14000 },
+  { grupo: 'Sabaneta', n: 'Sabaneta', valor: 14000 },
+  { grupo: 'La Estrella', n: 'La Estrella', valor: 17000 },
+  { grupo: 'Caldas', n: 'Caldas', valor: 20000 },
+  { grupo: 'Bello', n: 'Bello', valor: 22000 },
+  { grupo: 'Copacabana', n: 'Copacabana', valor: 28000 },
+];
+
 // Nota que se muestra (en vez de un valor) cuando el pedido combina Kit con
 // otros productos distintos: no tenemos una tarifa exacta para esa caja mixta.
 const ENVIO_NOTA_KIT_MIXTO = 'El envío de este pedido se paga contra entrega (lo cobra la transportadora), porque al combinar el Kit con otros productos no tenemos una tarifa exacta.';
@@ -641,10 +685,16 @@ App.paquetesEnvio = function() {
 // Calcula el envío según la categoría de la ciudad y los paquetes del pedido.
 // Si el pedido combina Kit + otros productos, no hay tarifa: devuelve la nota
 // (ver ENVIO_NOTA_KIT_MIXTO) y valor 0 (no se cobra envío en el pago en línea).
+// En zona "metro" (Valle de Aburrá), la tarifa plana se reemplaza por el precio
+// del barrio exacto que haya elegido la clienta (ver BARRIOS_METRO / co-barrio-metro).
 App.calcularEnvio = function(zona, info) {
   if (typeof info === 'undefined') info = App.paquetesEnvio();
   if (info.nota) return { valor: 0, op: null, nota: info.nota };
-  const t = ENVIO_TARIFAS[zona] || ENVIO_TARIFAS.municipal;
+  let t = ENVIO_TARIFAS[zona] || ENVIO_TARIFAS.municipal;
+  if (zona === 'metro') {
+    const barrioVal = parseInt(document.getElementById('co-barrio-metro')?.value || '', 10);
+    if (barrioVal) t = { '1kg': barrioVal, '2kg': barrioVal, op: t.op };
+  }
   const valor = info.paquetes.reduce((s, size) => s + t[size], 0);
   return { valor, op: t.op, nota: null };
 };
@@ -689,11 +739,45 @@ App.filtrarCiudades = function() {
   list.style.display = 'block';
 };
 
+// Llena el <select> de barrios del Valle de Aburrá una sola vez (agrupado por
+// municipio con <optgroup>, en el mismo orden en que aparecen en BARRIOS_METRO).
+App.initBarrioMetroSelect = function() {
+  const sel = document.getElementById('co-barrio-metro');
+  if (!sel || sel.dataset.listo) return;
+  let grupoActual = null, optgroup = null;
+  BARRIOS_METRO.forEach(b => {
+    if (b.grupo !== grupoActual) {
+      grupoActual = b.grupo;
+      optgroup = document.createElement('optgroup');
+      optgroup.label = b.grupo;
+      sel.appendChild(optgroup);
+    }
+    const opt = document.createElement('option');
+    opt.value = b.valor;
+    opt.textContent = b.n;
+    optgroup.appendChild(opt);
+  });
+  sel.dataset.listo = '1';
+};
+
 App.seleccionarCiudad = function(nEnc, dEnc, zona) {
   const n = decodeURIComponent(nEnc), d = decodeURIComponent(dEnc);
   document.getElementById('co-ciudad-input').value = `${n}, ${d}`;
   document.getElementById('co-ciudad').value = `${n}, ${d}|${zona}`;
   document.getElementById('co-ciudad-list').style.display = 'none';
+  // En el Valle de Aburrá (zona "metro"), el precio depende del barrio exacto,
+  // no de la ciudad escrita (mucha gente dice "Medellín" por toda el área metro).
+  const metroWrap = document.getElementById('co-barrio-metro-wrap');
+  if (metroWrap) {
+    if (zona === 'metro') {
+      App.initBarrioMetroSelect();
+      metroWrap.style.display = 'flex';
+    } else {
+      metroWrap.style.display = 'none';
+      const sel = document.getElementById('co-barrio-metro');
+      if (sel) sel.value = '';
+    }
+  }
   App.updateEnvio();
 };
 
@@ -955,6 +1039,18 @@ App.submitCheckout = function(e) {
   const ciudad = ciudadVal.split('|')[0];
   const zona   = ciudadVal.split('|')[1];
 
+  // En el Valle de Aburrá, el barrio exacto es obligatorio (define el precio real)
+  const barrioMetroSel = document.getElementById('co-barrio-metro');
+  let barrioMetroNombre = '';
+  if (zona === 'metro') {
+    if (!barrioMetroSel || !barrioMetroSel.value) {
+      alert('Por favor selecciona tu barrio o sector para calcular el domicilio.');
+      barrioMetroSel && barrioMetroSel.focus();
+      return;
+    }
+    barrioMetroNombre = barrioMetroSel.options[barrioMetroSel.selectedIndex].textContent;
+  }
+
   // Dirección estructurada (nomenclatura colombiana)
   const viaTipo  = document.getElementById('co-via-tipo').value;
   const viaNum   = document.getElementById('co-via-num').value.trim();
@@ -1005,7 +1101,7 @@ App.submitCheckout = function(e) {
   payCents += envioValor * 100;
   const envioTxt = envInfo.nota
     ? envInfo.nota
-    : `${App.formatCOP(envioValor)} — ${envInfo.op} (incluido en tu pago)`;
+    : `${App.formatCOP(envioValor)} — ${envInfo.op}${barrioMetroNombre ? ` (${barrioMetroNombre})` : ''} (incluido en tu pago)`;
   precio = envInfo.nota
     ? `${precio} (envío no incluido — ${envInfo.nota})`
     : `${precio} + envío ${App.formatCOP(envioValor)} = ${App.formatCOP(payCents / 100)}`;
