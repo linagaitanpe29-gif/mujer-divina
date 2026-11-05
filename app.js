@@ -596,11 +596,17 @@ const ENVIO_TARIFAS = {
   remoto:        { '1kg': 54000, '2kg': 54000, op: 'Envío aéreo' },
 };
 
+// Nota que se muestra (en vez de un valor) cuando el pedido combina Kit con
+// otros productos distintos: no tenemos una tarifa exacta para esa caja mixta.
+const ENVIO_NOTA_KIT_MIXTO = 'El envío de este pedido se paga contra entrega (lo cobra la transportadora), porque al combinar el Kit con otros productos no tenemos una tarifa exacta.';
+
 // Paquetes a cobrar del pedido actual (producto único o carrito): cada Kit es
 // su propio paquete "full" (2kg) — 2 Kits = se cobra el doble. El resto de
 // productos (Biblia, Cuaderno, Índices, Lapicero, Caja de Promesas) van juntos
 // en un solo paquete, que pasa de 1kg a "full" si son más de 2 unidades (un
-// pedido de 3+ productos pequeños ya no cabe en la tarifa de 1kg).
+// pedido de 3+ productos pequeños ya no cabe en la tarifa de 1kg). Si el
+// pedido combina Kit + otros productos distintos, no se calcula tarifa: se
+// avisa que el envío queda a cobro de la transportadora (ver ENVIO_NOTA_KIT_MIXTO).
 App.paquetesEnvio = function() {
   let kitQty = 0, otherQty = 0;
   if (App._carritoMode) {
@@ -619,25 +625,28 @@ App.paquetesEnvio = function() {
     const upCbB   = document.getElementById('co-upsell-b');
     if (upWrapB && upWrapB.style.display !== 'none' && upCbB && upCbB.checked && App._coUpsellB) otherQty += 1;
   }
-  // Si hay Kit(s), cada uno es un paquete "full" aparte y el resto del pedido
-  // va absorbido dentro de esos paquetes (igual que antes: Kit + lo que sea =
-  // tarifa full, sin cobro aparte por los extras).
+  // Kit + otros productos distintos: caja mixta, tarifa desconocida.
+  if (kitQty > 0 && otherQty > 0) return { paquetes: null, nota: ENVIO_NOTA_KIT_MIXTO };
+  // Solo Kit(s): cada uno es un paquete "full" aparte (2 Kits = se cobra el doble).
   if (kitQty > 0) {
     const paquetes = [];
     for (let i = 0; i < kitQty; i++) paquetes.push('2kg');
-    return paquetes;
+    return { paquetes, nota: null };
   }
   // Sin Kit: todo va en un solo paquete, que pasa de 1kg a "full" si son más
   // de 2 unidades (ya no cabe en la tarifa de 1kg).
-  return [otherQty > 2 ? '2kg' : '1kg'];
+  return { paquetes: [otherQty > 2 ? '2kg' : '1kg'], nota: null };
 };
 
-// Calcula el envío según la categoría de la ciudad y los paquetes del pedido
-App.calcularEnvio = function(zona, paquetes) {
+// Calcula el envío según la categoría de la ciudad y los paquetes del pedido.
+// Si el pedido combina Kit + otros productos, no hay tarifa: devuelve la nota
+// (ver ENVIO_NOTA_KIT_MIXTO) y valor 0 (no se cobra envío en el pago en línea).
+App.calcularEnvio = function(zona, info) {
+  if (typeof info === 'undefined') info = App.paquetesEnvio();
+  if (info.nota) return { valor: 0, op: null, nota: info.nota };
   const t = ENVIO_TARIFAS[zona] || ENVIO_TARIFAS.municipal;
-  if (typeof paquetes === 'undefined') paquetes = App.paquetesEnvio();
-  const valor = paquetes.reduce((s, size) => s + t[size], 0);
-  return { valor, op: t.op };
+  const valor = info.paquetes.reduce((s, size) => s + t[size], 0);
+  return { valor, op: t.op, nota: null };
 };
 
 // Quita tildes y pasa a minúsculas para buscar sin importar acentos
@@ -702,8 +711,14 @@ App.updateEnvio = function() {
   const zona = val.split('|')[1];
   const e = App.calcularEnvio(zona);
   App._coEnvioValor = e.valor;
-  if (labelEl) labelEl.textContent = `Envío (${e.op}):`;
-  precioEl.textContent = `${App.formatCOP(e.valor)} · incluido en tu pago`;
+  App._coEnvioNota  = e.nota || null;
+  if (e.nota) {
+    if (labelEl) labelEl.textContent = 'Envío:';
+    precioEl.textContent = e.nota;
+  } else {
+    if (labelEl) labelEl.textContent = `Envío (${e.op}):`;
+    precioEl.textContent = `${App.formatCOP(e.valor)} · incluido en tu pago`;
+  }
   info.style.display = 'flex';
   App.actualizarTotalPagar();
 };
@@ -984,11 +999,16 @@ App.submitCheckout = function(e) {
   }
 
   // Envío: categoría de la ciudad × paquetes del pedido — se SUMA al pago en línea
+  // (salvo Kit + otros productos: ahí no se cobra, queda a cobro de la transportadora)
   const envInfo    = App.calcularEnvio(zona);
   const envioValor = envInfo.valor;
   payCents += envioValor * 100;
-  const envioTxt = `${App.formatCOP(envioValor)} — ${envInfo.op} (incluido en tu pago)`;
-  precio = `${precio} + envío ${App.formatCOP(envioValor)} = ${App.formatCOP(payCents / 100)}`;
+  const envioTxt = envInfo.nota
+    ? envInfo.nota
+    : `${App.formatCOP(envioValor)} — ${envInfo.op} (incluido en tu pago)`;
+  precio = envInfo.nota
+    ? `${precio} (envío no incluido — ${envInfo.nota})`
+    : `${precio} + envío ${App.formatCOP(envioValor)} = ${App.formatCOP(payCents / 100)}`;
 
   const referencia = 'MD-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
   const pedido = { producto, precio, nombre, email_cliente: email, cel, cedula,
