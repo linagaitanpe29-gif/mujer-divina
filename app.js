@@ -24,15 +24,15 @@ const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional
    recorrido de la semana y enlaza al slug que ya exista en el manifest para
    esa fecha. Al iniciar una nueva serie, basta con reemplazar este objeto. */
 const SERIE_ACTUAL = {
-  nombre: 'Un Corazón que Aprende a Obedecer a Dios',
+  nombre: 'La Batalla Comienza en tu Mente',
   dias: [
-    { date: '2026-11-02', tema: 'No basta con escuchar, hay que obedecer' },
-    { date: '2026-11-03', tema: '¿Busco la voluntad de Dios o Su aprobación para mis planes?' },
-    { date: '2026-11-04', tema: '¿Qué está ocupando el primer lugar en mi corazón?' },
-    { date: '2026-11-05', tema: 'Mis palabras también revelan mi corazón' },
-    { date: '2026-11-06', tema: 'Esperar en Dios también requiere confianza' },
-    { date: '2026-11-07', tema: 'Obedecer también significa amar' },
-    { date: '2026-11-08', tema: 'Una vida edificada sobre la roca' }
+    { date: '2026-11-09', tema: 'No todo lo que piensas es verdad' },
+    { date: '2026-11-10', tema: 'Deja de mirarte con los ojos del mundo' },
+    { date: '2026-11-11', tema: 'Lo que alimentas en tu mente influye en tu corazón' },
+    { date: '2026-11-12', tema: 'Cuando la preocupación ocupa el lugar de la confianza' },
+    { date: '2026-11-13', tema: 'La voz con la que te hablas también importa' },
+    { date: '2026-11-14', tema: 'No permitas que tu pasado defina tu futuro' },
+    { date: '2026-11-15', tema: 'Una mente renovada produce una manera diferente de vivir' }
   ]
 };
 
