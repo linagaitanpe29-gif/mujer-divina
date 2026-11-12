@@ -15,6 +15,7 @@
 const crypto = require('crypto');
 const { obtenerPedido, marcarPagado } = require('../lib/pedidos');
 const { enviarVenta } = require('../lib/correos');
+const { reenviarEventoVerificado } = require('../lib/whatsapp');
 
 function leerBody(req) {
   return new Promise((resolve) => {
@@ -94,16 +95,19 @@ module.exports = async (req, res) => {
       return;
     }
     if (pedido.estado === 'pagado') {
+      await reenviarEventoVerificado(evento);
       res.status(200).json({ ok: true, already: true });
       return;
     }
     const actualizado = await marcarPagado(referencia);
     if (!actualizado) {
       // Ya lo marcó otra vía (el navegador de la clienta) casi al mismo tiempo.
+      await reenviarEventoVerificado(evento);
       res.status(200).json({ ok: true, already: true });
       return;
     }
     await enviarVenta(actualizado.datos, '✅ VENTA PAGADA — confirmada por Wompi (webhook). Verifica en Wompi → Transacciones y despacha.');
+    await reenviarEventoVerificado(evento);
     res.status(200).json({ ok: true });
   } catch (e) {
     console.error('Wompi webhook error:', e.message);
