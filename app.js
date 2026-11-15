@@ -24,15 +24,15 @@ const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional
    recorrido de la semana y enlaza al slug que ya exista en el manifest para
    esa fecha. Al iniciar una nueva serie, basta con reemplazar este objeto. */
 const SERIE_ACTUAL = {
-  nombre: 'La Batalla Comienza en tu Mente',
+  nombre: 'Una Mujer Conforme al Corazón de Dios',
   dias: [
-    { date: '2026-11-09', tema: 'No todo lo que piensas es verdad' },
-    { date: '2026-11-10', tema: 'Deja de mirarte con los ojos del mundo' },
-    { date: '2026-11-11', tema: 'Lo que alimentas en tu mente influye en tu corazón' },
-    { date: '2026-11-12', tema: 'Cuando la preocupación ocupa el lugar de la confianza' },
-    { date: '2026-11-13', tema: 'La voz con la que te hablas también importa' },
-    { date: '2026-11-14', tema: 'No permitas que tu pasado defina tu futuro' },
-    { date: '2026-11-15', tema: 'Una mente renovada produce una manera diferente de vivir' }
+    { date: '2026-11-16', tema: 'Dios mira lo que otros no pueden ver' },
+    { date: '2026-11-17', tema: 'Un corazón sincero delante de Dios' },
+    { date: '2026-11-18', tema: 'Cuando el orgullo nos aleja de Dios' },
+    { date: '2026-11-19', tema: 'La humildad que agrada a Dios' },
+    { date: '2026-11-20', tema: 'Aprender a tener un corazón agradecido' },
+    { date: '2026-11-21', tema: 'La importancia de un corazón arrepentido' },
+    { date: '2026-11-22', tema: 'Un corazón que busca agradar a Dios' }
   ]
 };
 
