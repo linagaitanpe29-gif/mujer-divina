@@ -588,12 +588,16 @@ App._coWompi = '#';
    del paquete. tamaño = '2kg' si el pedido lleva Kit; si no, '1kg' (Biblia/Caja/Índices).
    Tarifas reales tomadas de guías de Interrapidísimo (jul 2026). El envío se SUMA
    al total y se cobra en línea junto con el producto. */
+// Tarifas Interrapidísimo (mensajería expresa, tarifario oficial vigente desde
+// el 30/jun/2026) + margen fijo de $900 que ya traía el tarifario anterior de
+// Lina en 1kg/2kg (se mantiene igual en 4kg, para 2 Kits). metro y remoto son
+// planos (domiciliario propio / envío aéreo), no dependen del peso.
 const ENVIO_TARIFAS = {
-  metro:         { '1kg': 15000, '2kg': 15000, op: 'Domiciliario propio' },
-  regional:      { '1kg': 12500, '2kg': 16900, op: 'Interrapidísimo' },
-  metropolitano: { '1kg': 18500, '2kg': 23400, op: 'Interrapidísimo' },
-  municipal:     { '1kg': 20900, '2kg': 25800, op: 'Interrapidísimo' },
-  remoto:        { '1kg': 54000, '2kg': 54000, op: 'Envío aéreo' },
+  metro:         { '1kg': 15000, '2kg': 15000, '4kg': 15000, op: 'Domiciliario propio' },
+  regional:      { '1kg': 12500, '2kg': 16900, '4kg': 30500, op: 'Interrapidísimo' },
+  metropolitano: { '1kg': 18500, '2kg': 23400, '4kg': 37500, op: 'Interrapidísimo' },
+  municipal:     { '1kg': 20900, '2kg': 25800, '4kg': 39900, op: 'Interrapidísimo' },
+  remoto:        { '1kg': 54000, '2kg': 54000, '4kg': 54000, op: 'Envío aéreo' },
 };
 
 /* ── BARRIOS DEL VALLE DE ABURRÁ (domicilio propio, tarifa plana por barrio) ──
@@ -644,42 +648,63 @@ const BARRIOS_METRO = [
 // otros productos distintos: no tenemos una tarifa exacta para esa caja mixta.
 const ENVIO_NOTA_KIT_MIXTO = 'El envío de este pedido se paga contra entrega (lo cobra la transportadora), porque al combinar el Kit con otros productos no tenemos una tarifa exacta.';
 
-// Paquetes a cobrar del pedido actual (producto único o carrito): cada Kit es
-// su propio paquete "full" (2kg) — 2 Kits = se cobra el doble. El resto de
-// productos (Biblia, Cuaderno, Índices, Lapicero, Caja de Promesas) van juntos
-// en un solo paquete, que pasa de 1kg a "full" si son más de 2 unidades (un
-// pedido de 3+ productos pequeños ya no cabe en la tarifa de 1kg). Si el
-// pedido combina Kit + otros productos distintos, no se calcula tarifa: se
-// avisa que el envío queda a cobro de la transportadora (ver ENVIO_NOTA_KIT_MIXTO).
+// Categorías de peso real por producto (confirmadas por Lina con sus envíos
+// reales de Interrapidísimo):
+// - "pesado" (Biblia, Cuaderno): solos van en 1kg, pero CUALQUIER otro producto
+//   que no sea liviano que se les sume —otra unidad de sí mismos, el otro, o
+//   una Caja de Promesas— ya sube el paquete a 2kg.
+// - "apilable" (Caja de Promesas): más compacta — 2 unidades siguen en 1kg,
+//   desde la 3ª unidad sube a 2kg.
+// - "liviano" (Índices Bíblicos, Lapicero MD): no agregan peso al paquete.
+// - Kit: caso aparte — solo pesa 1kg; 2 Kits ya pesan 4kg (confirmado).
+const PESO_KIT      = /kit/i;
+const PESO_PESADO   = /biblia|cuaderno/i;
+const PESO_APILABLE = /promesas/i;
+const PESO_LIVIANO  = /ndices|lapicero/i;
+
+// Paquetes a cobrar del pedido actual (producto único o carrito). Si el pedido
+// combina Kit con algún producto que sí pesa (Biblia/Cuaderno/Promesas), no se
+// calcula tarifa todavía: avisa que el envío queda a cobro de la transportadora
+// (ver ENVIO_NOTA_KIT_MIXTO) — caso pendiente de confirmar con un envío real.
 App.paquetesEnvio = function() {
-  let kitQty = 0, otherQty = 0;
+  let kitQty = 0, pesadoQty = 0, apilableQty = 0;
+  const clasificar = (texto, qty) => {
+    if (PESO_KIT.test(texto)) kitQty += qty;
+    else if (PESO_PESADO.test(texto)) pesadoQty += qty;
+    else if (PESO_APILABLE.test(texto)) apilableQty += qty;
+    else if (!PESO_LIVIANO.test(texto)) pesadoQty += qty; // producto sin clasificar: por seguridad, como "pesado"
+  };
   if (App._carritoMode) {
-    App.cart.get().forEach(i => {
-      if (/kit/i.test(i.slug)) kitQty += i.qty; else otherQty += i.qty;
-    });
+    App.cart.get().forEach(i => clasificar(i.slug, i.qty));
   } else {
     const nameEl = document.getElementById('co-product-name');
-    const esKit = /kit/i.test(nameEl ? nameEl.textContent : '');
-    if (esKit) kitQty += 1; else otherQty += 1;
+    clasificar(nameEl ? nameEl.textContent : '', 1);
     // Complementos (cross-sell) agregados en el checkout de producto único
     const upWrapA = document.getElementById('co-upsell-wrap');
     const upCbA   = document.getElementById('co-upsell');
-    if (upWrapA && upWrapA.style.display !== 'none' && upCbA && upCbA.checked && App._coUpsell) otherQty += 1;
+    if (upWrapA && upWrapA.style.display !== 'none' && upCbA && upCbA.checked && App._coUpsell) clasificar(App._coUpsell.slug, 1);
     const upWrapB = document.getElementById('co-upsell-wrap-b');
     const upCbB   = document.getElementById('co-upsell-b');
-    if (upWrapB && upWrapB.style.display !== 'none' && upCbB && upCbB.checked && App._coUpsellB) otherQty += 1;
+    if (upWrapB && upWrapB.style.display !== 'none' && upCbB && upCbB.checked && App._coUpsellB) clasificar(App._coUpsellB.slug, 1);
   }
-  // Kit + otros productos distintos: caja mixta, tarifa desconocida.
+
+  const otherQty = pesadoQty + apilableQty; // sin contar lo liviano, que no pesa
+
+  // Kit + algo que sí pesa: caja mixta, tarifa todavía sin confirmar.
   if (kitQty > 0 && otherQty > 0) return { paquetes: null, nota: ENVIO_NOTA_KIT_MIXTO };
-  // Solo Kit(s): cada uno es un paquete "full" aparte (2 Kits = se cobra el doble).
+
   if (kitQty > 0) {
-    const paquetes = [];
-    for (let i = 0; i < kitQty; i++) paquetes.push('2kg');
+    // 1 Kit = 1kg. 2 Kits = 4kg (confirmado). 3+ Kits: sin dato real todavía —
+    // se extiende +2kg por Kit adicional mientras se confirma con un envío real.
+    if (kitQty === 1) return { paquetes: ['1kg'], nota: null };
+    const paquetes = ['4kg'];
+    for (let i = 2; i < kitQty; i++) paquetes.push('2kg');
     return { paquetes, nota: null };
   }
-  // Sin Kit: todo va en un solo paquete, que pasa de 1kg a "full" si son más
-  // de 2 unidades (ya no cabe en la tarifa de 1kg).
-  return { paquetes: [otherQty > 2 ? '2kg' : '1kg'], nota: null };
+
+  // Sin Kit: Biblia/Cuaderno (solos o repetidos) y/o Caja de Promesas.
+  const sube2kg = (pesadoQty >= 2) || (pesadoQty >= 1 && apilableQty >= 1) || (apilableQty >= 3);
+  return { paquetes: [sube2kg ? '2kg' : '1kg'], nota: null };
 };
 
 // Calcula el envío según la categoría de la ciudad y los paquetes del pedido.
@@ -693,7 +718,7 @@ App.calcularEnvio = function(zona, info) {
   let t = ENVIO_TARIFAS[zona] || ENVIO_TARIFAS.municipal;
   if (zona === 'metro') {
     const barrioVal = parseInt(document.getElementById('co-barrio-metro')?.value || '', 10);
-    if (barrioVal) t = { '1kg': barrioVal, '2kg': barrioVal, op: t.op };
+    if (barrioVal) t = { '1kg': barrioVal, '2kg': barrioVal, '4kg': barrioVal, op: t.op };
   }
   const valor = info.paquetes.reduce((s, size) => s + t[size], 0);
   return { valor, op: t.op, nota: null };
