@@ -592,12 +592,35 @@ App._coWompi = '#';
 // el 30/jun/2026) + margen fijo de $900 que ya traía el tarifario anterior de
 // Lina en 1kg/2kg (se mantiene igual en 4kg, para 2 Kits). metro y remoto son
 // planos (domiciliario propio / envío aéreo), no dependen del peso.
+// Tarifario oficial de Interrapidísimo (vigente desde 30/jun/2026): valor del
+// primer kilo + cuánto sube cada kilo adicional por zona. La tabla oficial no
+// publica incrementos más allá del último que se indica (regional llega a 4kg,
+// metropolitano/municipal a 5kg) — si un pedido pesa más, se sigue sumando ese
+// ÚLTIMO incremento conocido para cada kilo de más. Se suma el margen fijo de
+// $900 que ya traía el tarifario anterior de Lina (calzaba igual en 1kg y 2kg).
+const TARIFA_INTERRAPIDISIMO = {
+  regional:      { inicial: 11600, incrementos: [4400, 5900, 7700] },
+  metropolitano: { inicial: 17600, incrementos: [4900, 6100, 8000, 9200] },
+  municipal:     { inicial: 20000, incrementos: [4900, 6100, 8000, 9200] },
+};
+const MARGEN_ENVIO = 900;
+
+// Precio Interrapidísimo para un peso (en kg, entero) y zona dados. null si la
+// zona no es una de las de Interrapidísimo (metro/remoto se calculan aparte).
+function precioInterrapidisimo(zona, pesoKg) {
+  const t = TARIFA_INTERRAPIDISIMO[zona];
+  if (!t) return null;
+  let total = t.inicial;
+  for (let kg = 2; kg <= pesoKg; kg++) {
+    const i = kg - 2;
+    total += i < t.incrementos.length ? t.incrementos[i] : t.incrementos[t.incrementos.length - 1];
+  }
+  return total + MARGEN_ENVIO;
+}
+
 const ENVIO_TARIFAS = {
-  metro:         { '1kg': 15000, '2kg': 15000, '4kg': 15000, op: 'Domiciliario propio' },
-  regional:      { '1kg': 12500, '2kg': 16900, '4kg': 30500, op: 'Interrapidísimo' },
-  metropolitano: { '1kg': 18500, '2kg': 23400, '4kg': 37500, op: 'Interrapidísimo' },
-  municipal:     { '1kg': 20900, '2kg': 25800, '4kg': 39900, op: 'Interrapidísimo' },
-  remoto:        { '1kg': 54000, '2kg': 54000, '4kg': 54000, op: 'Envío aéreo' },
+  metro:  { valor: 15000, op: 'Domiciliario propio' },
+  remoto: { valor: 54000, op: 'Envío aéreo' },
 };
 
 /* ── BARRIOS DEL VALLE DE ABURRÁ (domicilio propio, tarifa plana por barrio) ──
@@ -662,11 +685,11 @@ const PESO_PESADO   = /biblia|cuaderno/i;
 const PESO_APILABLE = /promesas/i;
 const PESO_LIVIANO  = /ndices|lapicero/i;
 
-// Paquetes a cobrar del pedido actual (producto único o carrito). Si el pedido
+// Peso real del pedido actual (producto único o carrito), en kg. Si el pedido
 // combina Kit con algún producto que sí pesa (Biblia/Cuaderno/Promesas), no se
 // calcula tarifa todavía: avisa que el envío queda a cobro de la transportadora
 // (ver ENVIO_NOTA_KIT_MIXTO) — caso pendiente de confirmar con un envío real.
-App.paquetesEnvio = function() {
+App.pesoEnvio = function() {
   let kitQty = 0, pesadoQty = 0, apilableQty = 0;
   const clasificar = (texto, qty) => {
     if (PESO_KIT.test(texto)) kitQty += qty;
@@ -691,37 +714,37 @@ App.paquetesEnvio = function() {
   const otherQty = pesadoQty + apilableQty; // sin contar lo liviano, que no pesa
 
   // Kit + algo que sí pesa: caja mixta, tarifa todavía sin confirmar.
-  if (kitQty > 0 && otherQty > 0) return { paquetes: null, nota: ENVIO_NOTA_KIT_MIXTO };
+  if (kitQty > 0 && otherQty > 0) return { pesoKg: 0, nota: ENVIO_NOTA_KIT_MIXTO };
 
   if (kitQty > 0) {
-    // 1 Kit = 1kg. 2 Kits = 4kg (confirmado). 3+ Kits: sin dato real todavía —
-    // se extiende +2kg por Kit adicional mientras se confirma con un envío real.
-    if (kitQty === 1) return { paquetes: ['1kg'], nota: null };
-    const paquetes = ['4kg'];
-    for (let i = 2; i < kitQty; i++) paquetes.push('2kg');
-    return { paquetes, nota: null };
+    // 1 Kit = 1kg, 2 Kits = 4kg (confirmados con envíos reales). Para 3 o más,
+    // se extiende la misma progresión (+3kg por Kit adicional: 1, 4, 7, 10…)
+    // mientras se confirma con un envío real de 3+ Kits.
+    const pesoKg = kitQty === 1 ? 1 : 3 * kitQty - 2;
+    return { pesoKg, nota: null };
   }
 
   // Sin Kit: Biblia/Cuaderno (solos o repetidos) y/o Caja de Promesas.
   const sube2kg = (pesadoQty >= 2) || (pesadoQty >= 1 && apilableQty >= 1) || (apilableQty >= 3);
-  return { paquetes: [sube2kg ? '2kg' : '1kg'], nota: null };
+  return { pesoKg: sube2kg ? 2 : 1, nota: null };
 };
 
-// Calcula el envío según la categoría de la ciudad y los paquetes del pedido.
+// Calcula el envío según la categoría de la ciudad y el peso real del pedido.
 // Si el pedido combina Kit + otros productos, no hay tarifa: devuelve la nota
 // (ver ENVIO_NOTA_KIT_MIXTO) y valor 0 (no se cobra envío en el pago en línea).
-// En zona "metro" (Valle de Aburrá), la tarifa plana se reemplaza por el precio
-// del barrio exacto que haya elegido la clienta (ver BARRIOS_METRO / co-barrio-metro).
+// En zona "metro" (Valle de Aburrá), se usa el precio del barrio exacto que
+// haya elegido la clienta (ver BARRIOS_METRO / co-barrio-metro), plano sin
+// importar el peso — igual que "remoto" (envío aéreo a Amazonas).
 App.calcularEnvio = function(zona, info) {
-  if (typeof info === 'undefined') info = App.paquetesEnvio();
+  if (typeof info === 'undefined') info = App.pesoEnvio();
   if (info.nota) return { valor: 0, op: null, nota: info.nota };
-  let t = ENVIO_TARIFAS[zona] || ENVIO_TARIFAS.municipal;
   if (zona === 'metro') {
     const barrioVal = parseInt(document.getElementById('co-barrio-metro')?.value || '', 10);
-    if (barrioVal) t = { '1kg': barrioVal, '2kg': barrioVal, '4kg': barrioVal, op: t.op };
+    return { valor: barrioVal || ENVIO_TARIFAS.metro.valor, op: ENVIO_TARIFAS.metro.op, nota: null };
   }
-  const valor = info.paquetes.reduce((s, size) => s + t[size], 0);
-  return { valor, op: t.op, nota: null };
+  if (zona === 'remoto') return { valor: ENVIO_TARIFAS.remoto.valor, op: ENVIO_TARIFAS.remoto.op, nota: null };
+  const valor = precioInterrapidisimo(zona, info.pesoKg) ?? precioInterrapidisimo('municipal', info.pesoKg);
+  return { valor, op: 'Interrapidísimo', nota: null };
 };
 
 // Quita tildes y pasa a minúsculas para buscar sin importar acentos
