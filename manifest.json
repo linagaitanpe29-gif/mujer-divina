@@ -1,5 +1,248 @@
 [
   {
+    "slug": "busca-primero-el-reino-de-dios-2027-01-02",
+    "title": "Busca primero el reino de Dios",
+    "date": "2027-01-02",
+    "versiculo": "Mas buscad primeramente el reino de Dios y su justicia.",
+    "referencia": "Mateo 6:33",
+    "categoria": "Un Nuevo Año, el Mismo Dios Fiel",
+    "intro": "Mis metas pueden cambiar cada año, pero mi prioridad debe seguir siendo honrar a Dios."
+  },
+  {
+    "slug": "entrega-tus-planes-a-dios-2027-01-01",
+    "title": "Entrega tus planes a Dios",
+    "date": "2027-01-01",
+    "versiculo": "Si el Señor quiere, viviremos y haremos esto o aquello.",
+    "referencia": "Santiago 4:15",
+    "categoria": "Un Nuevo Año, el Mismo Dios Fiel",
+    "intro": "Comenzar un nuevo año con fe significa aprender a planificar con responsabilidad y humildad delante de Dios."
+  },
+  {
+    "slug": "antes-de-terminar-el-ano-examina-tu-corazon-2026-12-31",
+    "title": "Antes de terminar el año, examina tu corazón",
+    "date": "2026-12-31",
+    "versiculo": "Examíname, oh Dios, y conoce mi corazón.",
+    "referencia": "Salmo 139:23",
+    "categoria": "Un Nuevo Año, el Mismo Dios Fiel",
+    "intro": "Antes de construir nuevas metas, quiero examinar el corazón con el que voy a perseguirlas."
+  },
+  {
+    "slug": "aprender-del-pasado-sin-quedarnos-atrapadas-en-el-2026-12-30",
+    "title": "Aprender del pasado sin quedarnos atrapadas en él",
+    "date": "2026-12-30",
+    "versiculo": "Olvidando ciertamente lo que queda atrás, y extendiéndome a lo que está delante.",
+    "referencia": "Filipenses 3:13",
+    "categoria": "Un Nuevo Año, el Mismo Dios Fiel",
+    "intro": "Puedo aprender de mi historia sin permitir que ella determine toda mi identidad."
+  },
+  {
+    "slug": "aprender-a-agradecer-por-lo-que-vivimos-2026-12-29",
+    "title": "Aprender a agradecer por lo que vivimos",
+    "date": "2026-12-29",
+    "versiculo": "Dad gracias en todo, porque esta es la voluntad de Dios para con vosotros en Cristo Jesús.",
+    "referencia": "1 Tesalonicenses 5:18",
+    "categoria": "Un Nuevo Año, el Mismo Dios Fiel",
+    "intro": "Puedo agradecer a Dios sin fingir que todo lo que viví fue fácil."
+  },
+  {
+    "slug": "recordar-la-fidelidad-de-dios-2026-12-28",
+    "title": "Recordar la fidelidad de Dios",
+    "date": "2026-12-28",
+    "versiculo": "Me acordaré de las obras de JAH; sí, haré yo memoria de tus maravillas antiguas.",
+    "referencia": "Salmo 77:11",
+    "categoria": "Un Nuevo Año, el Mismo Dios Fiel",
+    "intro": "Recordar la fidelidad de Dios me ayuda a mirar mi historia con gratitud."
+  },
+  {
+    "slug": "la-luz-del-mundo-2026-12-27",
+    "title": "La luz del mundo",
+    "date": "2026-12-27",
+    "versiculo": "Y aquel Verbo fue hecho carne, y habitó entre nosotros.",
+    "referencia": "Juan 1:14",
+    "categoria": "El Regalo Más Grande: Jesús",
+    "intro": "La Navidad termina, pero nuestra vida con Jesucristo continúa."
+  },
+  {
+    "slug": "jesus-vino-para-salvarnos-2026-12-26",
+    "title": "Jesús vino para salvarnos",
+    "date": "2026-12-26",
+    "versiculo": "Y llamarás su nombre JESÚS, porque él salvará a su pueblo de sus pecados.",
+    "referencia": "Mateo 1:21",
+    "categoria": "El Regalo Más Grande: Jesús",
+    "intro": "Jesús vino porque nuestra mayor necesidad era la salvación."
+  },
+  {
+    "slug": "hoy-celebramos-al-salvador-2026-12-25",
+    "title": "Hoy celebramos al Salvador",
+    "date": "2026-12-25",
+    "versiculo": "Que os ha nacido hoy, en la ciudad de David, un Salvador, que es CRISTO el Señor.",
+    "referencia": "Lucas 2:11",
+    "categoria": "El Regalo Más Grande: Jesús",
+    "intro": "Hoy celebramos al Salvador que Dios nos ha dado."
+  },
+  {
+    "slug": "la-respuesta-de-maria-2026-12-24",
+    "title": "La respuesta de María",
+    "date": "2026-12-24",
+    "versiculo": "He aquí la sierva del Señor; hágase conmigo conforme a tu palabra.",
+    "referencia": "Lucas 1:38",
+    "categoria": "El Regalo Más Grande: Jesús",
+    "intro": "La Navidad nos invita a dirigir nuestra admiración hacia Dios."
+  },
+  {
+    "slug": "la-humildad-de-su-nacimiento-2026-12-23",
+    "title": "La humildad de Su nacimiento",
+    "date": "2026-12-23",
+    "versiculo": "Y dio a luz a su hijo primogénito, y lo envolvió en pañales, y lo acostó en un pesebre.",
+    "referencia": "Lucas 2:7",
+    "categoria": "El Regalo Más Grande: Jesús",
+    "intro": "Jesús nos mostró que la verdadera grandeza no necesita construirse sobre el orgullo."
+  },
+  {
+    "slug": "emanuel-dios-con-nosotros-2026-12-22",
+    "title": "Emanuel: Dios con nosotros",
+    "date": "2026-12-22",
+    "versiculo": "Y llamarás su nombre Emanuel, que traducido es: Dios con nosotros.",
+    "referencia": "Mateo 1:23",
+    "categoria": "El Regalo Más Grande: Jesús",
+    "intro": "Emanuel nos recuerda que Dios se acercó a nosotros mediante Jesucristo."
+  },
+  {
+    "slug": "la-promesa-del-salvador-2026-12-21",
+    "title": "La promesa del Salvador",
+    "date": "2026-12-21",
+    "versiculo": "Porque un niño nos es nacido, hijo nos es dado.",
+    "referencia": "Isaías 9:6",
+    "categoria": "El Regalo Más Grande: Jesús",
+    "intro": "La Navidad nos recuerda que Dios cumplió Su promesa de enviar al Salvador."
+  },
+  {
+    "slug": "marta-y-maria-las-prioridades-de-nuestro-corazon-2026-12-17",
+    "title": "Marta y María: las prioridades de nuestro corazón",
+    "date": "2026-12-17",
+    "versiculo": "Pero sólo una cosa es necesaria; y María ha escogido la buena parte.",
+    "referencia": "Lucas 10:42",
+    "categoria": "Las Mujeres de la Biblia También Tenían Luchas",
+    "intro": "Estar ocupada no siempre significa estar dedicando tiempo a lo más importante."
+  },
+  {
+    "slug": "rut-fidelidad-en-medio-de-la-incertidumbre-2026-12-16",
+    "title": "Rut: fidelidad en medio de la incertidumbre",
+    "date": "2026-12-16",
+    "versiculo": "Tu pueblo será mi pueblo, y tu Dios mi Dios.",
+    "referencia": "Rut 1:16",
+    "categoria": "Las Mujeres de la Biblia También Tenían Luchas",
+    "intro": "La fidelidad se demuestra en nuestras decisiones, incluso cuando el futuro es incierto."
+  },
+  {
+    "slug": "ester-valentia-para-actuar-en-el-momento-correcto-2026-12-15",
+    "title": "Ester: valentía para actuar en el momento correcto",
+    "date": "2026-12-15",
+    "versiculo": "¿Y quién sabe si para esta hora has llegado al reino?",
+    "referencia": "Ester 4:14",
+    "categoria": "Las Mujeres de la Biblia También Tenían Luchas",
+    "intro": "La valentía también significa asumir nuestras responsabilidades con sabiduría."
+  },
+  {
+    "slug": "ana-cuando-el-dolor-nos-lleva-a-la-oracion-2026-12-14",
+    "title": "Ana: cuando el dolor nos lleva a la oración",
+    "date": "2026-12-14",
+    "versiculo": "Soy una mujer atribulada de espíritu; no he bebido vino ni sidra, sino que he derramado mi alma delante de Jehová.",
+    "referencia": "1 Samuel 1:15",
+    "categoria": "Las Mujeres de la Biblia También Tenían Luchas",
+    "intro": "Puedo presentar mi dolor delante de Dios sin tener que esconder lo que siento."
+  },
+  {
+    "slug": "una-relacion-con-dios-mas-alla-de-las-apariencias-2026-12-13",
+    "title": "Una relación con Dios más allá de las apariencias",
+    "date": "2026-12-13",
+    "versiculo": "El que permanece en mí, y yo en él, éste lleva mucho fruto; porque separados de mí nada podéis hacer.",
+    "referencia": "Juan 15:5",
+    "categoria": "Cuando Dios Trabaja en lo Secreto",
+    "intro": "Una vida espiritual auténtica comienza con permanecer en Jesucristo."
+  },
+  {
+    "slug": "permanecer-fieles-en-las-pequenas-cosas-2026-12-12",
+    "title": "Permanecer fieles en las pequeñas cosas",
+    "date": "2026-12-12",
+    "versiculo": "El que es fiel en lo muy poco, también en lo más es fiel.",
+    "referencia": "Lucas 16:10",
+    "categoria": "Cuando Dios Trabaja en lo Secreto",
+    "intro": "La fidelidad se demuestra con lo que hago hoy, no solamente con lo que sueño hacer mañana."
+  },
+  {
+    "slug": "aprender-a-servir-sin-buscar-reconocimiento-2026-12-11",
+    "title": "Aprender a servir sin buscar reconocimiento",
+    "date": "2026-12-11",
+    "versiculo": "Pues si yo, el Señor y el Maestro, he lavado vuestros pies, vosotros también debéis lavaros los pies los unos a los otros.",
+    "referencia": "Juan 13:14",
+    "categoria": "Cuando Dios Trabaja en lo Secreto",
+    "intro": "El verdadero servicio nace del amor, no de la necesidad de ser admiradas."
+  },
+  {
+    "slug": "la-obediencia-que-nadie-aplaude-2026-12-10",
+    "title": "La obediencia que nadie aplaude",
+    "date": "2026-12-10",
+    "versiculo": "Y todo lo que hagáis, hacedlo de corazón, como para el Señor y no para los hombres.",
+    "referencia": "Colosenses 3:23",
+    "categoria": "Cuando Dios Trabaja en lo Secreto",
+    "intro": "La fidelidad no necesita aplausos para ser valiosa."
+  },
+  {
+    "slug": "cuando-oramos-para-ser-escuchadas-por-dios-y-no-admiradas-por-otros-2026-12-09",
+    "title": "Cuando oramos para ser escuchadas por Dios y no admiradas por otros",
+    "date": "2026-12-09",
+    "versiculo": "Porque vuestro Padre sabe de qué cosas tenéis necesidad, antes que vosotros le pidáis.",
+    "referencia": "Mateo 6:8",
+    "categoria": "Cuando Dios Trabaja en lo Secreto",
+    "intro": "La oración sincera no necesita impresionar a nadie."
+  },
+  {
+    "slug": "la-importancia-de-buscar-a-dios-en-secreto-2026-12-08",
+    "title": "La importancia de buscar a Dios en secreto",
+    "date": "2026-12-08",
+    "versiculo": "Mas tú, cuando ores, entra en tu aposento, y cerrada la puerta, ora a tu Padre que está en secreto.",
+    "referencia": "Mateo 6:6",
+    "categoria": "Cuando Dios Trabaja en lo Secreto",
+    "intro": "Mi relación con Dios también se construye en los momentos que nadie ve."
+  },
+  {
+    "slug": "quien-eres-cuando-nadie-te-ve-2026-12-07",
+    "title": "¿Quién eres cuando nadie te ve?",
+    "date": "2026-12-07",
+    "versiculo": "Guardaos de hacer vuestra justicia delante de los hombres, para ser vistos de ellos.",
+    "referencia": "Mateo 6:1",
+    "categoria": "Cuando Dios Trabaja en lo Secreto",
+    "intro": "Mi obediencia a Dios no necesita una audiencia."
+  },
+  {
+    "slug": "la-valentia-de-permanecer-firme-en-la-fe-2026-12-02",
+    "title": "La valentía de permanecer firme en la fe",
+    "date": "2026-12-02",
+    "versiculo": "Y Daniel propuso en su corazón no contaminarse.",
+    "referencia": "Daniel 1:8",
+    "categoria": "No Fuiste Llamada a Vivir para Agradar al Mundo",
+    "intro": "La valentía también se demuestra en las decisiones pequeñas que tomamos con fidelidad."
+  },
+  {
+    "slug": "ser-diferente-no-significa-ser-menos-2026-12-01",
+    "title": "Ser diferente no significa ser menos",
+    "date": "2026-12-01",
+    "versiculo": "No os conforméis a este siglo, sino transformaos por medio de la renovación de vuestro entendimiento.",
+    "referencia": "Romanos 12:2",
+    "categoria": "No Fuiste Llamada a Vivir para Agradar al Mundo",
+    "intro": "Seguir a Cristo puede hacerme diferente, pero nunca me autoriza a sentirme superior."
+  },
+  {
+    "slug": "a-quien-estas-intentando-agradar-2026-11-30",
+    "title": "¿A quién estás intentando agradar?",
+    "date": "2026-11-30",
+    "versiculo": "Pues si todavía agradara a los hombres, no sería siervo de Cristo.",
+    "referencia": "Gálatas 1:10",
+    "categoria": "No Fuiste Llamada a Vivir para Agradar al Mundo",
+    "intro": "No todas las opiniones deben tener la misma autoridad sobre mis decisiones."
+  },
+  {
     "slug": "conocer-a-dios-transforma-nuestra-manera-de-vivir-2026-11-29",
     "title": "Conocer a Dios transforma nuestra manera de vivir",
     "date": "2026-11-29",
