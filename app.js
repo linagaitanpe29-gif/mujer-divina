@@ -24,15 +24,15 @@ const PUBLIC_ROUTES = ['/', '/ingresar', '/registrarse', '/tienda', '/devocional
    recorrido de la semana y enlaza al slug que ya exista en el manifest para
    esa fecha. Al iniciar una nueva serie, basta con reemplazar este objeto. */
 const SERIE_ACTUAL = {
-  nombre: 'Una Mujer Conforme al Corazón de Dios',
+  nombre: 'Aprendiendo a Conocer Verdaderamente a Dios',
   dias: [
-    { date: '2026-11-16', tema: 'Dios mira lo que otros no pueden ver' },
-    { date: '2026-11-17', tema: 'Un corazón sincero delante de Dios' },
-    { date: '2026-11-18', tema: 'Cuando el orgullo nos aleja de Dios' },
-    { date: '2026-11-19', tema: 'La humildad que agrada a Dios' },
-    { date: '2026-11-20', tema: 'Aprender a tener un corazón agradecido' },
-    { date: '2026-11-21', tema: 'La importancia de un corazón arrepentido' },
-    { date: '2026-11-22', tema: 'Un corazón que busca agradar a Dios' }
+    { date: '2026-11-23', tema: 'Conocer a Dios es más que saber de Él' },
+    { date: '2026-11-24', tema: 'Dios es santo, incluso cuando el mundo normaliza el pecado' },
+    { date: '2026-11-25', tema: 'La fidelidad de Dios no depende de mis circunstancias' },
+    { date: '2026-11-26', tema: 'La justicia de Dios y Su misericordia' },
+    { date: '2026-11-27', tema: 'Dios es amor, pero ¿qué significa realmente?' },
+    { date: '2026-11-28', tema: 'Aprender a confiar en la soberanía de Dios' },
+    { date: '2026-11-29', tema: 'Conocer a Dios transforma nuestra manera de vivir' }
   ]
 };
 
