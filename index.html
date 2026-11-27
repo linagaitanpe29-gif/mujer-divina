@@ -368,13 +368,35 @@
 
     <section id="page-tienda" class="page hidden">
 
-      <!-- BANNER BLACK FRIDAY -->
-      <div class="bf-banner" id="bf-banner">
-        <div class="bf-banner-inner">
-          <span class="bf-banner-tag">Hoy</span>
-          <span class="bf-banner-title">BLACK FRIDAY</span>
-          <span class="bf-banner-sep">✦</span>
-          <span class="bf-banner-sub">10% OFF en toda la tienda</span>
+      <!-- BANNER BLACK FRIDAY — cuenta regresiva -->
+      <div class="bf-countdown" id="bf-countdown">
+        <div class="bf-ribbon">
+          <div class="bf-ribbon-track">
+            <span>SALE</span><span>SALE</span><span>SALE</span><span>SALE</span><span>SALE</span><span>SALE</span>
+            <span>SALE</span><span>SALE</span><span>SALE</span><span>SALE</span><span>SALE</span><span>SALE</span>
+          </div>
+        </div>
+        <div class="bf-countdown-inner">
+          <p class="bf-countdown-eyebrow">Black Friday</p>
+          <h2 class="bf-countdown-title">ÚLTIMAS HORAS<br>DE DESCUENTO</h2>
+          <span class="bf-countdown-pill">10% OFF EN TODO</span>
+        </div>
+        <div class="bf-ribbon">
+          <div class="bf-ribbon-track">
+            <span>SALE</span><span>SALE</span><span>SALE</span><span>SALE</span><span>SALE</span><span>SALE</span>
+            <span>SALE</span><span>SALE</span><span>SALE</span><span>SALE</span><span>SALE</span><span>SALE</span>
+          </div>
+        </div>
+        <div class="bf-timer-wrap">
+          <div class="bf-timer">
+            <div class="bf-timer-unit"><span class="bf-timer-num" id="bf-h">00</span><span class="bf-timer-label">Horas</span></div>
+            <span class="bf-timer-colon">:</span>
+            <div class="bf-timer-unit"><span class="bf-timer-num" id="bf-m">00</span><span class="bf-timer-label">Minutos</span></div>
+            <span class="bf-timer-colon">:</span>
+            <div class="bf-timer-unit"><span class="bf-timer-num" id="bf-s">00</span><span class="bf-timer-label">Segundos</span></div>
+          </div>
+          <p class="bf-countdown-sub">Nuestras ofertas de Black Friday terminan hoy. Aprovecha el 10% off en toda la tienda antes de la medianoche.</p>
+          <a href="#tienda-productos" class="btn bf-countdown-cta" onclick="document.getElementById('tienda-productos').scrollIntoView({behavior:'smooth'});return false;">Ver tienda →</a>
         </div>
       </div>
 
