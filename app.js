@@ -241,6 +241,7 @@ const App = {
   /* ── TIENDA ───────────────────────────────────────── */
   initTienda() {
     this.decorarTienda();
+    this.iniciarContadorBF();
     const slides = document.getElementById('tienda-slides');
     const dotsWrap = document.getElementById('tienda-dots');
     if (!slides || this._tiendaInit) return;
@@ -787,6 +788,31 @@ App.filtrarCiudades = function() {
   list.style.display = 'block';
 };
 
+// Cuenta regresiva de Black Friday — termina hoy a medianoche (hora Bogotá).
+// Promo de un solo día: este bloque se quita junto con el resto del Black
+// Friday cuando se revierta la promoción.
+App.iniciarContadorBF = function() {
+  if (App._bfCountdownInit) return;
+  const h = document.getElementById('bf-h');
+  if (!h) return;
+  App._bfCountdownInit = true;
+  const m = document.getElementById('bf-m');
+  const s = document.getElementById('bf-s');
+  const fin = new Date('2026-11-30T00:00:00-05:00').getTime();
+  const tick = () => {
+    const rest = fin - Date.now();
+    if (rest <= 0) { h.textContent = '00'; m.textContent = '00'; s.textContent = '00'; clearInterval(timer); return; }
+    const hh = Math.floor(rest / 3600000);
+    const mm = Math.floor((rest % 3600000) / 60000);
+    const ss = Math.floor((rest % 60000) / 1000);
+    h.textContent = String(hh).padStart(2, '0');
+    m.textContent = String(mm).padStart(2, '0');
+    s.textContent = String(ss).padStart(2, '0');
+  };
+  tick();
+  const timer = setInterval(tick, 1000);
+};
+
 // Llena el <select> de barrios del Valle de Aburrá una sola vez (agrupado por
 // municipio con <optgroup>, en el mismo orden en que aparecen en BARRIOS_METRO).
 App.initBarrioMetroSelect = function() {
@@ -921,25 +947,25 @@ App.openCheckoutCarrito = function() {
 // Catálogo de complementos (cross-sell). precio en pesos.
 App.UPSELLS = {
   indices: {
-    slug: 'indices-biblicos', nombre: 'Índices Bíblicos', precio: 29000,
+    slug: 'indices-biblicos', nombre: 'Índices Bíblicos', precio: 26100,
     img: 'fotos/productos/stickers-1.jpeg',
     tit: '¿Quieres agregar tus Índices Bíblicos? 📑',
     desc: 'Los stickers con el nombre de cada libro para encontrar tus pasajes al instante en tu Biblia.'
   },
   cuaderno: {
-    slug: 'cuaderno-devocional', nombre: 'Cuaderno Devocional', precio: 59000,
+    slug: 'cuaderno-devocional', nombre: 'Cuaderno Devocional', precio: 53100,
     img: 'fotos/productos/cuaderno-portada.jpg',
     tit: '¿Quieres complementarlo con tu Cuaderno Devocional? 📖',
     desc: 'Para que con cada promesa que recibas hagas tu devocional y vivas tu día con la Palabra de Dios.'
   },
   promesas: {
-    slug: 'caja-de-promesas', nombre: 'Caja de Promesas', precio: 85000,
+    slug: 'caja-de-promesas', nombre: 'Caja de Promesas', precio: 76500,
     img: 'fotos/productos/promesas-caja.jpg',
     tit: '¿Quieres acompañarlo con tu Caja de Promesas? 🎁',
     desc: 'Para acompañar tus devocionales en la mañana y recibir la Palabra de Dios que Él tiene para ti ese día.'
   },
   lapicero: {
-    slug: 'lapicero-md', nombre: 'Lapicero MD', precio: 12000,
+    slug: 'lapicero-md', nombre: 'Lapicero MD', precio: 10800,
     img: 'fotos/productos/lapicero-md.jpg',
     tit: '¿Quieres agregar tu Lapicero MD? ✒️',
     desc: 'El lapicero dorado con grabado "Mujer Divina", perfecto para escribir en tu Cuaderno Devocional.'

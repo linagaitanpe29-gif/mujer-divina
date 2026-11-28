@@ -368,21 +368,36 @@
 
     <section id="page-tienda" class="page hidden">
 
-      <!-- HERO TIENDA -->
-      <div class="floral-zone tienda-hero">
-        <div class="hero-blob"></div>
-        <div class="hero">
-          <div class="hero-content">
-            <span class="eyebrow">Colección Mujer Divina</span>
-            <span class="hero-title-text">Todo comienza<br>en Su presencia</span>
-            <p class="hero-subtitle">Productos creados para acompañar a la mujer que busca a Dios, cuida su fe y vive con propósito.</p>
-            <div class="orn orn-light">
-              <div class="orn-line"></div><div class="orn-dia"></div>
-              <span class="orn-center">◆</span>
-              <div class="orn-dia"></div><div class="orn-line"></div>
-            </div>
-            <a href="#tienda-productos" class="btn btn-gold" onclick="document.getElementById('tienda-productos').scrollIntoView({behavior:'smooth'});return false;">Ver colección</a>
+      <!-- BANNER BLACK FRIDAY — cuenta regresiva (reemplaza el hero mientras dura la promo) -->
+      <div class="bf-countdown" id="bf-countdown">
+        <div class="bf-topstrip">Mujer Divina · Jesús te ama</div>
+        <div class="bf-ribbon">
+          <div class="bf-ribbon-track">
+            <span>BLACK FRIDAY</span><span>BLACK FRIDAY</span><span>BLACK FRIDAY</span><span>BLACK FRIDAY</span>
+            <span>BLACK FRIDAY</span><span>BLACK FRIDAY</span><span>BLACK FRIDAY</span><span>BLACK FRIDAY</span>
           </div>
+        </div>
+        <div class="bf-countdown-inner">
+          <p class="bf-countdown-eyebrow">Black Friday</p>
+          <h2 class="bf-countdown-title">ÚLTIMAS HORAS<br>DE DESCUENTO</h2>
+          <span class="bf-countdown-pill">10% OFF EN TODO</span>
+        </div>
+        <div class="bf-ribbon">
+          <div class="bf-ribbon-track">
+            <span>BLACK FRIDAY</span><span>BLACK FRIDAY</span><span>BLACK FRIDAY</span><span>BLACK FRIDAY</span>
+            <span>BLACK FRIDAY</span><span>BLACK FRIDAY</span><span>BLACK FRIDAY</span><span>BLACK FRIDAY</span>
+          </div>
+        </div>
+        <div class="bf-timer-wrap">
+          <div class="bf-timer">
+            <div class="bf-timer-unit"><span class="bf-timer-num" id="bf-h">00</span><span class="bf-timer-label">Horas</span></div>
+            <span class="bf-timer-colon">:</span>
+            <div class="bf-timer-unit"><span class="bf-timer-num" id="bf-m">00</span><span class="bf-timer-label">Minutos</span></div>
+            <span class="bf-timer-colon">:</span>
+            <div class="bf-timer-unit"><span class="bf-timer-num" id="bf-s">00</span><span class="bf-timer-label">Segundos</span></div>
+          </div>
+          <p class="bf-countdown-sub">Nuestras ofertas de Black Friday terminan mañana. Aprovecha el 10% off en toda la tienda antes de la medianoche.</p>
+          <a href="#tienda-productos" class="btn bf-countdown-cta" onclick="document.getElementById('tienda-productos').scrollIntoView({behavior:'smooth'});return false;">Ver tienda →</a>
         </div>
         <div class="hero-wave" aria-hidden="true">
           <svg viewBox="0 0 1440 64" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -453,11 +468,13 @@
             </ul>
             <p class="kit-dark-noincluye">(Este kit no incluye los Índices Bíblicos — se venden por separado.)</p>
             <div class="kit-dark-price-wrap">
+              <span class="kit-dark-before">$269.000</span>
               <div class="kit-dark-price-row">
-                <span class="kit-dark-price">$269.000</span>
+                <span class="kit-dark-price">$242.100</span>
+                <span class="kit-dark-saving kit-dark-saving-bf">Black Friday -10%</span>
               </div>
             </div>
-            <button class="btn kit-dark-cta" onclick="App.openCheckout('Kit Mujer Divina','$269.000','x')">Comprar mi Kit →</button>
+            <button class="btn kit-dark-cta" onclick="App.openCheckout('Kit Mujer Divina','$242.100','x')">Comprar mi Kit →</button>
             <p class="kit-dark-note">Envío a todo Colombia · Pago seguro con Wompi</p>
           </div>
         </div>
@@ -500,9 +517,11 @@
                 <li>Ideal como regalo para una mujer especial</li>
               </ul>
               <div class="prod-price-wrap">
-                <span class="prod-price">$85.000</span>
+                <span class="prod-price-before">$85.000</span>
+                <span class="prod-price">$76.500</span>
+                <span class="prod-price-tag prod-price-tag-bf">Black Friday -10%</span>
               </div>
-              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('Caja de Promesas','$85.000','https://checkout.wompi.co/l/Ner44D')">Comprar ahora →</button>
+              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('Caja de Promesas','$76.500','https://checkout.wompi.co/l/Ner44D')">Comprar ahora →</button>
             </div>
           </div>
 
@@ -536,9 +555,11 @@
                 <li>Incluye espacio personalizable "Esta Biblia pertenece a"</li>
               </ul>
               <div class="prod-price-wrap">
-                <span class="prod-price">$129.000</span>
+                <span class="prod-price-before">$129.000</span>
+                <span class="prod-price">$116.100</span>
+                <span class="prod-price-tag prod-price-tag-bf">Black Friday -10%</span>
               </div>
-              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('La Santa Biblia','$129.000','x')">Comprar ahora →</button>
+              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('La Santa Biblia','$116.100','x')">Comprar ahora →</button>
             </div>
           </div>
 
@@ -573,9 +594,11 @@
                 <li>Secciones: versículo del día, reflexión y oración</li>
               </ul>
               <div class="prod-price-wrap">
-                <span class="prod-price">$59.000</span>
+                <span class="prod-price-before">$59.000</span>
+                <span class="prod-price">$53.100</span>
+                <span class="prod-price-tag prod-price-tag-bf">Black Friday -10%</span>
               </div>
-              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('Cuaderno Devocional','$59.000','https://checkout.wompi.co/l/sdzyIS')">Comprar ahora →</button>
+              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('Cuaderno Devocional','$53.100','https://checkout.wompi.co/l/sdzyIS')">Comprar ahora →</button>
             </div>
           </div>
 
@@ -608,9 +631,11 @@
                 <li>Perfectos para la Biblia Mujer Divina</li>
               </ul>
               <div class="prod-price-wrap">
-                <span class="prod-price">$29.000</span>
+                <span class="prod-price-before">$29.000</span>
+                <span class="prod-price">$26.100</span>
+                <span class="prod-price-tag prod-price-tag-bf">Black Friday -10%</span>
               </div>
-              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('Índices Bíblicos','$29.000','x')">Comprar ahora →</button>
+              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('Índices Bíblicos','$26.100','x')">Comprar ahora →</button>
             </div>
           </div>
 
@@ -642,9 +667,11 @@
                 <li>Perfecto como detalle de regalo</li>
               </ul>
               <div class="prod-price-wrap">
-                <span class="prod-price">$12.000</span>
+                <span class="prod-price-before">$12.000</span>
+                <span class="prod-price">$10.800</span>
+                <span class="prod-price-tag prod-price-tag-bf">Black Friday -10%</span>
               </div>
-              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('Lapicero MD','$12.000','x')">Comprar ahora →</button>
+              <button class="btn btn-gold prod-cta" onclick="App.openCheckout('Lapicero MD','$10.800','x')">Comprar ahora →</button>
             </div>
           </div>
 
