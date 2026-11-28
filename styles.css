@@ -2578,12 +2578,16 @@ div.serie-row.is-future { cursor: default; }
 
 /* Insignia "Black Friday -10%" sobre la etiqueta normal de cada producto */
 .prod-price-tag-bf {
-  background: #0A0A0A !important;
-  color: var(--gold-lt) !important;
+  background: linear-gradient(120deg, #0A0A0A, #C21860, #0A0A0A) !important;
+  background-size: 200% auto;
+  animation: shimmer 5s linear infinite;
+  color: #fff !important;
   border: none !important;
 }
 .kit-dark-saving-bf {
-  background: #0A0A0A !important;
-  color: var(--gold-lt) !important;
+  background: linear-gradient(120deg, #0A0A0A, #C21860, #0A0A0A) !important;
+  background-size: 200% auto;
+  animation: shimmer 5s linear infinite;
+  color: #fff !important;
   border: none !important;
 }
