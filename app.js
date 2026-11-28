@@ -921,25 +921,25 @@ App.openCheckoutCarrito = function() {
 // Catálogo de complementos (cross-sell). precio en pesos.
 App.UPSELLS = {
   indices: {
-    slug: 'indices-biblicos', nombre: 'Índices Bíblicos', precio: 26100,
+    slug: 'indices-biblicos', nombre: 'Índices Bíblicos', precio: 29000,
     img: 'fotos/productos/stickers-1.jpeg',
     tit: '¿Quieres agregar tus Índices Bíblicos? 📑',
     desc: 'Los stickers con el nombre de cada libro para encontrar tus pasajes al instante en tu Biblia.'
   },
   cuaderno: {
-    slug: 'cuaderno-devocional', nombre: 'Cuaderno Devocional', precio: 53100,
+    slug: 'cuaderno-devocional', nombre: 'Cuaderno Devocional', precio: 59000,
     img: 'fotos/productos/cuaderno-portada.jpg',
     tit: '¿Quieres complementarlo con tu Cuaderno Devocional? 📖',
     desc: 'Para que con cada promesa que recibas hagas tu devocional y vivas tu día con la Palabra de Dios.'
   },
   promesas: {
-    slug: 'caja-de-promesas', nombre: 'Caja de Promesas', precio: 76500,
+    slug: 'caja-de-promesas', nombre: 'Caja de Promesas', precio: 85000,
     img: 'fotos/productos/promesas-caja.jpg',
     tit: '¿Quieres acompañarlo con tu Caja de Promesas? 🎁',
     desc: 'Para acompañar tus devocionales en la mañana y recibir la Palabra de Dios que Él tiene para ti ese día.'
   },
   lapicero: {
-    slug: 'lapicero-md', nombre: 'Lapicero MD', precio: 10800,
+    slug: 'lapicero-md', nombre: 'Lapicero MD', precio: 12000,
     img: 'fotos/productos/lapicero-md.jpg',
     tit: '¿Quieres agregar tu Lapicero MD? ✒️',
     desc: 'El lapicero dorado con grabado "Mujer Divina", perfecto para escribir en tu Cuaderno Devocional.'
