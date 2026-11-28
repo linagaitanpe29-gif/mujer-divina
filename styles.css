@@ -2529,6 +2529,11 @@ div.serie-row.is-future { cursor: default; }
   position: relative; z-index: 2;
   text-align: center; padding: 26px 20px 4px; max-width: 560px; margin: 0 auto;
 }
+.bf-countdown-lead {
+  font-family: var(--f-script); font-size: clamp(1.1rem, 3vw, 1.4rem);
+  color: rgba(255,255,242,.88); display: block; margin-bottom: 2px;
+  text-shadow: 0 1px 8px rgba(58,28,37,.25);
+}
 .bf-countdown-title {
   font-family: var(--f-title); font-weight: 400;
   font-size: clamp(2rem, 7vw, 3.2rem); line-height: 1.08; color: var(--ivory);
