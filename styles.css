@@ -2519,8 +2519,8 @@ div.serie-row.is-future { cursor: default; }
   background: rgba(205,163,73,.06); border-bottom: 1px solid rgba(205,163,73,.3);
 }
 .bf-ribbon {
-  background: var(--rose);
-  border-top: 1px solid rgba(58,28,37,.15); border-bottom: 1px solid rgba(58,28,37,.15);
+  background: #161110;
+  border-top: 1px solid rgba(205,163,73,.35); border-bottom: 1px solid rgba(205,163,73,.35);
   transform: rotate(-2deg);
   margin: 0 -40px;
   padding: 7px 0;
@@ -2534,7 +2534,7 @@ div.serie-row.is-future { cursor: default; }
 }
 .bf-ribbon-track span {
   font-family: var(--f-sans); font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
-  color: var(--dark); font-size: .82rem;
+  color: var(--gold-lt); font-size: .82rem;
 }
 @keyframes bf-scroll {
   from { transform: translateX(0); }
